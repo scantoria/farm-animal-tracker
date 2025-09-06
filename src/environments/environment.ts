@@ -1,11 +1,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyB2W0T_yXKwqiU-N0CdJdYVr4jmMWEdRgg",
+    authDomain: "farmanimaltracker.firebaseapp.com",
+    projectId: "farmanimaltracker",
+    storageBucket: "farmanimaltracker.firebasestorage.app",
+    messagingSenderId: "177150446042",
+    appId: "1:177150446042:web:c6b05c712b3eb07a5f58e3",
+    measurementId: "G-PKJEZHXRJG"
   }
 };
