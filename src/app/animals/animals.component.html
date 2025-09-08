@@ -1,0 +1,7 @@
+<p>List of Farm Animals</p>
+
+<div *ngIf="animals$ | async as animals">
+  <div *ngFor="let animal of animals">
+    <p>{{ animal.name }} - {{ animal.type }}</p>
+  </div>
+</div>
