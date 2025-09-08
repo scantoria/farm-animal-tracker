@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { AddAnimalComponent } from './add-animal/add-animal.component';
 import { EditAnimalComponent } from './edit-animal/edit-animal.component';
 import { AuthGuard } from './auth/auth.guard';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -12,4 +13,5 @@ export const routes: Routes = [
     { path: 'signup', component: SignupComponent },
     { path: 'add-animal', component: AddAnimalComponent, canActivate: [AuthGuard] },
     { path: 'edit-animal/:id', component: EditAnimalComponent, canActivate: [AuthGuard] },
+    { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] }, 
 ];
