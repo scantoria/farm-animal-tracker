@@ -1,0 +1,14 @@
+<nav>
+  <div *ngIf="isAuthenticated$ | async">
+    <a [routerLink]="['/']">Home</a>
+    <button (click)="onLogout()">Logout</button>
+  </div>
+  <div *ngIf="!(isAuthenticated$ | async)">
+    <a [routerLink]="['/login']">Login</a>
+    <a [routerLink]="['/signup']">Sign Up</a>
+  </div>
+</nav>
+
+<hr>
+
+<router-outlet></router-outlet>

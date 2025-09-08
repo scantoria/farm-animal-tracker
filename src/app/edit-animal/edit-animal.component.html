@@ -2,10 +2,20 @@
   <h2>Edit Animal</h2>
 
   <label for="name">Name:</label>
-  <input type="text" id="name" name="name" [(ngModel)]="animal.name" required>
+  <input type="text" id="name" name="name" [(ngModel)]="animal.name" required #name="ngModel">
+  <div *ngIf="name.invalid && (name.dirty || name.touched)">
+    <div *ngIf="name.errors?.['required']">
+      Name is required.
+    </div>
+  </div>
 
   <label for="type">Type:</label>
-  <input type="text" id="type" name="type" [(ngModel)]="animal.type" required>
+  <input type="text" id="type" name="type" [(ngModel)]="animal.type" required #type="ngModel">
+  <div *ngIf="type.invalid && (type.dirty || type.touched)">
+    <div *ngIf="type.errors?.['required']">
+      Type is required.
+    </div>
+  </div>
 
-  <button type="submit">Update Animal</button>
+  <button type="submit" [disabled]="form.invalid">Update Animal</button>
 </form>
