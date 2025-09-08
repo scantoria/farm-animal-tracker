@@ -3,5 +3,6 @@
 <div *ngIf="animals$ | async as animals">
   <div *ngFor="let animal of animals">
     <p>{{ animal.name }} - {{ animal.type }}</p>
+    <button (click)="deleteAnimal(animal)">Delete</button>
   </div>
 </div>
