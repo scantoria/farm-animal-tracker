@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, updateDoc, docData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,6 +17,11 @@ export class DataService {
   getAnimals(): Observable<any[]> {
     const animalsRef = collection(this.firestore, 'animals');
     return collectionData(animalsRef, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  getAnimalById(id: string): Observable<any> {
+    const animalDocRef = doc(this.firestore, `animals/${id}`);
+    return docData(animalDocRef, { idField: 'id' }) as Observable<any>;
   }
 
   deleteAnimal(animal: any) {

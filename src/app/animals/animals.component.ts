@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-animals',
   standalone: true,
-  imports: [CommonModule], // Add CommonModule here
+  imports: [
+    CommonModule,
+    RouterLink
+  ], // Add CommonModule here
   templateUrl: './animals.component.html',
   styleUrl: './animals.component.scss'
 })

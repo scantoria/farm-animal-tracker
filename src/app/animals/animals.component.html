@@ -4,5 +4,6 @@
   <div *ngFor="let animal of animals">
     <p>{{ animal.name }} - {{ animal.type }}</p>
     <button (click)="deleteAnimal(animal)">Delete</button>
+    <button [routerLink]="['/edit-animal', animal.id]">Edit</button>
   </div>
 </div>
