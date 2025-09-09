@@ -1,31 +1,47 @@
+// src/app/add-animal/add-animal.component.ts
+
 import { Component } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
-import { DataService } from '../data.service';
-import { CommonModule } from '@angular/common';
+import { AnimalsService } from '../animals.service';
 import { Router } from '@angular/router';
+import { Animal } from '../animals/animal.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-animal',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, FormsModule],
+  providers: [AnimalsService], // Add this line
   templateUrl: './add-animal.component.html',
   styleUrl: './add-animal.component.scss'
 })
 export class AddAnimalComponent {
 
-  constructor(private dataService: DataService, private router: Router) { }
+  constructor(private animalsService: AnimalsService, private router: Router) { }
 
   onSubmit(form: NgForm) {
-    const { name, type } = form.value;
+    if (form.invalid) {
+      return;
+    }
 
-    this.dataService.addAnimal({ name, type })
-      .then(() => {
-        console.log('Animal added successfully!');
-        form.resetForm();
-        this.router.navigate(['/']); // Redirect to the home page
-      })
-      .catch((error) => {
-        console.error('Error adding animal:', error);
+    const newAnimal: Animal = {
+      name: form.value.name,
+      species: form.value.species,
+      breed: form.value.breed,
+      dob: new Date(form.value.dob),
+      sex: form.value.sex,
+      status: form.value.status,
+    };
+
+    this.animalsService.addAnimal(newAnimal)
+      .subscribe({
+        next: () => {
+          form.resetForm();
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          console.error('Error adding animal:', error);
+        }
       });
   }
 }

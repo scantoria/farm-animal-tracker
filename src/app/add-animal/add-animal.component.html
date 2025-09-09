@@ -9,11 +9,47 @@
     </div>
   </div>
 
-  <label for="type">Type:</label>
-  <input type="text" id="type" name="type" ngModel required #type="ngModel">
-  <div *ngIf="type.invalid && (type.dirty || type.touched)">
-    <div *ngIf="type.errors?.['required']">
-      Type is required.
+  <label for="species">Species:</label>
+  <input type="text" id="species" name="species" ngModel required #species="ngModel">
+  <div *ngIf="species.invalid && (species.dirty || species.touched)">
+    <div *ngIf="species.errors?.['required']">
+      Species is required.
+    </div>
+  </div>
+
+  <label for="breed">Breed:</label>
+  <input type="text" id="breed" name="breed" ngModel required #breed="ngModel">
+  <div *ngIf="breed.invalid && (breed.dirty || breed.touched)">
+    <div *ngIf="breed.errors?.['required']">
+      Breed is required.
+    </div>
+  </div>
+
+  <label for="dob">Date of Birth:</label>
+  <input type="date" id="dob" name="dob" ngModel required #dob="ngModel">
+  <div *ngIf="dob.invalid && (dob.dirty || dob.touched)">
+    <div *ngIf="dob.errors?.['required']">
+      Date of Birth is required.
+    </div>
+  </div>
+
+  <label for="sex">Sex:</label>
+  <select id="sex" name="sex" ngModel required #sex="ngModel">
+    <option value="" disabled selected>Select Sex</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+  </select>
+  <div *ngIf="sex.invalid && (sex.dirty || sex.touched)">
+    <div *ngIf="sex.errors?.['required']">
+      Sex is required.
+    </div>
+  </div>
+
+  <label for="status">Status:</label>
+  <input type="text" id="status" name="status" ngModel required #status="ngModel">
+  <div *ngIf="status.invalid && (status.dirty || status.touched)">
+    <div *ngIf="status.errors?.['required']">
+      Status is required.
     </div>
   </div>
 
