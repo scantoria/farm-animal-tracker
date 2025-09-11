@@ -1,35 +1,43 @@
+// src/app/animals/animals.component.ts
+
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
-import { CommonModule } from '@angular/common';
+import { AnimalsService } from '../animals.service';
+import { Animal } from './animal.model';
 import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-animals',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink
-  ], // Add CommonModule here
+  imports: [CommonModule, RouterLink],
+  providers: [AnimalsService],
   templateUrl: './animals.component.html',
   styleUrl: './animals.component.scss'
 })
 export class AnimalsComponent implements OnInit {
-  animals$: Observable<any[]> | undefined;
 
-  constructor(private dataService: DataService) { }
+  animals$!: Observable<Animal[]>;
+
+  constructor(private animalsService: AnimalsService) { }
 
   ngOnInit(): void {
-    this.animals$ = this.dataService.getAnimals();
+    this.animals$ = this.animalsService.getAll();
   }
 
-  deleteAnimal(animal: any) {
-    this.dataService.deleteAnimal(animal)
-      .then(() => {
-        console.log('Animal deleted successfully!');
-      })
-      .catch(error => {
-        console.error('Error deleting animal:', error);
-      });
+  deleteAnimal(animal: Animal): void {
+    if (confirm('Are you sure you want to delete this animal?')) {
+      this.animalsService.deleteAnimal(animal)
+        .subscribe({
+          next: () => {
+            console.log('Animal deleted successfully.');
+            // Re-fetch the list to update the view
+            this.animals$ = this.animalsService.getAll();
+          },
+          error: (error) => {
+            console.error('Error deleting animal:', error);
+          }
+        });
+    }
   }
 }
