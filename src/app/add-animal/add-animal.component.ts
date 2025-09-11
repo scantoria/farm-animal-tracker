@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
   selector: 'app-add-animal',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  providers: [AnimalsService], // Add this line
   templateUrl: './add-animal.component.html',
   styleUrl: './add-animal.component.scss'
 })
@@ -28,7 +27,7 @@ export class AddAnimalComponent {
       name: form.value.name,
       species: form.value.species,
       breed: form.value.breed,
-      dob: new Date(form.value.dob),
+      dob: form.value.dob, // The value from the input is already a string
       sex: form.value.sex,
       status: form.value.status,
     };

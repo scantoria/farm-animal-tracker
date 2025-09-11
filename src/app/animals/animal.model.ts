@@ -7,7 +7,7 @@ export interface Animal {
   name: string;
   species: string;
   breed: string;
-  dob: Date; // date of birth
+  dob: string;
   sex: 'Male' | 'Female';
   registrationNumber?: string;
   microchipId?: string;

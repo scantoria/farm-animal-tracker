@@ -1,48 +1,62 @@
+// src/app/edit-animal/edit-animal.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AnimalsService } from '../animals.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Animal } from '../animals/animal.model';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-edit-animal',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, FormsModule, RouterLink],
+  providers: [AnimalsService],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss'
 })
 export class EditAnimalComponent implements OnInit {
-  animal: any;
-  animalId: string | null = null;
+  animal: Animal | undefined;
 
   constructor(
+    private animalsService: AnimalsService,
     private route: ActivatedRoute,
-    private dataService: DataService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.animalId = this.route.snapshot.paramMap.get('id');
-    if (this.animalId) {
-      this.dataService.getAnimalById(this.animalId).subscribe(animal => {
-        this.animal = animal;
-      });
+    const animalId = this.route.snapshot.paramMap.get('id');
+    if (animalId) {
+      this.animalsService.getAnimal(animalId)
+        .subscribe(animal => {
+          this.animal = animal;
+        });
     }
   }
 
   onSubmit(form: NgForm): void {
-    const updatedAnimal = {
-      id: this.animalId,
-      ...form.value
+    if (form.invalid || !this.animal?.id) {
+      return;
+    }
+
+    const updatedAnimal: Animal = {
+      ...this.animal, // Spread the existing properties
+      name: form.value.name,
+      species: form.value.species,
+      breed: form.value.breed,
+      dob: form.value.dob, // No more new Date() conversion
+      sex: form.value.sex,
+      status: form.value.status,
     };
 
-    this.dataService.updateAnimal(updatedAnimal)
-      .then(() => {
-        console.log('Animal updated successfully!');
-        this.router.navigate(['/']);
-      })
-      .catch(error => {
-        console.error('Error updating animal:', error);
+    this.animalsService.updateAnimal(updatedAnimal)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          console.error('Error updating animal:', error);
+        }
       });
   }
 }
