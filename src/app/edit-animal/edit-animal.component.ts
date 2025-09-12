@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-edit-animal',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   providers: [AnimalsService],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss'

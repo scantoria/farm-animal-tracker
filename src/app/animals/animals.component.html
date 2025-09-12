@@ -8,7 +8,7 @@
       <strong>Breed:</strong> {{ animal.breed }}<br>
       <strong>Sex:</strong> {{ animal.sex }}<br>
       <strong>Status:</strong> {{ animal.status }}<br>
-      <strong>Date of Birth:</strong> {{ animal.dob | date }}
+      <strong>Date of Birth:</strong> {{ animal.dob }}
     </p>
     <button (click)="deleteAnimal(animal)">Delete</button>
     <button [routerLink]="['/edit-animal', animal.id]">Edit</button>
