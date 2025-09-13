@@ -10,7 +10,8 @@
       <strong>Status:</strong> {{ animal.status }}<br>
       <strong>Date of Birth:</strong> {{ animal.dob }}
     </p>
-    <button (click)="deleteAnimal(animal)">Delete</button>
-    <button [routerLink]="['/edit-animal', animal.id]">Edit</button>
+    <button (click)="deleteAnimal(animal)">Delete</button> 
+    <button [routerLink]="['/edit-animal', animal.id]">Edit</button> 
+    <button [routerLink]="['/animals', animal.id, 'health-records']">Health Records</button>
   </div>
 </div>

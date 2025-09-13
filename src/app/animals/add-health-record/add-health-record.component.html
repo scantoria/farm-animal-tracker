@@ -1,0 +1,26 @@
+<div class="container">
+  <h2>Add Health Record</h2>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div>
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" ngModel required>
+    </div>
+    <div>
+      <label for="eventType">Event Type:</label>
+      <input type="text" id="eventType" name="eventType" ngModel required>
+    </div>
+    <div>
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" ngModel required></textarea>
+    </div>
+    <div>
+      <label for="administeredBy">Administered By:</label>
+      <input type="text" id="administeredBy" name="administeredBy" ngModel required>
+    </div>
+    <div>
+      <label for="dosage">Dosage (Optional):</label>
+      <input type="text" id="dosage" name="dosage" ngModel>
+    </div>
+    <button type="submit" [disabled]="f.invalid">Add Record</button>
+  </form>
+</div>

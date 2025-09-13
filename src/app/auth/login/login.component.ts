@@ -22,7 +22,7 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful:', response);
           form.resetForm();
-          this.router.navigate(['/']); // Update this line
+          this.router.navigate(['/']);
         },
         error: (error) => {
           console.error('Login failed:', error);
