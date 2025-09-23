@@ -2,9 +2,9 @@
 
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
-import { AnimalsService } from '../animals.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Animal } from '../animals/animal.model';
+import { Animal } from '../../../../shared/models/animal.model';
 import { CommonModule } from '@angular/common';
 
 @Component({

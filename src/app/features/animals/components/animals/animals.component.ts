@@ -1,8 +1,8 @@
-// src/app/animals/animals.component.ts
+// src/app/features/animals/animals.component.ts
 
 import { Component, OnInit } from '@angular/core';
-import { AnimalsService } from '../animals.service';
-import { Animal } from './animal.model';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';

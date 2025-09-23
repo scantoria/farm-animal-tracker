@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, collectionData } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Animal } from './animals/animal.model';
+import { Animal } from '../../shared/models/animal.model';
 
 @Injectable({
   providedIn: 'root'

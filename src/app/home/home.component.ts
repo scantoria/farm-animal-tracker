@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { AnimalsComponent } from '../animals/animals.component';
+import { AnimalsComponent } from '../features/animals/components/animals/animals.component';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({

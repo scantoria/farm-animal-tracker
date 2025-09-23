@@ -2,9 +2,9 @@
 
 import { Component } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
-import { AnimalsService } from '../animals.service';
+import { AnimalsService } from '../../../..//core/services/animals.service';
 import { Router } from '@angular/router';
-import { Animal } from '../animals/animal.model';
+import { Animal } from '../../../../shared/models/animal.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -27,7 +27,7 @@ export class AddAnimalComponent {
       name: form.value.name,
       species: form.value.species,
       breed: form.value.breed,
-      dob: form.value.dob, // The value from the input is already a string
+      dob: form.value.dob, 
       sex: form.value.sex,
       status: form.value.status,
     };

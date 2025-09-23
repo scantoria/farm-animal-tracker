@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../core/services/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from 'firebase/auth';
