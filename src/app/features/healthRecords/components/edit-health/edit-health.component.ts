@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -6,20 +7,20 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HealthService } from '../../../../core/services/health.service'; // Corrected path
-import { HealthModel } from '../../../../shared/models/health.model'; // Corrected path
+import { HealthService } from '../../../../core/services/health.service';
+import { HealthModel } from '../../../../shared/models/health.model';
 import { take } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
-  selector: 'app-edit',
+  selector: 'app-edit-health',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './edit-health.component.html',
   styleUrls: ['./edit-health.component.scss'],
 })
 export class EditHealthComponent implements OnInit {
-  editHealthForm!: FormGroup;
+  editHealthRecordForm!: FormGroup;
   recordId!: string;
   animalId!: string;
 
@@ -28,37 +29,46 @@ export class EditHealthComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private healthService: HealthService
-  ) {}
+  ) {
+    this.editHealthRecordForm = this.fb.group({
+      date: ['', Validators.required],
+      eventType: ['', Validators.required],
+      description: ['', Validators.required],
+      // Add other fields from your HealthModel as needed
+    });
+  }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.recordId = this.route.snapshot.paramMap.get('recordId')!;
 
-    this.editHealthForm = this.fb.group({
+    this.editHealthRecordForm = this.fb.group({
       date: ['', Validators.required],
       eventType: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       administeredBy: ['', Validators.required],
       dosage: [''],
     });
 
-    if (this.recordId) {
+    if (this.animalId && this.recordId) {
       this.healthService
         .getHealthRecord(this.animalId, this.recordId)
         .pipe(take(1))
         .subscribe((record: HealthModel) => {
-          this.editHealthForm.patchValue(record);
+          if (record) {
+            this.editHealthRecordForm.patchValue(record);
+          }
         });
     }
   }
 
   onSubmit() {
-    if (this.editHealthForm.valid && this.recordId) {
+    if (this.editHealthRecordForm.valid && this.animalId && this.recordId) {
       this.healthService
         .updateHealthRecord(
-          this.animalId,
-          this.recordId,
-          this.editHealthForm.value
+          this.animalId, 
+          this.recordId, 
+          this.editHealthRecordForm.value
         )
         .subscribe(() => {
           console.log('Health record updated successfully!');

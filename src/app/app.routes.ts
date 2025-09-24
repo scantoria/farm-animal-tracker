@@ -8,6 +8,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HealthComponent } from './features/healthRecords/components/health/health.component';
 import { AddHealthComponent } from './features/healthRecords/components/add-health/add-health.component';
+import { EditHealthComponent } from './features/healthRecords/components/edit-health/edit-health.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] }, 
     { path: 'animals/:id/health', component: HealthComponent }, 
     { path: 'animals/:id/add-health', component: AddHealthComponent },
+    { path: 'animals/:id/health/edit/:recordId', component: EditHealthComponent},
     { path: '**', redirectTo: '/animals' },
 ];

@@ -8,11 +8,13 @@
   <div *ngIf="healthModel$ | async as records">
     <div class="list-group mt-3">
       <div class="list-group-item" *ngFor="let record of records">
+        <!--
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">{{ record.eventType }}</h5>
           <small>{{ record.date }}</small>
         </div>
-        <p class="mb-1">{{ record.description }}</p>
+        -->
+        <p class="mb-1">{{ record.eventType }}&nbsp; | &nbsp;{{ record.date }}&nbsp; | &nbsp;{{ record.description }}&nbsp; | &nbsp;{{record.dosage}}</p>
         <div>
           <button class="btn btn-sm btn-info" (click)="onEdit(record.id!)">
             Edit
