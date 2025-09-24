@@ -16,7 +16,7 @@ export const routes: Routes = [
     { path: 'add-animal', component: AddAnimalComponent, canActivate: [AuthGuard] },
     { path: 'edit-animal/:id', component: EditAnimalComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] }, 
-    { path: 'animals/:id/health-records', component: HealthComponent }, 
-    { path: 'animals/:id/add-health-record', component: AddHealthComponent },
+    { path: 'animals/:id/health', component: HealthComponent }, 
+    { path: 'animals/:id/add-health', component: AddHealthComponent },
     { path: '**', redirectTo: '/animals' },
 ];

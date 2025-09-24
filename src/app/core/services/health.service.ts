@@ -7,8 +7,8 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  //query,
-  //where,
+  query,
+  where,
   collectionData,
 } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
@@ -26,7 +26,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'healthRecords'
+      'health'
     );
     return from(addDoc(healthCollection, healthModel));
   }
@@ -36,7 +36,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'healthRecords'
+      'health'
     );
     return collectionData(healthCollection, { idField: 'id' }).pipe(
       map((records) => records as HealthModel[])
@@ -48,7 +48,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'healthRecords',
+      'health',
       recordId
     );
     return from(
@@ -71,7 +71,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'healthRecords',
+      'health',
       recordId
     );
     return from(updateDoc(healthDocRef, updatedRecord));
@@ -82,7 +82,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'healthRecords',
+      'health',
       recordId
     );
     return from(deleteDoc(healthDocRef));

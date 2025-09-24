@@ -6,7 +6,7 @@ import { HealthModel } from '../../../../shared/models/health.model';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-health-records',
+  selector: 'app-health',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './health.component.html',
@@ -32,15 +32,14 @@ export class HealthComponent implements OnInit {
   }
 
   onAddHealthRecord() {
-    // FIX: Updated the navigation path to match the app.routes.ts configuration
-    this.router.navigate(['/animals', this.animalId, 'add-health-record']);
+    this.router.navigate(['/animals', this.animalId, 'add-health']);
   }
 
   onEdit(recordId: string) {
     this.router.navigate([
       '/animals',
       this.animalId,
-      'health-records',
+      'health',
       'edit',
       recordId,
     ]);
@@ -52,5 +51,11 @@ export class HealthComponent implements OnInit {
         console.log('Record deleted successfully!');
       });
     }
+  }
+
+  // New method to navigate back to the animal record
+  onBackToAnimal() {
+    //this.router.navigate(['/edit-animal', this.animalId]);
+    this.router.navigate(['/']);
   }
 }

@@ -42,7 +42,7 @@ export class AddHealthComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('Health record added successfully!');
-          this.router.navigate(['/animals', this.animalId, 'health-records']);
+          this.router.navigate(['/animals', this.animalId, 'health']);
         },
         error: (error) => {
           console.error('Error adding health record:', error);
@@ -51,6 +51,6 @@ export class AddHealthComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/animals', this.animalId, 'health-records']);
+    this.router.navigate(['/animals', this.animalId, 'health']);
   }
 }

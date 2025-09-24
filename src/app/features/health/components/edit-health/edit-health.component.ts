@@ -12,7 +12,7 @@ import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-health',
+  selector: 'app-edit',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './edit-health.component.html',
@@ -62,12 +62,12 @@ export class EditHealthComponent implements OnInit {
         )
         .subscribe(() => {
           console.log('Health record updated successfully!');
-          this.router.navigate(['/animals', this.animalId, 'health-records']);
+          this.router.navigate(['/animals', this.animalId, 'health']);
         });
     }
   }
 
   onCancel() {
-    this.router.navigate(['/animals', this.animalId, 'health-records']);
+    this.router.navigate(['/animals', this.animalId, 'health']);
   }
 }
