@@ -6,8 +6,8 @@ import { AddAnimalComponent } from './features/animals/components/add-animal/add
 import { EditAnimalComponent } from './features/animals/components/edit-animal/edit-animal.component';
 import { AuthGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { HealthComponent } from './features/health/components/health/health.component';
-import { AddHealthComponent } from './features/health/components/add-health/add-health.component';
+import { HealthComponent } from './features/healthRecords/components/health/health.component';
+import { AddHealthComponent } from './features/healthRecords/components/add-health/add-health.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },

@@ -26,7 +26,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'health'
+      'healthRecords'
     );
     return from(addDoc(healthCollection, healthModel));
   }
@@ -36,7 +36,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'health'
+      'healthRecords'
     );
     return collectionData(healthCollection, { idField: 'id' }).pipe(
       map((records) => records as HealthModel[])
@@ -48,7 +48,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'health',
+      'healthRecords',
       recordId
     );
     return from(
@@ -71,7 +71,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'health',
+      'healthRecords',
       recordId
     );
     return from(updateDoc(healthDocRef, updatedRecord));
@@ -82,7 +82,7 @@ export class HealthService {
       this.firestore,
       'animals',
       animalId,
-      'health',
+      'healthRecords',
       recordId
     );
     return from(deleteDoc(healthDocRef));
