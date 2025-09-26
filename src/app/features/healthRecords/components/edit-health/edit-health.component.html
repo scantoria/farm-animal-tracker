@@ -22,6 +22,14 @@
         class="form-control"
       ></textarea>
     </div>
+    <div class="form-group">
+      <label for="dosage">Dosage</label>
+      <textarea
+        id="dosage"
+        formControlName="dosage"
+        class="form-control"
+      ></textarea>
+    </div>
     <button type="submit" class="btn btn-primary" [disabled]="!editHealthRecordForm.valid">
       Update Record
     </button>
