@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AnimalsComponent } from '../features/animals/components/animals/animals.component';
+import { AnimalsComponent } from '../features/animals/components/animals/animal.details.component';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';

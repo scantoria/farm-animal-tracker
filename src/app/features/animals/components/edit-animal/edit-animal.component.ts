@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-edit-animal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   providers: [AnimalsService],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss'
@@ -59,4 +59,7 @@ export class EditAnimalComponent implements OnInit {
         }
       });
   }
+  //onBackToBreedingEvents() {
+  //  this.router.navigate(['/animals', this.animal?.id, 'breeding']);
+  //}
 }

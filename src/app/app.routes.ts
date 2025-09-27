@@ -12,6 +12,9 @@ import { EditHealthComponent } from './features/healthRecords/components/edit-he
 import { BreedingComponent } from './features/breeding/components/breeding/breeding.component';
 import { AddBreedingComponent } from './features/breeding/components/add-breeding/add-breeding.component';
 import { EditBreedingComponent } from './features/breeding/components/edit-breeding/edit-breeding.component';
+import { PregnancyCheckComponent } from './features/breeding/components/pregnancy-check/pregnancy-check.component'; // <-- Add this import
+import { AddPregnancyCheckComponent } from './features/breeding/components/add-pregnancy-check/add-pregnancy-check.component'; // <-- Add this import
+import { EditPregnancyCheckComponent } from './features/breeding/components/edit-pregnancy-check/edit-pregnancy-check.component'; // <-- Add this import
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -26,5 +29,8 @@ export const routes: Routes = [
     { path: 'animals/:id/breeding', component: BreedingComponent, canActivate: [AuthGuard] }, 
     { path: 'animals/:id/add-breeding', component: AddBreedingComponent, canActivate: [AuthGuard] },
     { path: 'animals/:id/breeding/edit/:recordId', component: EditBreedingComponent, canActivate: [AuthGuard] },
+    { path: 'animals/:id/breeding/:eventId/checks', component: PregnancyCheckComponent },
+    { path: 'animals/:id/breeding/:eventId/add-check', component: AddPregnancyCheckComponent },
+    { path: 'animals/:id/breeding/:eventId/checks/edit/:checkId', component: EditPregnancyCheckComponent }, 
     { path: '**', redirectTo: '/animals' },
 ];

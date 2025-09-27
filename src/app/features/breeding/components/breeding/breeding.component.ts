@@ -1,11 +1,48 @@
-import { Component } from '@angular/core';
+// src/app/features/breeding/components/breeding/breeding.component.ts
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { BreedingEvent } from '../../../../shared/models/breeding.model';
+import { BreedingService } from '../../../../core/services/breeding.service';
 
 @Component({
-  selector: 'app-breeding.component',
-  imports: [],
+  selector: 'app-breeding',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './breeding.component.html',
-  styleUrl: './breeding.component.scss'
+  styleUrls: ['./breeding.component.scss'],
 })
-export class BreedingComponent {
+export class BreedingComponent implements OnInit {
+  breedingEvents$!: Observable<BreedingEvent[]>;
+  animalId!: string;
 
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private breedingService: BreedingService
+  ) {}
+
+  ngOnInit(): void {
+    this.animalId = this.route.snapshot.paramMap.get('id')!;
+    if (this.animalId) {
+      this.breedingEvents$ = this.breedingService.getBreedingEventsByAnimalId(this.animalId);
+    }
+  }
+
+  onAddBreedingEvent() {
+    this.router.navigate(['/animals', this.animalId, 'add-breeding']);
+  }
+
+  onEdit(eventId: string) {
+    this.router.navigate(['/animals', this.animalId, 'breeding', 'edit', eventId]);
+  }
+
+  onDelete(eventId: string) {
+    if (confirm('Are you sure you want to delete this breeding event?')) {
+      this.breedingService.deleteBreedingEvent(this.animalId, eventId).subscribe(() => {
+        console.log('Breeding event deleted successfully!');
+      });
+    }
+  }
 }

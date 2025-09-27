@@ -71,8 +71,37 @@ export class BreedingService {
     );
   }
   
-  // Note: Add methods for get, update, and delete PregnancyCheck as needed.
+// ** PregnancyCheck CRUD **
+// ... (Existing add and list methods)
 
+// New method to get a single PregnancyCheck
+getPregnancyCheck(animalId: string, eventId: string, checkId: string): Observable<PregnancyCheck | undefined> {
+  const checkDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/pregnancyChecks/${checkId}`);
+  return from(getDoc(checkDocRef)).pipe(
+    map(docSnap => {
+      if (docSnap.exists()) {
+        return { id: docSnap.id, ...docSnap.data() } as PregnancyCheck;
+      } else {
+        return undefined; // Return undefined if not found
+      }
+    })
+  );
+}
+
+// New method to update a PregnancyCheck
+updatePregnancyCheck(animalId: string, eventId: string, checkId: string, updatedCheck: Partial<PregnancyCheck>) {
+  const checkDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/pregnancyChecks/${checkId}`);
+  return from(updateDoc(checkDocRef, updatedCheck));
+}
+
+// New method to delete a PregnancyCheck
+deletePregnancyCheck(animalId: string, eventId: string, checkId: string) {
+  const checkDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/pregnancyChecks/${checkId}`);
+  return from(deleteDoc(checkDocRef));
+}
+
+// ... (Existing HormoneTreatment methods)
+  
   // ** HormoneTreatment CRUD **
   addHormoneTreatment(animalId: string, hormoneTreatment: HormoneTreatment) {
     const hormoneTreatmentsCollection = collection(this.firestore, `animals/${animalId}/hormoneTreatments`);

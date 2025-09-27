@@ -12,8 +12,8 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   providers: [AnimalsService],
-  templateUrl: './animals.component.html',
-  styleUrl: './animals.component.scss'
+  templateUrl: './animal-details.component.html',
+  styleUrl: './animal-details.component.scss'
 })
 export class AnimalsComponent implements OnInit {
 

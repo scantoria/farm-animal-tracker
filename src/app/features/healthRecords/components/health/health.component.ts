@@ -55,7 +55,7 @@ export class HealthComponent implements OnInit {
 
   // New method to navigate back to the animal record
   onBackToAnimal() {
-    //this.router.navigate(['/edit-animal', this.animalId]);
-    this.router.navigate(['/']);
+    this.router.navigate(['/edit-animal', this.animalId]);
+    //this.router.navigate(['/']);
   }
 }

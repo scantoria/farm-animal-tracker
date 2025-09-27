@@ -53,5 +53,21 @@
     </div>
   </div>
 
-  <button type="submit" [disabled]="form.invalid">Update Animal</button>
+  <div class="card-footer d-flex justify-content-start">
+    <button type="submit" [disabled]="form.invalid">Update Animal</button>
+    &nbsp;
+    <button 
+        class="btn btn-outline-info me-2" 
+        [routerLink]="['/animals', animal.id, 'health']"
+    >
+        View Health Records
+    </button>
+    &nbsp;
+    <button 
+        class="btn btn-outline-success me-2" 
+        [routerLink]="['/animals', animal.id, 'breeding']"
+    >
+        View Breeding Events
+    </button>
+</div>
 </form>
