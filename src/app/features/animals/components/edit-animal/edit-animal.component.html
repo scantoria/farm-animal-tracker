@@ -83,5 +83,20 @@
     >
         Pregnancy Checks
     </button>
+    <a 
+        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+        [routerLink]="['/animals', animal.id, 'birthing']"
+      >
+        <span>Birthing Schedules</span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+        
+      <a 
+        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+        [routerLink]="['/animals', animal.id, 'weaning']"
+      >
+        <span>Weaning Schedules</span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
 </div>
 </form>

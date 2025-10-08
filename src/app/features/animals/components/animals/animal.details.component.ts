@@ -6,6 +6,7 @@ import { Animal } from '../../../../shared/models/animal.model';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Auth } from '@angular/fire/auth'; 
 
 @Component({
   selector: 'app-animals',
@@ -19,9 +20,20 @@ export class AnimalsComponent implements OnInit {
 
   animals$!: Observable<Animal[]>;
 
-  constructor(private animalsService: AnimalsService) { }
+  constructor(
+    private animalsService: AnimalsService,
+    private auth: Auth
+  ) { }
 
   ngOnInit(): void {
+    // 💥 CHECK 1: Log the current user object
+    console.log('Current User State:', this.auth.currentUser);
+
+    // Listen for changes (User might log out after the initial check)
+    this.auth.onAuthStateChanged(user => {
+      console.log('Auth State Changed. User is:', user);
+    });
+    
     this.animals$ = this.animalsService.getAll();
   }
 

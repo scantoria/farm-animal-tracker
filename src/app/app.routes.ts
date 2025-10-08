@@ -32,6 +32,11 @@ import { BirthingScheduleComponent } from './features/birthing/components/birthi
 import { AddBirthingScheduleComponent } from './features/birthing/components/add-birthing-schedule/add-birthing-schedule.component';
 import { EditBirthingScheduleComponent } from './features/birthing/components/edit-birthing-schedule/edit-birthing-schedule.component';
 
+// Weaning Schedule
+import { WeaningScheduleComponent } from './features/weaning/components/weaning-schedule/weaning-schedule.component'; 
+import { AddWeaningScheduleComponent } from './features/weaning/components/add-weaning-schedule/add-weaning-schedule.component';
+import { EditWeaningScheduleComponent } from './features/weaning/components/edit-weaning-schedule/edit-weaning-schedule.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -61,10 +66,25 @@ export const routes: Routes = [
     { path: 'animals/:id/breeding/:eventId/treatments/add', component: AddHormoneTreatmentComponent },
     { path: 'animals/:id/breeding/:eventId/treatments/edit/:treatmentId', component: EditHormoneTreatmentComponent },
 
-    // 👇 NEW Birthing Records Module Routes 👇
+    // Birthing Records Module Routes
     { path: 'animals/:id/birthing', component: BirthingScheduleComponent }, 
     { path: 'animals/:id/birthing/add', component: AddBirthingScheduleComponent },
     { path: 'animals/:id/birthing/edit/:recordId', component: EditBirthingScheduleComponent },
+
+    // Weaning Schedule
+    { 
+        path: 'animals/:id/weaning', 
+        component: WeaningScheduleComponent // The list view
+    }, 
+    { 
+        path: 'animals/:id/weaning/add', 
+        component: AddWeaningScheduleComponent // The creation form
+    },
+    { 
+        path: 'animals/:id/weaning/edit/:recordId', 
+        component: EditWeaningScheduleComponent // The editing form
+    },
+
 
     { path: '**', redirectTo: '/' },
 ];

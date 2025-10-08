@@ -1,25 +1,19 @@
 <div class="container">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Birthing Records (Dam ID: {{ animalId }})</h2>
+    <h2>Weaning Records (Animal ID: {{ animalId }})</h2>
     <button class="btn btn-primary" (click)="onAddRecord()">
-      Add New Birth Record
+      Add New Weaning Record
     </button>
   </div>
 
-  <div *ngIf="birthingRecords$ | async as records; else loading">
+  <div *ngIf="weaningRecords$ | async as records; else loading">
     <div *ngIf="records.length > 0; else noRecords">
       <div class="list-group mt-3">
         <div class="list-group-item" *ngFor="let record of records">
           <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1">Tag: **{{ record.tagInfo }}**</h5>
-            <small>DOB: {{ record.dob }}</small>
+            <h5 class="mb-1">Wean Date: **{{ record.weanDate }}**</h5>
+            <small>Method: {{ record.method }}</small>
           </div>
-          <p class="mb-1">
-            **Species:** {{ record.species }} | **Sex:** {{ record.sex | titlecase }} | **Weight:** {{ record.birthWeight }}
-          </p>
-          <p class="mb-1 text-secondary small">
-            Sire: {{ record.sire }} | Breed: {{ record.breed }} | Ease: {{ record.calvingEase }}
-          </p>
           <p *ngIf="record.notes" class="mb-1 text-secondary small">
             Notes: {{ record.notes }}
           </p>
@@ -38,12 +32,12 @@
       </div>
     </div>
     <ng-template #noRecords>
-      <div class="alert alert-info mt-3">No birthing records found for this animal.</div>
+      <div class="alert alert-info mt-3">No weaning records found for this animal.</div>
     </ng-template>
   </div>
 
   <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading birthing records...</div>
+    <div class="alert alert-warning mt-3">Loading weaning records...</div>
   </ng-template>
 
   <div class="mt-4">

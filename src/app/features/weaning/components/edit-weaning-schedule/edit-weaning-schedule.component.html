@@ -1,0 +1,61 @@
+<div class="container">
+  <h2>Edit Weaning Record (ID: {{ recordId }})</h2>
+
+  <div *ngIf="!weaningRecord" class="alert alert-warning">Loading record data...</div>
+
+  <form *ngIf="weaningRecord" #form="ngForm" (ngSubmit)="onSubmit(form)">
+    
+    <div class="mb-3">
+      <label for="weanDate" class="form-label">Wean Date *</label>
+      <input 
+        type="date" 
+        class="form-control" 
+        id="weanDate" 
+        name="weanDate" 
+        [(ngModel)]="weaningRecord.weanDate" 
+        required
+      >
+    </div>
+
+    <div class="mb-3">
+      <label for="method" class="form-label">Weaning Method *</label>
+      <select 
+        class="form-select" 
+        id="method" 
+        name="method" 
+        [(ngModel)]="weaningRecord.method" 
+        required
+      >
+        <option *ngFor="let method of methodOptions" [value]="method">{{ method }}</option>
+      </select>
+    </div>
+    
+    <div class="mb-3">
+      <label for="notes" class="form-label">Notes (Optional)</label>
+      <textarea 
+        class="form-control" 
+        id="notes" 
+        name="notes" 
+        rows="3" 
+        [(ngModel)]="weaningRecord.notes"
+      ></textarea>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="onCancel()"
+      >
+        Cancel
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-primary" 
+        [disabled]="form.invalid"
+      >
+        Update Record
+      </button>
+    </div>
+  </form>
+</div>
