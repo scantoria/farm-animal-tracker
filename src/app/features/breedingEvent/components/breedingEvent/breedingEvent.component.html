@@ -30,6 +30,12 @@
           >
             Delete
           </button>
+          <button 
+            [routerLink]="['/animals', animalId, 'breeding', event.id, 'treatments']" 
+            class="btn btn-sm btn-secondary"
+          >
+            View Treatments
+          </button>
         </div>
       </div>
     </div>
@@ -41,6 +47,7 @@
       Back to Animal Record
     </button>
     //-->
+    
     <button
       class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
       Back to Animal Record

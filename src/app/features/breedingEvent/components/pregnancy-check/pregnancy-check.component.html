@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Pregnancy Checks (Event: {{ eventId }})</h2>
+    <button class="btn btn-primary" (click)="onAddCheck()">
+      Add New Check
+    </button>
+  </div>
+
+  <div *ngIf="pregnancyChecks$ | async as checks; else loading">
+    <div *ngIf="checks.length > 0; else noChecks">
+      <div class="list-group mt-3">
+        <div class="list-group-item" *ngFor="let check of checks">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <h5 class="mb-1">Result: **{{ check.result }}**</h5>
+            <small>Check Date: {{ check.checkDate }}</small>
+          </div>
+          <p class="mb-1">
+            **Method:** {{ check.confirmationMethod }} | **Next Check:** {{ check.nextCheckDate || 'N/A' }}
+          </p>
+          <p *ngIf="check.notes" class="mb-1 text-secondary small">
+            Notes: {{ check.notes }}
+          </p>
+          <div class="mt-2">
+            <button class="btn btn-sm btn-info" (click)="onEdit(check.id!)">
+              Edit
+            </button>
+            <button 
+              class="btn btn-sm btn-danger ms-2" 
+              (click)="onDelete(check.id!)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noChecks>
+      <div class="alert alert-info mt-3">No pregnancy checks have been recorded for this breeding event yet.</div>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <div class="alert alert-warning mt-3">Loading pregnancy check records...</div>
+  </ng-template>
+
+  <div class="mt-4">
+    <button class="btn btn-secondary" (click)="onBackToBreedingEvents()">
+      &larr; Back to Breeding Events
+    </button>
+  </div>
+</div>

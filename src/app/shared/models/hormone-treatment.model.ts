@@ -3,11 +3,13 @@
 import { DocumentReference } from '@angular/fire/firestore';
 
 export interface HormoneTreatment {
-  id?: string; // Optional Firestore document ID
-  animalRef: DocumentReference; // A reference to the animal that received the treatment
+  id?: string; 
+  animalRef: DocumentReference;
+  breedingEventRef: DocumentReference;
   treatmentDate: string;
-  type: string; // e.g., 'Heat Synchronization', 'Ovulation Induction'
+  hormoneType: string; // e.g., 'Heat Synchronization', 'Ovulation Induction'
   productUsed: string;
   dosage: string;
-  comments: string;
+  notes: string;
+  administeredBy: string
 }

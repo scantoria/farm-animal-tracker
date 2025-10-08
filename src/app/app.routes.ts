@@ -6,15 +6,32 @@ import { AddAnimalComponent } from './features/animals/components/add-animal/add
 import { EditAnimalComponent } from './features/animals/components/edit-animal/edit-animal.component';
 import { AuthGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+
+// Animal Health
 import { HealthComponent } from './features/healthRecords/components/health/health.component';
 import { AddHealthComponent } from './features/healthRecords/components/add-health/add-health.component';
 import { EditHealthComponent } from './features/healthRecords/components/edit-health/edit-health.component';
-import { BreedingComponent } from './features/breeding/components/breeding/breeding.component';
-import { AddBreedingComponent } from './features/breeding/components/add-breeding/add-breeding.component';
-import { EditBreedingComponent } from './features/breeding/components/edit-breeding/edit-breeding.component';
-import { PregnancyCheckComponent } from './features/breeding/components/pregnancy-check/pregnancy-check.component'; // <-- Add this import
-import { AddPregnancyCheckComponent } from './features/breeding/components/add-pregnancy-check/add-pregnancy-check.component'; // <-- Add this import
-import { EditPregnancyCheckComponent } from './features/breeding/components/edit-pregnancy-check/edit-pregnancy-check.component'; // <-- Add this import
+
+// Breeding
+import { BreedingEventComponent } from './features/breedingEvent/components/breedingEvent/breedingEvent.component';
+import { AddBreedingComponent } from './features/breedingEvent/components/add-breeding/add-breeding.component';
+import { EditBreedingComponent } from './features/breedingEvent/components/edit-breeding/edit-breeding.component';
+
+// Pregnancy Check
+import { PregnancyCheckComponent } from './features/breedingEvent/components/pregnancy-check/pregnancy-check.component'; 
+import { AddPregnancyCheckComponent } from './features/breedingEvent/components/add-pregnancy-check/add-pregnancy-check.component'; 
+import { EditPregnancyCheckComponent } from './features/breedingEvent/components/edit-pregnancy-check/edit-pregnancy-check.component'; 
+
+// Hormone Treatment
+import { HormoneTreatmentListComponent } from './features/breedingEvent/components/hormone-treatment-list/hormone-treatment-list.component'; 
+import { AddHormoneTreatmentComponent } from './features/breedingEvent/components/add-hormone-treatment/add-hormone-treatment.component';
+import { EditHormoneTreatmentComponent } from './features/breedingEvent/components/edit-hormone-treatment/edit-hormone-treatment.component'; 
+
+// Birthing Schedule
+import { BirthingScheduleComponent } from './features/birthing/components/birthing-schedule/birthing-schedule.component'; 
+import { AddBirthingScheduleComponent } from './features/birthing/components/add-birthing-schedule/add-birthing-schedule.component';
+import { EditBirthingScheduleComponent } from './features/birthing/components/edit-birthing-schedule/edit-birthing-schedule.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -22,15 +39,32 @@ export const routes: Routes = [
     { path: 'signup', component: SignupComponent },
     { path: 'add-animal', component: AddAnimalComponent, canActivate: [AuthGuard] },
     { path: 'edit-animal/:id', component: EditAnimalComponent, canActivate: [AuthGuard] },
-    { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] }, 
-    { path: 'animals/:id/health', component: HealthComponent, canActivate: [AuthGuard] }, 
-    { path: 'animals/:id/add-health', component: AddHealthComponent, canActivate: [AuthGuard] },
-    { path: 'animals/:id/health/edit/:recordId', component: EditHealthComponent, canActivate: [AuthGuard] },
-    { path: 'animals/:id/breeding', component: BreedingComponent, canActivate: [AuthGuard] }, 
-    { path: 'animals/:id/add-breeding', component: AddBreedingComponent, canActivate: [AuthGuard] },
-    { path: 'animals/:id/breeding/edit/:recordId', component: EditBreedingComponent, canActivate: [AuthGuard] },
+    { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
+    
+    // Health Records Module Routes
+    { path: 'animals/:id/health', component: HealthComponent }, 
+    { path: 'animals/:id/add-health', component: AddHealthComponent },
+    { path: 'animals/:id/health/edit/:recordId', component: EditHealthComponent }, // Assuming an EditHealthComponent exists or will be added
+    
+    // Breeding Module Routes
+    { path: 'animals/:id/breeding', component: BreedingEventComponent },
+    { path: 'animals/:id/breeding/add', component: AddBreedingComponent },
+    { path: 'animals/:id/breeding/edit/:eventId', component: EditBreedingComponent },
+
+    // **NEW Pregnancy Check Routes (Level 2 - Nested under Breeding Event)**
     { path: 'animals/:id/breeding/:eventId/checks', component: PregnancyCheckComponent },
-    { path: 'animals/:id/breeding/:eventId/add-check', component: AddPregnancyCheckComponent },
-    { path: 'animals/:id/breeding/:eventId/checks/edit/:checkId', component: EditPregnancyCheckComponent }, 
-    { path: '**', redirectTo: '/animals' },
+    { path: 'animals/:id/breeding/:eventId/checks/add', component: AddPregnancyCheckComponent },
+    { path: 'animals/:id/breeding/:eventId/checks/edit/:checkId', component: EditPregnancyCheckComponent },
+
+    // Hormone Treatment Routes (Nested under Breeding Event)
+    { path: 'animals/:id/breeding/:eventId/treatments', component: HormoneTreatmentListComponent },
+    { path: 'animals/:id/breeding/:eventId/treatments/add', component: AddHormoneTreatmentComponent },
+    { path: 'animals/:id/breeding/:eventId/treatments/edit/:treatmentId', component: EditHormoneTreatmentComponent },
+
+    // 👇 NEW Birthing Records Module Routes 👇
+    { path: 'animals/:id/birthing', component: BirthingScheduleComponent }, 
+    { path: 'animals/:id/birthing/add', component: AddBirthingScheduleComponent },
+    { path: 'animals/:id/birthing/edit/:recordId', component: EditBirthingScheduleComponent },
+
+    { path: '**', redirectTo: '/' },
 ];

@@ -9,6 +9,7 @@ import {
   updateDoc,
   deleteDoc,
   collectionData,
+  DocumentReference
 } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -75,18 +76,18 @@ export class BreedingService {
 // ... (Existing add and list methods)
 
 // New method to get a single PregnancyCheck
-getPregnancyCheck(animalId: string, eventId: string, checkId: string): Observable<PregnancyCheck | undefined> {
-  const checkDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/pregnancyChecks/${checkId}`);
-  return from(getDoc(checkDocRef)).pipe(
-    map(docSnap => {
-      if (docSnap.exists()) {
-        return { id: docSnap.id, ...docSnap.data() } as PregnancyCheck;
-      } else {
-        return undefined; // Return undefined if not found
-      }
-    })
-  );
-}
+getPregnancyCheck(animalId: string, eventId: string, checkId: string): Observable<PregnancyCheck> {
+    const checkDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/pregnancyChecks/${checkId}`);
+    return from(getDoc(checkDocRef)).pipe(
+      map((docSnap) => {
+        if (docSnap.exists()) {
+          return { id: docSnap.id, ...docSnap.data() } as PregnancyCheck;
+        } else {
+          throw new Error('Pregnancy check not found');
+        }
+      })
+    );
+  }
 
 // New method to update a PregnancyCheck
 updatePregnancyCheck(animalId: string, eventId: string, checkId: string, updatedCheck: Partial<PregnancyCheck>) {
@@ -103,10 +104,10 @@ deletePregnancyCheck(animalId: string, eventId: string, checkId: string) {
 // ... (Existing HormoneTreatment methods)
   
   // ** HormoneTreatment CRUD **
-  addHormoneTreatment(animalId: string, hormoneTreatment: HormoneTreatment) {
-    const hormoneTreatmentsCollection = collection(this.firestore, `animals/${animalId}/hormoneTreatments`);
-    return from(addDoc(hormoneTreatmentsCollection, hormoneTreatment));
-  }
+  //addHormoneTreatment(animalId: string, hormoneTreatment: HormoneTreatment) {
+  //  const hormoneTreatmentsCollection = collection(this.firestore, `animals/${animalId}/hormoneTreatments`);
+  //  return from(addDoc(hormoneTreatmentsCollection, hormoneTreatment));
+  //}
 
   getHormoneTreatmentsByAnimalId(animalId: string): Observable<HormoneTreatment[]> {
     const hormoneTreatmentsCollection = collection(this.firestore, `animals/${animalId}/hormoneTreatments`);
@@ -115,5 +116,49 @@ deletePregnancyCheck(animalId: string, eventId: string, checkId: string) {
     );
   }
 
+  // ** HormoneTreatment CRUD **
+
+addHormoneTreatment(animalId: string, eventId: string, hormoneTreatment: HormoneTreatment) {
+  const hormoneTreatmentsCollection = collection(
+    this.firestore, 
+    `animals/${animalId}/breedingEvents/${eventId}/hormoneTreatments`
+  );
+  return from(addDoc(hormoneTreatmentsCollection, hormoneTreatment));
+}
+
+getHormoneTreatmentsByBreedingEventId(animalId: string, eventId: string): Observable<HormoneTreatment[]> {
+    const hormoneTreatmentsCollection = collection(
+        this.firestore, 
+        `animals/${animalId}/breedingEvents/${eventId}/hormoneTreatments`
+    );
+    return collectionData(hormoneTreatmentsCollection, { idField: 'id' }).pipe(
+      map((records) => records as HormoneTreatment[])
+    );
+}
+
+getHormoneTreatment(animalId: string, eventId: string, treatmentId: string): Observable<HormoneTreatment | undefined> {
+  const treatmentDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/hormoneTreatments/${treatmentId}`);
+  return from(getDoc(treatmentDocRef)).pipe(
+    map(docSnap => {
+      if (docSnap.exists()) {
+        return { id: docSnap.id, ...docSnap.data() } as HormoneTreatment;
+      } else {
+        return undefined;
+      }
+    })
+  );
+}
+
+// New method to UPDATE a HormoneTreatment
+updateHormoneTreatment(animalId: string, eventId: string, treatmentId: string, updatedTreatment: Partial<HormoneTreatment>) {
+  const treatmentDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/hormoneTreatments/${treatmentId}`);
+  return from(updateDoc(treatmentDocRef, updatedTreatment));
+}
+
+// New method to DELETE a HormoneTreatment
+deleteHormoneTreatment(animalId: string, eventId: string, treatmentId: string) {
+  const treatmentDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/hormoneTreatments/${treatmentId}`);
+  return from(deleteDoc(treatmentDocRef));
+}
   // Note: Add methods for get, update, and delete HormoneTreatment as needed.
 }

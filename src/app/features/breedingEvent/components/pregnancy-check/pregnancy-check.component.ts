@@ -28,14 +28,33 @@ export class PregnancyCheckComponent implements OnInit {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
     
+    //if (this.animalId && this.eventId) {
+    //  this.pregnancyChecks$ = this.breedingService.getPregnancyChecksByBreedingEventId(this.animalId, this.eventId);
+    //}
+
     if (this.animalId && this.eventId) {
-      this.pregnancyChecks$ = this.breedingService.getPregnancyChecksByBreedingEventId(this.animalId, this.eventId);
+      // Fetch the checks for the specific Breeding Event
+      this.loadPregnancyChecks();
     }
+  }
+
+  loadPregnancyChecks() {
+     this.pregnancyChecks$ = this.breedingService.getPregnancyChecksByBreedingEventId(
+        this.animalId, 
+        this.eventId
+      );
   }
 
   onAddCheck() {
     // We will define this route next
-    this.router.navigate(['/animals', this.animalId, 'breeding', this.eventId, 'add-check']);
+    this.router.navigate([
+      '/animals', 
+      this.animalId, 
+      'breeding', 
+      this.eventId, 
+      'checks',
+      'add'
+    ]);
   }
 
   onBackToBreedingEvents() {
@@ -43,15 +62,30 @@ export class PregnancyCheckComponent implements OnInit {
   }
 
   onEdit(checkId: string) {
-    this.router.navigate(['/animals', this.animalId, 'breeding', this.eventId, 'checks', 'edit', checkId]);
+    this.router.navigate([
+      '/animals', 
+      this.animalId, 
+      'breeding', 
+      this.eventId, 
+      'checks', 
+      'edit', 
+      checkId
+    ]);
   }
 
   onDelete(checkId: string) {
-    if (confirm('Are you sure you want to delete this pregnancy check?')) {
-      // NOTE: Ensure your BreedingService has this method implemented to delete
-      this.breedingService.deletePregnancyCheck(this.animalId, this.eventId, checkId).subscribe(() => {
-        console.log('Pregnancy check deleted successfully!');
-      });
+    if (confirm('Are you sure you want to delete this pregnancy check record?')) {
+      this.breedingService.deletePregnancyCheck(this.animalId, this.eventId, checkId)
+        .subscribe({
+          next: () => {
+            console.log('Pregnancy check deleted successfully!');
+            // Re-fetch the list to update the view
+            this.loadPregnancyChecks();
+          },
+          error: (error) => {
+            console.error('Error deleting pregnancy check:', error);
+          }
+        });
     }
   }
 

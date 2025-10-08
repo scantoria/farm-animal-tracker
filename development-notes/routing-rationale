@@ -1,0 +1,12 @@
+***
+
+## 2. Rationale for Routing
+
+| Button | Target Route | RouterLink Array | Rationale |
+| :--- | :--- | :--- | :--- |
+| **Health Records** | `animals/:id/health` | `['/animals', animal.id, 'health']` | This is the direct route to the animal's top-level health records list. |
+| **Breeding Events** | `animals/:id/breeding` | `['/animals', animal.id, 'breeding']` | This is the direct route to the animal's top-level breeding events list. |
+| **Hormone Management** | `animals/:id/breeding` | `['/animals', animal.id, 'breeding']` | Hormone Treatments are nested under a specific **Breeding Event**. This button provides a shortcut to the **Breeding Events List**, where the user can select the event to manage treatments. |
+| **Pregnancy Checks** | `animals/:id/breeding` | `['/animals', animal.id, 'breeding']` | Pregnancy Checks are also nested under a specific **Breeding Event**. This button acts as a shortcut to the **Breeding Events List**, which is the required intermediate page. |
+
+**No changes** were needed in `edit-animal.component.ts` as the `animal` property is correctly defined and the `RouterLink` directive is properly imported.

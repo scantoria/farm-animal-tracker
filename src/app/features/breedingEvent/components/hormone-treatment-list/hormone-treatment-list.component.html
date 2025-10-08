@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Hormone Treatments (Event: {{ eventId }})</h2>
+    <button class="btn btn-primary" (click)="onAddTreatment()">
+      Add New Treatment
+    </button>
+  </div>
+
+  <div *ngIf="hormoneTreatments$ | async as treatments; else loading">
+    <div *ngIf="treatments.length > 0; else noTreatments">
+      <div class="list-group mt-3">
+        <div class="list-group-item" *ngFor="let treatment of treatments">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <h5 class="mb-1">
+              {{ treatment.hormoneType }} - 
+              <span class="text-muted small">{{ treatment.productUsed }}</span>
+            </h5>
+            <small>Date: {{ treatment.treatmentDate }}</small>
+          </div>
+          <p class="mb-1">
+            **Dosage:** {{ treatment.dosage }} | **Administered By:** {{ treatment.administeredBy }}
+          </p>
+          <p *ngIf="treatment.notes" class="mb-1 text-secondary small">
+            Notes: {{ treatment.notes }}
+          </p>
+          <div class="mt-2">
+            <button class="btn btn-sm btn-info" (click)="onEdit(treatment.id!)">
+              Edit
+            </button>
+            <button 
+              class="btn btn-sm btn-danger ms-2" 
+              (click)="onDelete(treatment.id!)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noTreatments>
+      <div class="alert alert-info mt-3">No hormone treatments have been recorded for this breeding event yet.</div>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <div class="alert alert-warning mt-3">Loading hormone treatment records...</div>
+  </ng-template>
+
+  <div class="mt-4">
+    <button class="btn btn-secondary" (click)="onBackToBreedingEvents()">
+      &larr; Back to Breeding Events
+    </button>
+  </div>
+</div>

@@ -10,10 +10,10 @@ import { BreedingService } from '../../../../core/services/breeding.service';
   selector: 'app-breeding',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './breeding.component.html',
-  styleUrls: ['./breeding.component.scss'],
+  templateUrl: './breedingEvent.component.html',
+  styleUrls: ['./breedingEvent.component.scss'],
 })
-export class BreedingComponent implements OnInit {
+export class BreedingEventComponent implements OnInit {
   breedingEvents$!: Observable<BreedingEvent[]>;
   animalId!: string;
 

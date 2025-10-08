@@ -32,6 +32,27 @@
         </option>
       </select>
     </div>
+    <div class="form-group mb-4">
+      <label for="nextCheckDate">Next Check Date</label>
+      <input 
+        type="date" 
+        id="nextCheckDate" 
+        name="nextCheckDate" 
+        ngModel
+        required 
+        class="form-control" 
+      />
+    </div>
+    <div class="form-group mb-4">
+      <label for="notes">Notes</label>
+      <input 
+        type="text" 
+        id="notes" 
+        name="notes" 
+        ngModel
+        class="form-control"
+      />
+    </div>
 
     <button type="submit" class="btn btn-primary" [disabled]="checkForm.invalid">
       Add Check

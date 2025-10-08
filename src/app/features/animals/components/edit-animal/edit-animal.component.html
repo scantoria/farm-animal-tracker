@@ -60,14 +60,28 @@
         class="btn btn-outline-info me-2" 
         [routerLink]="['/animals', animal.id, 'health']"
     >
-        View Health Records
+        Health Records
     </button>
-    &nbsp;
+    
     <button 
-        class="btn btn-outline-success me-2" 
+        class="btn btn-outline-info me-2" 
         [routerLink]="['/animals', animal.id, 'breeding']"
     >
-        View Breeding Events
+        Breeding Events
+    </button>
+    
+    <button 
+        class="btn btn-outline-info me-2" 
+        [routerLink]="['/animals', animal.id, 'breeding']"
+    >
+        Hormone Management
+    </button>
+    
+    <button 
+        class="btn btn-outline-info" 
+        [routerLink]="['/animals', animal.id, 'breeding']"
+    >
+        Pregnancy Checks
     </button>
 </div>
 </form>

@@ -8,4 +8,6 @@ export interface PregnancyCheck {
   checkDate: string;
   result: string; // e.g., 'Pregnant', 'Open', 'Recheck Required'
   confirmationMethod: string; // e.g., 'Ultrasound', 'Blood Test'
+  nextCheckDate?: string; // Optional: Date of the next recommended check
+  notes?: string; // Optional: Any relevant notes or details
 }

@@ -44,7 +44,7 @@ export class EditPregnancyCheckComponent implements OnInit {
           console.error('Pregnancy check not found.');
           this.router.navigate(['/animals', this.animalId, 'breeding', this.eventId, 'checks']);
         }
-      });
+      }); 
     }
   }
 
