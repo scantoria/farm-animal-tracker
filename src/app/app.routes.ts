@@ -7,6 +7,11 @@ import { EditAnimalComponent } from './features/animals/components/edit-animal/e
 import { AuthGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 
+// Blacksmith Admin Imports
+import { BlacksmithAdminComponent } from './features/blacksmith/components/blacksmith-admin/blacksmith-admin.component';
+import { AddBlacksmithComponent } from './features/blacksmith/components/add-blacksmith/add-blacksmith.component';
+import { EditBlacksmithComponent } from './features/blacksmith/components/edit-blacksmith/edit-blacksmith.component';
+
 // Animal Health
 import { HealthComponent } from './features/healthRecords/components/health/health.component';
 import { AddHealthComponent } from './features/healthRecords/components/add-health/add-health.component';
@@ -37,6 +42,13 @@ import { WeaningScheduleComponent } from './features/weaning/components/weaning-
 import { AddWeaningScheduleComponent } from './features/weaning/components/add-weaning-schedule/add-weaning-schedule.component';
 import { EditWeaningScheduleComponent } from './features/weaning/components/edit-weaning-schedule/edit-weaning-schedule.component';
 
+// Blacksmith Services
+import { BlacksmithVisitComponent } from './features/blacksmith/components/blacksmith-visit/blacksmith-visit.component';
+import { AddBlacksmithVisitComponent } from './features/blacksmith/components/add-blacksmith-visit/add-blacksmith-visit.component';
+import { EditBlacksmithVisitComponent } from './features/blacksmith/components/edit-blacksmith-visit/edit-blacksmith-visit.component';
+
+// Provider Dashboard
+import { ProvidersComponent } from './features/providers/components/providers/providers.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -46,6 +58,14 @@ export const routes: Routes = [
     { path: 'edit-animal/:id', component: EditAnimalComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
     
+    // 👇 NEW Providers Dashboard Route 👇
+    { path: 'providers', component: ProvidersComponent, canActivate: [AuthGuard] },
+
+    // Blacksmith Admin Routes
+    { path: 'admin/blacksmiths', component: BlacksmithAdminComponent, canActivate: [AuthGuard] },
+    { path: 'admin/blacksmiths/add', component: AddBlacksmithComponent, canActivate: [AuthGuard] },
+    { path: 'admin/blacksmiths/edit/:blacksmithId', component: EditBlacksmithComponent, canActivate: [AuthGuard] },
+
     // Health Records Module Routes
     { path: 'animals/:id/health', component: HealthComponent }, 
     { path: 'animals/:id/add-health', component: AddHealthComponent },
@@ -72,19 +92,14 @@ export const routes: Routes = [
     { path: 'animals/:id/birthing/edit/:recordId', component: EditBirthingScheduleComponent },
 
     // Weaning Schedule
-    { 
-        path: 'animals/:id/weaning', 
-        component: WeaningScheduleComponent // The list view
-    }, 
-    { 
-        path: 'animals/:id/weaning/add', 
-        component: AddWeaningScheduleComponent // The creation form
-    },
-    { 
-        path: 'animals/:id/weaning/edit/:recordId', 
-        component: EditWeaningScheduleComponent // The editing form
-    },
+    { path: 'animals/:id/weaning', component: WeaningScheduleComponent }, 
+    { path: 'animals/:id/weaning/add', component: AddWeaningScheduleComponent },
+    { path: 'animals/:id/weaning/edit/:recordId', component: EditWeaningScheduleComponent },
 
+    // Blacksmith Services
+    { path: 'animals/:id/blacksmith', component: BlacksmithVisitComponent },
+    { path: 'animals/:id/blacksmith/add', component: AddBlacksmithVisitComponent },
+    { path: 'animals/:id/blacksmith/edit/:recordId', component: EditBlacksmithVisitComponent },
 
     { path: '**', redirectTo: '/' },
 ];

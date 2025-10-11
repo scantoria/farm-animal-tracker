@@ -1,0 +1,122 @@
+$form-font-size: 1rem;
+$form-padding: 0.75rem;
+$border-color: #ccc;
+$border-radius: 4px;
+$invalid-color: #dc3545;
+$spacing-small: 0.5rem;
+$spacing-medium: 1rem;
+$spacing-large: 1.5rem;
+$breakpoint-tablet: 768px;
+
+.responsive-form {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-medium;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spacing-medium;
+
+  label {
+    margin-bottom: $spacing-small;
+    font-weight: bold;
+    color: #333;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  select {
+    width: 100%;
+    padding: $form-padding;
+    font-size: $form-font-size;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    box-sizing: border-box; 
+
+    &:focus {
+      border-color: #007bff; 
+      outline: none;
+    }
+  }
+
+  // Styles for Angular validation states
+  input.ng-invalid.ng-touched,
+  select.ng-invalid.ng-touched {
+    border-color: $invalid-color;
+  }
+
+  .validation-message {
+    color: $invalid-color;
+    font-size: 0.875rem;
+    margin-top: $spacing-small;
+  }
+
+  // Responsive layout for larger screens
+  @media (min-width: $breakpoint-tablet) {
+    flex-direction: row;
+    align-items: center;
+
+    label {
+      flex-basis: 150px; // Gives labels a fixed width
+      margin-right: $spacing-medium;
+      margin-bottom: 0;
+    }
+
+    input, select {
+      flex: 1; // Allows inputs to grow and fill remaining space
+    }
+  }
+}
+
+.form-actions {
+  margin-top: $spacing-medium;
+  button {
+    // Style your submit button here
+    padding: $spacing-medium $spacing-large;
+    font-size: $form-font-size;
+  }
+}
+
+.navigation-buttons {
+  display: flex;
+  flex-wrap: wrap; // Allows buttons to wrap to the next line
+  gap: $spacing-medium; // Adds spacing between buttons
+  margin-top: $spacing-medium;
+
+  .btn {
+    flex-grow: 1; // Allows buttons to grow to fill space
+    text-align: center;
+  }
+}
+
+// Additional styling for the button group from the original template
+.card-footer {
+  // Can be replaced with similar Flexbox styling if needed
+  margin-top: $spacing-medium;
+}
+
+// Styling for `a` tags in the navigation section
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-medium;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  text-decoration: none;
+  color: #333;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.bi-chevron-right {
+  margin-left: $spacing-medium;
+}
+

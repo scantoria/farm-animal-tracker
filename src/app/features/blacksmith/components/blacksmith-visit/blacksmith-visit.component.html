@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Blacksmith Visit Records (Animal ID: {{ animalId }})</h2>
+    <button class="btn btn-primary" (click)="onAddRecord()">
+      Add New Visit Record
+    </button>
+  </div>
+
+  <div *ngIf="visitRecords$ | async as records; else loading">
+    <div *ngIf="records.length > 0; else noRecords">
+      <div class="list-group mt-3">
+        <div class="list-group-item" *ngFor="let record of records">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+           <h5 class="mb-1">Service: **{{ record.serviceProvided }}**</h5>
+            <small>Date: {{ record.visitDate }}</small>
+          </div>
+          <p class="mb-1">
+            **Next Appointment:** {{ record.nextAppointmentDate || 'N/A' }}
+          </p>
+          <p *ngIf="record.notes" class="mb-1 text-secondary small">
+            Notes: {{ record.notes }}
+          </p>
+          <div class="mt-2">
+            <button class="btn btn-sm btn-info" (click)="onEdit(record.id!)">
+              Edit
+            </button>
+            <button 
+              class="btn btn-sm btn-danger ms-2" 
+              (click)="onDelete(record.id!)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noRecords>
+      <div class="alert alert-info mt-3">No blacksmith visit records found for this animal.</div>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <div class="alert alert-warning mt-3">Loading visit records...</div>
+  </ng-template>
+
+  <div class="mt-4">
+    <button class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
+      &larr; Back to Animal Record
+    </button>
+  </div>
+</div>

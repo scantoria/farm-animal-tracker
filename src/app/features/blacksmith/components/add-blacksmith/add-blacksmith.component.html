@@ -1,0 +1,45 @@
+<div class="container">
+  <h2>Add New Blacksmith</h2>
+  
+  <form #blacksmithForm="ngForm" (ngSubmit)="onSubmit(blacksmithForm)">
+
+    <label for="name">Name:</label>
+    <input 
+      type="text" 
+      id="name" 
+      name="name" 
+      [(ngModel)]="newBlacksmith.name" 
+      required 
+      #name="ngModel"
+    >
+    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger small">
+      Name is required.
+    </div>
+
+    <label for="phone">Phone:</label>
+    <input 
+      type="text" 
+      id="phone" 
+      name="phone" 
+      [(ngModel)]="newBlacksmith.phone" 
+      required 
+      #phone="ngModel"
+    >
+    <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger small">
+      Phone is required.
+    </div>
+
+    <label for="specialty">Specialty (Optional):</label>
+    <input 
+      type="text" 
+      id="specialty" 
+      name="specialty" 
+      [(ngModel)]="newBlacksmith.specialty"
+    >
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="blacksmithForm.invalid">Save Blacksmith</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

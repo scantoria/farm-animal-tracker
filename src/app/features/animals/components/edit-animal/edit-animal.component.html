@@ -1,102 +1,123 @@
-<form *ngIf="animal" #form="ngForm" (ngSubmit)="onSubmit(form)">
+<form *ngIf="animal" #form="ngForm" (ngSubmit)="onSubmit(form)" class="responsive-form">
   <h2>Edit Animal</h2>
 
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" [(ngModel)]="animal.name" required #name="ngModel">
-  <div *ngIf="name.invalid && (name.dirty || name.touched)">
-    <div *ngIf="name.errors?.['required']">
-      Name is required.
+  <!-- Input for Name -->
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" [(ngModel)]="animal.name" required #name="ngModel">
+    <div class="validation-message" *ngIf="name.invalid && (name.dirty || name.touched)">
+      <div *ngIf="name.errors?.['required']">
+        Name is required.
+      </div>
     </div>
   </div>
 
-  <label for="species">Species:</label>
-  <input type="text" id="species" name="species" [(ngModel)]="animal.species" required #species="ngModel">
-  <div *ngIf="species.invalid && (species.dirty || species.touched)">
-    <div *ngIf="species.errors?.['required']">
-      Species is required.
+  <!-- Input for Species -->
+  <div class="form-group">
+    <label for="species">Species:</label>
+    <input type="text" id="species" name="species" [(ngModel)]="animal.species" required #species="ngModel">
+    <div class="validation-message" *ngIf="species.invalid && (species.dirty || species.touched)">
+      <div *ngIf="species.errors?.['required']">
+        Species is required.
+      </div>
     </div>
   </div>
 
-  <label for="breed">Breed:</label>
-  <input type="text" id="breed" name="breed" [(ngModel)]="animal.breed" required #breed="ngModel">
-  <div *ngIf="breed.invalid && (breed.dirty || breed.touched)">
-    <div *ngIf="breed.errors?.['required']">
-      Breed is required.
+  <!-- Input for Breed -->
+  <div class="form-group">
+    <label for="breed">Breed:</label>
+    <input type="text" id="breed" name="breed" [(ngModel)]="animal.breed" required #breed="ngModel">
+    <div class="validation-message" *ngIf="breed.invalid && (breed.dirty || breed.touched)">
+      <div *ngIf="breed.errors?.['required']">
+        Breed is required.
+      </div>
     </div>
   </div>
 
-  <label for="dob">Date of Birth:</label>
-  <input type="date" id="dob" name="dob" [ngModel]="animal.dob | date:'yyyy-MM-dd'" (ngModelChange)="animal.dob = $event" required #dob="ngModel">
-  <div *ngIf="dob.invalid && (dob.dirty || dob.touched)">
-    <div *ngIf="dob.errors?.['required']">
-      Date of Birth is required.
+  <!-- Input for Date of Birth -->
+  <div class="form-group">
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" name="dob" [ngModel]="animal.dob | date:'yyyy-MM-dd'" (ngModelChange)="animal.dob = $event" required #dob="ngModel">
+    <div class="validation-message" *ngIf="dob.invalid && (dob.dirty || dob.touched)">
+      <div *ngIf="dob.errors?.['required']">
+        Date of Birth is required.
+      </div>
     </div>
   </div>
 
-  <label for="sex">Sex:</label>
-  <select id="sex" name="sex" [(ngModel)]="animal.sex" required #sex="ngModel">
-    <option value="" disabled>Select Sex</option>
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-  </select>
-  <div *ngIf="sex.invalid && (sex.dirty || sex.touched)">
-    <div *ngIf="sex.errors?.['required']">
-      Sex is required.
+  <!-- Select for Sex -->
+  <div class="form-group">
+    <label for="sex">Sex:</label>
+    <select id="sex" name="sex" [(ngModel)]="animal.sex" required #sex="ngModel">
+      <option value="" disabled>Select Sex</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+    <div class="validation-message" *ngIf="sex.invalid && (sex.dirty || sex.touched)">
+      <div *ngIf="sex.errors?.['required']">
+        Sex is required.
+      </div>
     </div>
   </div>
 
-  <label for="status">Status:</label>
-  <input type="text" id="status" name="status" [(ngModel)]="animal.status" required #status="ngModel">
-  <div *ngIf="status.invalid && (status.dirty || status.touched)">
-    <div *ngIf="status.errors?.['required']">
-      Status is required.
+  <!-- Input for Status -->
+  <div class="form-group">
+    <label for="status">Status:</label>
+    <input type="text" id="status" name="status" [(ngModel)]="animal.status" required #status="ngModel">
+    <div class="validation-message" *ngIf="status.invalid && (status.dirty || status.touched)">
+      <div *ngIf="status.errors?.['required']">
+        Status is required.
+      </div>
     </div>
   </div>
 
-  <div class="card-footer d-flex justify-content-start">
-    <button type="submit" [disabled]="form.invalid">Update Animal</button>
-    &nbsp;
-    <button 
-        class="btn btn-outline-info me-2" 
-        [routerLink]="['/animals', animal.id, 'health']"
-    >
-        Health Records
-    </button>
-    
-    <button 
-        class="btn btn-outline-info me-2" 
-        [routerLink]="['/animals', animal.id, 'breeding']"
-    >
-        Breeding Events
-    </button>
-    
-    <button 
-        class="btn btn-outline-info me-2" 
-        [routerLink]="['/animals', animal.id, 'breeding']"
-    >
-        Hormone Management
-    </button>
-    
-    <button 
-        class="btn btn-outline-info" 
-        [routerLink]="['/animals', animal.id, 'breeding']"
-    >
-        Pregnancy Checks
-    </button>
-    <a 
-        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-        [routerLink]="['/animals', animal.id, 'birthing']"
-      >
-        <span>Birthing Schedules</span>
-        <i class="bi bi-chevron-right"></i>
-      </a>
-        
-      <a 
-        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-        [routerLink]="['/animals', animal.id, 'weaning']"
-      >
-        <span>Weaning Schedules</span>
-        <i class="bi bi-chevron-right"></i>
-      </a>
-</div>
+  <!-- Action buttons section -->
+  <div class="form-actions">
+    <button type="submit" [disabled]="form.invalid" class="btn btn-primary">Update Animal</button>
+  </div>
+
+  <hr />
+
+  <!-- Navigation buttons section -->
+  <div class="navigation-buttons">
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'health']">
+      <span>Health Records</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'breeding']">
+      <span>Breeding Events</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+
+    <!--//
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'breeding']">
+      <span>Hormone Management</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'breeding']">
+      <span>Pregnancy Checks</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+    //-->
+
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'birthing']">
+      <span>Birthing Schedules</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'weaning']">
+      <span>Weaning Schedules</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'blacksmith']">
+      <span>Blacksmith Visits</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+  </div>
 </form>

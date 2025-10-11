@@ -2,6 +2,7 @@
   <div *ngIf="isAuthenticated$ | async">
     <a [routerLink]="['/']">Home</a>&nbsp;
     <a [routerLink]="['/profile']">Profile</a>&nbsp; 
+    <a [routerLink]="['/providers']">Providers 🧑‍⚕️</a>&nbsp;
     <button (click)="onLogout()">Logout</button>
   </div>
   <div *ngIf="!(isAuthenticated$ | async)">

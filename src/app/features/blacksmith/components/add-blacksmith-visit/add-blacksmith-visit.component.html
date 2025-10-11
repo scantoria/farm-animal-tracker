@@ -1,0 +1,56 @@
+<div class="container">
+  <h2>Add Blacksmith Visit for: {{animalId}}</h2>
+  
+  <form #visitForm="ngForm" (ngSubmit)="onSubmit(visitForm)">
+
+    <label for="visitDate">Visit Date:</label>
+    <input 
+      type="date" 
+      id="visitDate" 
+      name="visitDate" 
+      [(ngModel)]="visitDate" 
+      #visitDate="ngModel"
+      required
+    >
+    <div *ngIf="visitDate.invalid && (visitDate.dirty || visitDate.touched)">
+      <div *ngIf="visitDate.errors?.['required']" class="text-danger small">Visit Date is required.</div>
+    </div>
+
+    <label for="serviceProvided">Service Provided:</label>
+    <select 
+      id="serviceProvided" 
+      name="serviceProvided" 
+      [(ngModel)]="visitData.serviceProvided" 
+      required 
+      #serviceProvided="ngModel"
+    >
+      <option value="" disabled>Select Service</option>
+      <option *ngFor="let service of serviceOptions" [value]="service">
+        {{ service }}
+      </option>
+    </select>
+    <div *ngIf="serviceProvided.invalid && (serviceProvided.dirty || serviceProvided.touched)">
+      <div *ngIf="serviceProvided.errors?.['required']" class="text-danger small">Service Provided is required.</div>
+    </div>
+
+    <label for="nextAppointmentDate">Next Appointment Date (Optional):</label>
+    <input type="date" id="nextAppointmentDate" name="nextAppointmentDate" [(ngModel)]="visitData.nextAppointmentDate">
+    <label for="notes">Notes:</label>
+    <textarea id="notes" name="notes" rows="3" [(ngModel)]="visitData.notes"></textarea>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="visitForm.invalid">Add Visit</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<!--//
+
+    
+    
+    
+
+    
+
+//-->
