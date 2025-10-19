@@ -19,12 +19,6 @@ import { BlacksmithVisit } from '../../shared/models/blacksmith-visit.model';
 export class BlacksmithService {
   constructor(private firestore: Firestore) {}
 
-  // CREATE
-  addVisitRecord(animalId: string, record: BlacksmithVisit) {
-    const recordsCollection = collection(this.firestore, `animals/${animalId}/blacksmithVisits`);
-    return from(addDoc(recordsCollection, record));
-  }
-
   // READ (List)
   getVisitsByAnimalId(animalId: string): Observable<BlacksmithVisit[]> {
     const recordsCollection = collection(this.firestore, `animals/${animalId}/blacksmithVisits`);
@@ -45,6 +39,12 @@ export class BlacksmithService {
         }
       })
     );
+  }
+
+  // CREATE
+  addVisitRecord(animalId: string, record: BlacksmithVisit) {
+    const recordsCollection = collection(this.firestore, `animals/${animalId}/blacksmithVisits`);
+    return from(addDoc(recordsCollection, record));
   }
 
   // UPDATE

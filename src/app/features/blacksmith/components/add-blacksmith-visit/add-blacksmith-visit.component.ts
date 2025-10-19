@@ -21,15 +21,10 @@ import { Observable } from 'rxjs';
 
 export class AddBlacksmithVisitComponent implements OnInit {
   animalId!: string;
-  visitData: Partial<BlacksmithVisit> = {}; 
-  /*
-  visitData: Partial<BlacksmithVisit> = {
-    visitDate: '', 
-    serviceProvided: '',
-  };
-  */
+  selectedProviderName: string = ''; 
   blacksmiths$!: Observable<Blacksmith[]>;
-  serviceOptions: string[] = ['Trim - All Four', 'Shoeing - Front', 'Shoeing - All Four', 'Corrective Trim'];
+  visitData: Partial<BlacksmithVisit> = {}; 
+  serviceOptions: string[] = ['Select Service','Trim - All Four', 'Shoeing - Front', 'Shoeing - All Four', 'Corrective Trim'];
 
 
   constructor(
@@ -42,15 +37,11 @@ export class AddBlacksmithVisitComponent implements OnInit {
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
-    //this.loadBlacksmiths();
+    this.loadBlacksmiths();
   }
 
   loadBlacksmiths() {
     this.blacksmiths$ = this.blacksmithDataService.getAllBlacksmiths();
-  }
-
-  onFormInit(form: NgForm) {
-      setTimeout(() => form.resetForm(), 0);
   }
 
   onSubmit(form: NgForm) {
@@ -58,26 +49,16 @@ export class AddBlacksmithVisitComponent implements OnInit {
       console.log('Form is invalid. Errors:', form.controls);
       return;
     }
-
-    // 1. Create DocumentReferences
+    
     const animalRef: DocumentReference = doc(this.firestore, `animals/${this.animalId}`);
-    //const blacksmithRef: DocumentReference = doc(this.firestore, `blacksmiths/${this.selectedBlacksmithId}`);
-
-    // 2. Construct the MINIMAL record object
     const newVisit: any = {
-      //visitDate: form.value.visitDate, 
-      //serviceProvided: 'Test Entry',//form.value.serviceProvided,
-      //nextAppointmentDate: form.value.nextAppointmentDate,
-      //notes: form.value.notes,
       ...form.value,
       animalRef: animalRef,
-      //blacksmithRef: blacksmithRef,
-      //blacksmithRef: { id: 'TEST_ID', path: 'blacksmiths/TEST_ID' },
-      //id: undefined 
+      
     };// as BlacksmithVisit;
 
+    console.log(form.value);
 
-    // 3. Save the record
     this.blacksmithService.addVisitRecord(this.animalId, newVisit)
       .subscribe({
         next: () => {

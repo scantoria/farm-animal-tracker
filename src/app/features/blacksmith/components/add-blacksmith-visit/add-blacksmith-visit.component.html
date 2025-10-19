@@ -2,13 +2,48 @@
   <h2>Add Blacksmith Visit for: {{animalId}}</h2>
   
   <form #visitForm="ngForm" (ngSubmit)="onSubmit(visitForm)">
+<!--//
+    <label for="provider">Blacksmith (Provider Name):</label>
+    <select 
+      id="provider" 
+      name="provider" 
+      [(ngModel)]="selectedProviderName" 
+      required 
+      #providerControl="ngModel"
+    >
+      <option value="" disabled>Select Blacksmith</option>
+      <option *ngFor="let bs of blacksmiths$ | async" [value]="bs.name">
+        {{ bs.name }}
+      </option>
+    </select>
+    <div *ngIf="providerControl.invalid && (providerControl.dirty || providerControl.touched)">
+      <div *ngIf="providerControl.errors?.['required']" class="text-danger small">Blacksmith is required.</div>
+    </div>
+//-->
+
+    <label for="provider">Blacksmith (Provider Name):</label>
+    <select 
+      id="provider" 
+      name="provider" 
+      [(ngModel)]="visitData.provider" 
+      required 
+      #providerControl="ngModel"
+    >
+      <option value="" disabled>Select Blacksmith</option>
+      <option *ngFor="let bs of blacksmiths$ | async" [value]="bs.name">
+        {{ bs.name }}
+      </option>
+    </select>
+    <div *ngIf="providerControl.invalid && (providerControl.dirty || providerControl.touched)">
+      <div *ngIf="providerControl.errors?.['required']" class="text-danger small">Blacksmith is required.</div>
+    </div>
 
     <label for="visitDate">Visit Date:</label>
     <input 
       type="date" 
       id="visitDate" 
       name="visitDate" 
-      [(ngModel)]="visitDate" 
+      [(ngModel)]="visitData.visitDate" 
       #visitDate="ngModel"
       required
     >
@@ -25,7 +60,7 @@
       #serviceProvided="ngModel"
     >
       <option value="" disabled>Select Service</option>
-      <option *ngFor="let service of serviceOptions" [value]="service">
+      <option *ngFor="let service of serviceOptions" [value]="visitData.serviceProvided">
         {{ service }}
       </option>
     </select>
@@ -44,13 +79,3 @@
     </div>
   </form>
 </div>
-
-<!--//
-
-    
-    
-    
-
-    
-
-//-->

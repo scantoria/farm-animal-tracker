@@ -10,10 +10,15 @@
     <div *ngIf="records.length > 0; else noRecords">
       <div class="list-group mt-3">
         <div class="list-group-item" *ngFor="let record of records">
-          <div class="d-flex w-100 justify-content-between align-items-center">
-           <h5 class="mb-1">Service: **{{ record.serviceProvided }}**</h5>
-            <small>Date: {{ record.visitDate }}</small>
-          </div>
+          <p class="mb-1">
+            Provider: {{ record.provider }}
+          </p>
+          <p class="mb-1">
+            Date: {{ record.visitDate }}
+          </p>
+          <p class="mb-1">
+            Service: {{ record.serviceProvided }}
+          </p>
           <p class="mb-1">
             **Next Appointment:** {{ record.nextAppointmentDate || 'N/A' }}
           </p>
