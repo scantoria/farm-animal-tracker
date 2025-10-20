@@ -50,6 +50,11 @@ import { EditBlacksmithVisitComponent } from './features/blacksmith/components/e
 // Provider Dashboard
 import { ProvidersComponent } from './features/providers/components/providers/providers.component';
 
+// Medication Record
+import { MedicationRecordComponent } from './features/medication-record/components/medication-record/medication-record.component';
+import { AddMedicationRecordComponent } from './features/medication-record/components/add-medication-record/add-medication-record.component';
+import { EditMedicationRecordComponent } from './features/medication-record/components/edit-medication-record/edit-medication-record.component';
+
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
@@ -100,6 +105,11 @@ export const routes: Routes = [
     { path: 'animals/:id/blacksmith', component: BlacksmithVisitComponent },
     { path: 'animals/:id/blacksmith/add', component: AddBlacksmithVisitComponent },
     { path: 'animals/:id/blacksmith/edit/:recordId', component: EditBlacksmithVisitComponent },
+
+    // Medication Record
+    { path: 'animals/:id/medication-record', component: MedicationRecordComponent },
+    { path: 'animals/:id/medication-record/add', component: AddMedicationRecordComponent },
+    { path: 'animals/:id/medication-record/edit', component: EditMedicationRecordComponent},
 
     { path: '**', redirectTo: '/' },
 ];
