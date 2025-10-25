@@ -51,7 +51,7 @@ import { EditBlacksmithVisitComponent } from './features/blacksmith/components/e
 import { ProvidersComponent } from './features/providers/components/providers/providers.component';
 
 // Medication Record
-import { MedicationRecordComponent } from './features/medication-record/components/medication-record/medication-record.component';
+import { MedicationRecordListComponent } from './features/medication-record/components/medication-record-list/medication-record-list.component';
 import { AddMedicationRecordComponent } from './features/medication-record/components/add-medication-record/add-medication-record.component';
 import { EditMedicationRecordComponent } from './features/medication-record/components/edit-medication-record/edit-medication-record.component';
 
@@ -62,8 +62,8 @@ export const routes: Routes = [
     { path: 'add-animal', component: AddAnimalComponent, canActivate: [AuthGuard] },
     { path: 'edit-animal/:id', component: EditAnimalComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
-    
-    // 👇 NEW Providers Dashboard Route 👇
+
+    // Providers
     { path: 'providers', component: ProvidersComponent, canActivate: [AuthGuard] },
 
     // Blacksmith Admin Routes
@@ -107,9 +107,32 @@ export const routes: Routes = [
     { path: 'animals/:id/blacksmith/edit/:recordId', component: EditBlacksmithVisitComponent },
 
     // Medication Record
-    { path: 'animals/:id/medication-record', component: MedicationRecordComponent },
+    { path: 'animals/:id/medication-record', component: MedicationRecordListComponent },
     { path: 'animals/:id/medication-record/add', component: AddMedicationRecordComponent },
-    { path: 'animals/:id/medication-record/edit', component: EditMedicationRecordComponent},
+    { path: 'animals/:id/medication-record/edit/:recordId', component: EditMedicationRecordComponent},
 
+    /*{
+        path: ':id/edit',
+        component: EditAnimalComponent, // The main component hosting the tabs/links
+        children: [
+        // Existing routes (e.g., details, blacksmith)
+        // ...
+        
+        // NEW MEDICATION ROUTES
+        { 
+            path: 'medication', 
+            component: MedicationRecordListComponent // List View (Default tab)
+        },
+        { 
+            path: 'medication/add', 
+            component: AddMedicationRecordComponent // Add View
+        },
+        { 
+            path: 'medication/edit/:recordId', // Parameter for the specific record
+            component: EditMedicationRecordComponent // Edit View
+        },
+        { path: '', redirectTo: 'details', pathMatch: 'full' }
+        ]
+    },*/
     { path: '**', redirectTo: '/' },
 ];

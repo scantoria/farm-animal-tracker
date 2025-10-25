@@ -1,1 +1,82 @@
-<p>edit-medication-record.component works!</p>
+<div class="container">
+  <h2>Edit Medication/Treatment Record: {{ recordId }}</h2>
+
+  <form #recordForm="ngForm" (ngSubmit)="onSubmit(recordForm)">
+
+    <label for="visitDate">Visit Date:</label>
+    <input 
+      type="date" 
+      id="visitDate" 
+      name="visitDate" 
+      [(ngModel)]="recordData.visitDate" 
+      required 
+      #visitDate="ngModel"
+    >
+    <div *ngIf="visitDate.invalid && (visitDate.dirty || visitDate.touched)">
+      <div *ngIf="visitDate.errors?.['required']" class="text-danger small">Visit Date is required.</div>
+    </div>
+    
+    <label for="provider">Veterinarian (Provider Name):</label>
+    <select 
+      id="provider" 
+      name="provider" 
+      [(ngModel)]="recordData.provider" 
+      required 
+      #providerControl="ngModel"
+    >
+      <option value="" disabled>Select Veterinarian</option>
+      <option *ngFor="let vet of veterinarians$ | async" [value]="vet.name">
+        {{ vet.name }}
+      </option>
+    </select>
+    <div *ngIf="providerControl.invalid && (providerControl.dirty || providerControl.touched)">
+      <div *ngIf="providerControl.errors?.['required']" class="text-danger small">Veterinarian is required.</div>
+    </div>
+    
+    <label for="treatmentType">Treatment Type:</label>
+    <select 
+      id="treatmentType" 
+      name="treatmentType" 
+      [(ngModel)]="recordData.treatmentType" 
+      required 
+      #treatmentTypeControl="ngModel"
+    >
+      <option value="" disabled>Select Type</option>
+      <option *ngFor="let type of treatmentTypes" [value]="type">
+        {{ type }}
+      </option>
+    </select>
+    <div *ngIf="treatmentTypeControl.invalid && (treatmentTypeControl.dirty || treatmentTypeControl.touched)">
+      <div *ngIf="treatmentTypeControl.errors?.['required']" class="text-danger small">Treatment Type is required.</div>
+    </div>
+
+    <label for="medicationName">Medication Name:</label>
+    <input 
+      type="text" 
+      id="medicationName" 
+      name="medicationName" 
+      [(ngModel)]="recordData.medicationName"
+    >
+
+    <label for="dosage">Dosage / Quantity:</label>
+    <input 
+      type="text" 
+      id="dosage" 
+      name="dosage" 
+      [(ngModel)]="recordData.dosage"
+    >
+
+    <label for="notes">Notes:</label>
+    <textarea 
+      id="notes" 
+      name="notes" 
+      rows="3" 
+      [(ngModel)]="recordData.notes"
+    ></textarea>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-success" [disabled]="recordForm.invalid">Save Changes</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

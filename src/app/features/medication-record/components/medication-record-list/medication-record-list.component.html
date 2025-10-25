@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Medication/Treatment Records (Animal ID: {{ animalId }})</h2>
+    <button class="btn btn-primary" (click)="onAddRecord()">
+      Add New Record
+    </button>
+  </div>
+
+  <div *ngIf="medicationRecords$ | async as records; else loading">
+    <div *ngIf="records.length > 0; else noRecords">
+      <div class="list-group mt-3">
+        <div class="list-group-item" *ngFor="let record of records">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <h5 class="mb-1">Type: **{{ record.treatmentType }}**</h5>
+            <small>Date: {{ record.visitDate }}</small>
+          </div>
+          <p class="mb-1">
+            **Provider:** {{ record.provider || 'N/A' }}
+          </p>
+          <p class="mb-1">
+            **Medication:** {{ record.medicationName || 'N/A' }} 
+            <span *ngIf="record.dosage">({{ record.dosage }})</span>
+          </p>
+          <p *ngIf="record.notes" class="mb-1 text-secondary small">
+            Notes: {{ record.notes }}
+          </p>
+          
+          <div class="mt-2">
+            <!--//<button class="btn btn-sm btn-info" (click)="onEdit(record.id!)">
+              Edit
+            </button>//-->
+            <a 
+                [routerLink]="['edit', record.id!]" 
+                class="btn btn-sm btn-info"
+            >
+                Edit
+            </a>
+            <button 
+              class="btn btn-sm btn-danger ms-2" 
+              (click)="onDelete(record.id!)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noRecords>
+      <div class="alert alert-info mt-3">No medication or treatment records found for this animal.</div>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <div class="alert alert-warning mt-3">Loading records...</div>
+  </ng-template>
+</div>
