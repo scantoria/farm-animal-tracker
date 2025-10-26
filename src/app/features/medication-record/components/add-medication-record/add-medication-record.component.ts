@@ -22,11 +22,8 @@ import { VeterinarianDataService } from '../../../../core/services/veterinarian-
 })
 export class AddMedicationRecordComponent implements OnInit {
   animalId!: string;
-  
   recordData: Partial<MedicationRecord> = {}; 
-  
   veterinarians$!: Observable<Veterinarian[]>; 
-
   treatmentTypes: string[] = ['Vaccination', 'Deworming', 'Antibiotics', 'Injury Treatment'];
 
 
@@ -56,15 +53,15 @@ export class AddMedicationRecordComponent implements OnInit {
     const animalRef: DocumentReference = doc(this.firestore, `animals/${this.animalId}`);
     const newRecord: MedicationRecord = {
       ...form.value,
-      animalRef: animalRef,
-      id: undefined 
+      animalRef: animalRef
+      //id: undefined 
     } as MedicationRecord;
 
     this.medicationService.addRecord(this.animalId, newRecord)
       .subscribe({
         next: () => {
           console.log('Medication record added successfully!');
-          this.router.navigate(['/animals', this.animalId, 'medication']); 
+          this.router.navigate(['/animals', this.animalId, 'medication-record']); 
         },
         error: (error) => {
           console.error('Error adding medication record:', error);
@@ -73,6 +70,6 @@ export class AddMedicationRecordComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/animals', this.animalId, 'medication']);
+    this.router.navigate(['/animals', this.animalId, 'medication-record']);
   }
 }

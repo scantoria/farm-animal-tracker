@@ -53,4 +53,10 @@
   <ng-template #loading>
     <div class="alert alert-warning mt-3">Loading records...</div>
   </ng-template>
+
+  <div class="mt-4">
+    <button class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
+      &larr; Back to Animal Record
+    </button>
+  </div>
 </div>

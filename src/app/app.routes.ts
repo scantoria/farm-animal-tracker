@@ -55,6 +55,12 @@ import { MedicationRecordListComponent } from './features/medication-record/comp
 import { AddMedicationRecordComponent } from './features/medication-record/components/add-medication-record/add-medication-record.component';
 import { EditMedicationRecordComponent } from './features/medication-record/components/edit-medication-record/edit-medication-record.component';
 
+// Veterinarian Admin
+import { VeterinarianAdminComponent } from './features/veterinarian/components/veterinarian-admin/veterinarian-admin.component';
+import { AddVeterinarianComponent } from './features/veterinarian/components/add-veterinarian/add-veterinarian.component';
+import { EditVeterinarianComponent } from './features/veterinarian/components/edit-veterinarian/edit-veterinarian.component';
+
+
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
@@ -70,6 +76,11 @@ export const routes: Routes = [
     { path: 'admin/blacksmiths', component: BlacksmithAdminComponent, canActivate: [AuthGuard] },
     { path: 'admin/blacksmiths/add', component: AddBlacksmithComponent, canActivate: [AuthGuard] },
     { path: 'admin/blacksmiths/edit/:blacksmithId', component: EditBlacksmithComponent, canActivate: [AuthGuard] },
+
+    // Veterinarian admin path
+    { path: 'admin/veterinarian', component: VeterinarianAdminComponent },
+    { path: 'admin/veterinarian/add', component: AddVeterinarianComponent },
+    { path: 'admin/veterinarian/edit/:recordId', component: EditVeterinarianComponent },
 
     // Health Records Module Routes
     { path: 'animals/:id/health', component: HealthComponent }, 
@@ -134,5 +145,7 @@ export const routes: Routes = [
         { path: '', redirectTo: 'details', pathMatch: 'full' }
         ]
     },*/
+
+    
     { path: '**', redirectTo: '/' },
 ];

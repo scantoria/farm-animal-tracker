@@ -5,5 +5,6 @@ export interface Veterinarian {
     phone?: string;
     email?: string;
     clinic?: string;
-    specialty?: string //general, Bovine, Equine, Caprine, Ovine 
+    specialty?: string; //general, Bovine, Equine, Caprine, Ovine 
+    notes?: string;
 }

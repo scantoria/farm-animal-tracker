@@ -1,0 +1,75 @@
+<div class="container">
+  <h2>Add New Veterinarian</h2>
+
+  <form #vetForm="ngForm" (ngSubmit)="onSubmit(vetForm)">
+
+    <label for="name">Name (Practice/Vet):</label>
+    <input 
+      type="text" 
+      id="name" 
+      name="name" 
+      [(ngModel)]="vetData.name" 
+      required 
+      #nameControl="ngModel"
+    >
+    <!--//
+    <div *ngIf="nameControl.invalid && (nameControl.dirty || nameControl.touched)">
+      <div *ngIf="nameControl.errors?.['required']" class="text-danger small">Name is required.</div>
+    </div>
+    //-->
+
+    <div *ngIf="nameControl.invalid && (nameControl.dirty || nameControl.touched)" class="text-danger small">
+      Name is required.
+    </div>
+
+    <label for="clinic">Clinic/Practice Name (Optional):</label>
+    <input 
+      type="text" 
+      id="clinic" 
+      name="clinic" 
+      [(ngModel)]="vetData.clinic" 
+    >
+
+    <label for="specialty">Specialty (Optional):</label>
+    <select 
+        id="specialty" 
+        name="specialty" 
+        [(ngModel)]="vetData.specialty"
+    >
+      <option value="">Select Specialty (Optional)</option>
+      <option *ngFor="let specialty of specialtyOptions" [value]="specialty">
+        {{ specialty }}
+      </option>
+
+    </select>
+    
+    <label for="phone">Phone (Optional):</label>
+    <input 
+      type="text" 
+      id="phone" 
+      name="phone" 
+      [(ngModel)]="vetData.phone"
+    >
+
+    <label for="email">Email (Optional):</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email" 
+      [(ngModel)]="vetData.email"
+    >
+
+    <label for="notes">Notes (Optional):</label>
+    <textarea 
+      id="notes" 
+      name="notes" 
+      rows="3" 
+      [(ngModel)]="vetData.notes"
+    ></textarea>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="vetForm.invalid">Add Veterinarian</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

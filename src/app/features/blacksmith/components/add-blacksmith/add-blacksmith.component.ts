@@ -25,8 +25,6 @@ export class AddBlacksmithComponent {
       return;
     }
 
-    // Since it's Partial<Blacksmith>, we cast it to the full model, 
-    // relying on Firestore to generate the ID.
     const blacksmith: Blacksmith = form.value as Blacksmith;
 
     this.blacksmithDataService.addBlacksmith(blacksmith)

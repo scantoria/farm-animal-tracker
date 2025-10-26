@@ -21,10 +21,7 @@ import { VeterinarianDataService } from '../../../../core/services/veterinarian-
 export class EditMedicationRecordComponent implements OnInit {
   animalId!: string;
   recordId!: string;
-  
-  // Model to hold form data. Will be pre-filled with existing data.
   recordData: Partial<MedicationRecord> = {}; 
-  
   veterinarians$!: Observable<Veterinarian[]>; 
   treatmentTypes: string[] = [
     'Vaccination', 'Deworming', 'Injury Treatment', 
@@ -40,17 +37,13 @@ export class EditMedicationRecordComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // 1. Get IDs from the route
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.recordId = this.route.snapshot.paramMap.get('recordId')!;
-
     this.loadVeterinarians();
       
-    // 2. Fetch the existing record data
     if (this.animalId && this.recordId) {
       this.medicationService.getRecord(this.animalId, this.recordId)
         .subscribe(record => {
-          // Assign the fetched record to the model to populate the form
           this.recordData = record;
         });
     }
@@ -66,24 +59,19 @@ export class EditMedicationRecordComponent implements OnInit {
       return;
     }
     
-    // 1. Create DocumentReference for the animal
     const animalRef: DocumentReference = doc(this.firestore, `animals/${this.animalId}`);
 
-    // 2. Construct the updated record object (using Partial to avoid sending 'id' and 'animalRef' if unnecessary, 
-    // but we include them here for completeness)
     const updatedRecord: Partial<MedicationRecord> = {
       ...form.value,
       animalRef: animalRef,
-    };
+    } as Partial<MedicationRecord>;
 
-    // 3. Update the record
-    // NOTE: This relies on the 'updateRecord' method being in the service (Step 3).
     this.medicationService.updateRecord(this.animalId, this.recordId, updatedRecord)
       .subscribe({
         next: () => {
           console.log('Medication record updated successfully!');
           // Navigate back to the list
-          this.router.navigate(['/animals', this.animalId, 'medication']);
+          this.router.navigate(['/animals', this.animalId, 'medication-record']);
         },
         error: (error) => {
           console.error('Error updating medication record:', error);
@@ -92,6 +80,6 @@ export class EditMedicationRecordComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/animals', this.animalId, 'medication']);
+    this.router.navigate(['/animals', this.animalId, 'medication-record']);
   }
 }

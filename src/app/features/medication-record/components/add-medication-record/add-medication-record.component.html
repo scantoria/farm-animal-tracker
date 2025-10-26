@@ -21,7 +21,6 @@
       id="provider" 
       name="provider" 
       [(ngModel)]="recordData.provider" 
-      required 
       #providerControl="ngModel"
     >
       <option value="" disabled>Select Veterinarian</option>
@@ -29,9 +28,6 @@
         {{ vet.name }}
       </option>
     </select>
-    <div *ngIf="providerControl.invalid && (providerControl.dirty || providerControl.touched)">
-      <div *ngIf="providerControl.errors?.['required']" class="text-danger small">Veterinarian is required.</div>
-    </div>
     
     <label for="treatmentType">Treatment Type:</label>
     <select 
