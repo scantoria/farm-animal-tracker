@@ -2,7 +2,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
-import { AnimalsService } from '../../../../core/services/animals.service';
+import { AnimalDataService } from '../../../../core/services/animals-data.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Animal } from '../../../../shared/models/animal.model';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-edit-animal',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  providers: [AnimalsService],
+  providers: [AnimalDataService],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss'
 })
@@ -20,7 +20,7 @@ export class EditAnimalComponent implements OnInit {
   animal: Animal | undefined;
 
   constructor(
-    private animalsService: AnimalsService,
+    private animalDataService: AnimalDataService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -28,7 +28,7 @@ export class EditAnimalComponent implements OnInit {
   ngOnInit(): void {
     const animalId = this.route.snapshot.paramMap.get('id');
     if (animalId) {
-      this.animalsService.getAnimal(animalId)
+      this.animalDataService.getAnimal(animalId)
         .subscribe(animal => {
           this.animal = animal;
         });
@@ -50,7 +50,7 @@ export class EditAnimalComponent implements OnInit {
       status: form.value.status,
     };
 
-    this.animalsService.updateAnimal(updatedAnimal)
+    this.animalDataService.updateAnimal(updatedAnimal)
       .subscribe({
         next: () => {
           this.router.navigate(['/']);

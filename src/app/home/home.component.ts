@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AnimalsComponent } from '../features/animals/components/animals/animal.details.component';
+import { AnimalsListComponent } from '../features/animals/components/animals/animal-list.component';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [AnimalsComponent, RouterLink],
+  imports: [AnimalsListComponent, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

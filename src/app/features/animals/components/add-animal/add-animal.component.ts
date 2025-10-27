@@ -2,7 +2,7 @@
 
 import { Component } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
-import { AnimalsService } from '../../../..//core/services/animals.service';
+import { AnimalDataService } from '../../../../core/services/animals-data.service';
 import { Router } from '@angular/router';
 import { Animal } from '../../../../shared/models/animal.model';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AddAnimalComponent {
 
-  constructor(private animalsService: AnimalsService, private router: Router) { }
+  constructor(private animalDataService: AnimalDataService, private router: Router) { }
 
   onSubmit(form: NgForm) {
     if (form.invalid) {
@@ -32,7 +32,7 @@ export class AddAnimalComponent {
       status: form.value.status,
     };
 
-    this.animalsService.addAnimal(newAnimal)
+    this.animalDataService.addAnimal(newAnimal)
       .subscribe({
         next: () => {
           form.resetForm();

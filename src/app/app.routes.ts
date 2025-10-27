@@ -57,8 +57,8 @@ import { EditMedicationRecordComponent } from './features/medication-record/comp
 
 // Veterinarian Admin
 import { VeterinarianAdminComponent } from './features/veterinarian/components/veterinarian-admin/veterinarian-admin.component';
-import { AddVeterinarianComponent } from './features/veterinarian/components/add-veterinarian/add-veterinarian.component';
-import { EditVeterinarianComponent } from './features/veterinarian/components/edit-veterinarian/edit-veterinarian.component';
+import { AddVeterinarianComponent } from './features/veterinarian/components/add-veterinarian.component/add-veterinarian.component';
+import { EditVeterinarianComponent } from './features/veterinarian/components/edit-veterinarian.component/edit-veterinarian.component';
 
 
 export const routes: Routes = [

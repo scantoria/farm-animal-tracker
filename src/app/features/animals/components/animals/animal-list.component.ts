@@ -1,27 +1,28 @@
 // src/app/features/animals/animals.component.ts
 
 import { Component, OnInit } from '@angular/core';
-import { AnimalsService } from '../../../../core/services/animals.service';
-import { Animal } from '../../../../shared/models/animal.model';
-import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Animal } from '../../../../shared/models/animal.model';
+import { AnimalDataService } from '../../../../core/services/animals-data.service';
 import { Auth } from '@angular/fire/auth'; 
 
 @Component({
   selector: 'app-animals',
   standalone: true,
-  imports: [CommonModule, RouterLink],
-  providers: [AnimalsService],
-  templateUrl: './animal-details.component.html',
-  styleUrl: './animal-details.component.scss'
+  imports: [CommonModule, RouterModule],
+  providers: [AnimalDataService],
+  templateUrl: './animal-list.component.html',
+  styleUrl: './animal-list.component.scss'
 })
-export class AnimalsComponent implements OnInit {
 
+export class AnimalsListComponent implements OnInit {
   animals$!: Observable<Animal[]>;
 
   constructor(
-    private animalsService: AnimalsService,
+    private router: Router,
+    private animalDataService: AnimalDataService,
     private auth: Auth
   ) { }
 
@@ -34,17 +35,26 @@ export class AnimalsComponent implements OnInit {
       console.log('Auth State Changed. User is:', user);
     });
     
-    this.animals$ = this.animalsService.getAll();
+    //this.animals$ = this.animalsService.getAll();
+    this.loadAnimals();
   }
 
-  deleteAnimal(animal: Animal): void {
+  loadAnimals(): void {
+    this.animals$ = this.animalDataService.getAll();
+  }
+
+  onViewEdit(animalId: string): void {
+    this.router.navigate(['/animals', animalId, 'edit']); 
+  }
+
+  onDelete(animal: Animal): void {
     if (confirm('Are you sure you want to delete this animal?')) {
-      this.animalsService.deleteAnimal(animal)
+      this.animalDataService.deleteAnimal(animal)
         .subscribe({
           next: () => {
             console.log('Animal deleted successfully.');
             // Re-fetch the list to update the view
-            this.animals$ = this.animalsService.getAll();
+            this.animals$ = this.animalDataService.getAll();
           },
           error: (error) => {
             console.error('Error deleting animal:', error);

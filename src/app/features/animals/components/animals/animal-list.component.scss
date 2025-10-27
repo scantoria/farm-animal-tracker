@@ -1,0 +1,112 @@
+// src/app/features/animals/components/animal-list/animal-list.component.scss
+
+// Define the tablet breakpoint and mixin (using the global definition)
+$breakpoint-md: 768px; 
+@mixin md-up {
+  @media (min-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+// Global variable usage for consistency (assuming they are in style.scss)
+$color-border: #dee2e6;
+$color-secondary: #6c757d;
+
+// ... (Header bar and mobile-first styles remain mostly unchanged)
+
+// Mobile card styling (now for the <a> tag)
+.animal-list .list-group-item {
+  // Mobile layout: Display data in a stack, grouped visually
+  display: grid;
+  grid-template-columns: 1fr auto; // NEW: Added auto column for chevron
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid $color-border;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer; // Indicate clickability
+  color: inherit; // Maintain text color
+  text-decoration: none; // Remove underline
+}
+
+// ... (Mobile-first styles for individual columns remain, adjusted for new structure)
+
+.animal-chevron-col {
+  // On mobile, position the chevron next to the name
+  order: 1; 
+  i { color: $color-secondary; }
+}
+
+// --- TABLET/DESKTOP STYLING (min-width: 768px) ---
+@include md-up {
+  
+  .animal-list {
+    display: grid;
+    // 1. UPDATED GRID COLUMNS: 5 Data Columns + 1 small Chevron Column
+    // Name | Species | Breed | Status | DOB | Chevron
+    grid-template-columns: 2fr 1fr 1fr 0.8fr 1fr 0.2fr; 
+    gap: 0;
+    border-top: 1px solid $color-border;
+    
+    // 2. Create the Column Header Row
+    &::before {
+      // Content matches the five data columns
+      content: 'Name / ID' 'Species' 'Breed' 'Status' 'DOB' ''; // Empty header for chevron
+      display: contents; 
+      font-weight: bold;
+      color: $color-secondary;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      // ... (other header styles)
+    }
+    
+    // Style the individual header cells
+    &::before > * {
+      padding: 0.75rem 1rem;
+      background-color: #f0f0f0; 
+      border-bottom: 1px solid $color-border;
+      display: flex;
+      align-items: center;
+      
+      // Right-align the Chevron Header (the last one)
+      &:nth-child(6) { 
+        justify-content: flex-end; 
+      }
+    }
+    
+    // 3. Style the clickable row container
+    .list-group-item {
+      display: contents; // Makes the <a> container disappear, children become grid cells
+      margin: 0;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      background: none;
+    }
+
+    // 4. Style the data cells (div.animal-data)
+    .animal-data {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid $color-border;
+      display: flex;
+      align-items: center;
+      // ... (other data styles)
+    }
+    
+    // Name, Species, Breed, Status, DOB column styles remain.
+
+    // Chevron Column Formatting (Ensure it's right-aligned on desktop)
+    .animal-chevron-col {
+      order: unset;
+      justify-content: flex-end;
+    }
+    
+    // 5. Hover effect for the entire row is now applied directly to the anchor tag children
+    .list-group-item:hover .animal-data {
+        background-color: #f8f9fa;
+        text-decoration: none; // Just in case, to prevent link underline
+    }
+  }
+}
