@@ -27,20 +27,20 @@ export class VeterinarianAdminComponent implements OnInit {
     this.loadVeterinarians();
   }
 
-  loadVeterinarians(): void {
+  loadVeterinarians() {
     this.veterinarians$ = this.vetDataService.getAllVeterinarians();
   }
 
-  onAdd(): void {
+  onAddVeterinarian() {
     this.router.navigate(['/admin/veterinarian/add']);
   }
 
-  onEdit(vetId: string): void {
+  onEdit(vetId: string) {
     //this.router.navigate(['/veterinarian-admin/edit', vetId]);
     this.router.navigate(['/admin/veterinarian/edit', vetId]);
   }
 
-  onDelete(vetId: string): void {
+  onDelete(vetId: string) {
     if (confirm('Are you sure you want to delete this veterinarian? This action cannot be undone.')) {
       this.vetDataService.deleteVeterinarian(vetId)
         .subscribe({
