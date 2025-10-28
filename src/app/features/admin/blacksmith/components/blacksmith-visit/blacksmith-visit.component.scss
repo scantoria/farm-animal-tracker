@@ -1,9 +1,11 @@
-// src/app/features/medication/components/medication-record-list/medication-record-list.component.scss
+// src/app/features/blacksmith/components/blacksmith-visit/blacksmith-visit.component.scss
 
-// --- VARIABLES (Re-using consistent variables) ---
+
+// --- VARIABLES (Use constants for consistent design) ---
 $spacing-medium: 1rem;
 $spacing-small: 0.5rem;
 $border-color: #eee;
+$primary-color: #007bff;
 $text-color: #333;
 $breakpoint-desktop: 1200px;
 
@@ -22,7 +24,7 @@ $breakpoint-desktop: 1200px;
   }
 }
 
-.medication-list {
+.blacksmith-list {
   // Overrides Bootstrap's default list-group styling for a better grid look
   padding: 0; 
   border-radius: 4px;
@@ -33,14 +35,14 @@ $breakpoint-desktop: 1200px;
 .list-header {
   // Styles for the desktop column headers
   font-weight: 600;
-  color: #6c757d; // Secondary text color
+  color: #6c757d; // Bootstrap's secondary text color
   padding: $spacing-small $spacing-medium;
   border-bottom: 1px solid $border-color;
   background-color: #f8f9fa;
   display: none; // Default to hidden on mobile
 }
 
-.list-group-item.medication-row {
+.list-group-item.blacksmith-row {
   // Base styles for the entire row (which is an anchor tag)
   display: flex; // Default to flex for mobile card view
   flex-direction: column; 
@@ -54,7 +56,7 @@ $breakpoint-desktop: 1200px;
   .data-label {
     font-weight: 600;
     margin-right: $spacing-small;
-    min-width: 80px; 
+    min-width: 80px; // Give the label a fixed width
     display: inline-block;
   }
 
@@ -85,11 +87,11 @@ $breakpoint-desktop: 1200px;
 @media (min-width: $breakpoint-desktop) {
   
   .list-header, 
-  .list-group-item.medication-row {
+  .list-group-item.blacksmith-row {
     // Convert to CSS Grid for desktop
     display: grid;
-    // Define the columns: Date (Fixed) | Type (Fixed) | Medication (Auto) | Dosage (Fixed) | Provider (Auto) | Actions (Fixed)
-    grid-template-columns: 120px 150px minmax(150px, 1.5fr) 120px minmax(150px, 1fr) 90px;
+    // Define the columns: Date (Fixed) | Provider (Fixed) | Service (Auto-fill) | Next Appt (Fixed) | Notes (Auto-fill) | Actions (Fixed)
+    grid-template-columns: 120px 150px minmax(150px, 1fr) 150px minmax(100px, 1fr) 90px;
     align-items: center;
     gap: $spacing-medium;
     padding: $spacing-small $spacing-medium;
@@ -99,7 +101,7 @@ $breakpoint-desktop: 1200px;
     display: grid !important; // Overrides d-none
   }
 
-  .list-group-item.medication-row {
+  .list-group-item.blacksmith-row {
     flex-direction: initial; // Undo mobile flex-direction
     
     // Hide mobile labels on desktop
@@ -116,12 +118,17 @@ $breakpoint-desktop: 1200px;
   }
 
   .record-actions {
-    // Desktop: Put the delete link and chevron side-by-side
+    // Desktop: Put the delete button and chevron side-by-side
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: $spacing-small;
     width: auto;
     margin: 0;
+  }
+  
+  // Hide the delete button icon text on desktop
+  .delete-btn {
+    padding: 0.25rem 0.5rem; // Make the delete button smaller
   }
 }

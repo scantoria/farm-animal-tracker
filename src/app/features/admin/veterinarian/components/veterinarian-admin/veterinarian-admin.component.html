@@ -1,0 +1,71 @@
+<div class="page-container">
+  
+  <div class="header-bar">
+    <h2>Veterinarian (Provider) Registry</h2>
+    <button class="btn btn-primary" [routerLink]="['add']">
+      <i class="bi bi-plus-circle"></i> Add New Veterinarian
+    </button>
+  </div>
+
+  <div *ngIf="veterinarians$ | async as records; else loading">
+    <div *ngIf="records.length > 0; else noRecords">
+      
+      <div class="list-group vet-list">
+        
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col name-col">Name</div>
+          <div class="header-col clinic-col">Clinic</div>
+          <div class="header-col phone-col">Phone</div>
+          <div class="header-col specialty-col">Specialty</div>
+          <div class="header-col action-col"></div> </div>
+
+        <a 
+          class="list-group-item vet-row" 
+          *ngFor="let record of records" 
+          [routerLink]="['edit', record.id!]"
+        >
+          
+          <div class="record-data name-col">
+            <span class="d-lg-none data-label">Name:</span>
+            {{ record.name }}
+          </div>
+          
+          <div class="record-data clinic-col d-none d-md-block text-truncate">
+            <span class="d-lg-none data-label">Clinic:</span>
+            {{ record.clinic || '—' }}
+          </div>
+          
+          <div class="record-data phone-col d-none d-md-block text-truncate">
+            <span class="d-lg-none data-label">Phone:</span>
+            {{ record.phone || '—' }}
+          </div>
+          
+          <div class="record-data specialty-col d-none d-lg-block text-truncate">
+            <span class="d-lg-none data-label">Specialty:</span>
+            {{ record.specialty || 'General' }}
+          </div>
+          
+          <div class="record-actions action-col">
+            <a 
+              href="javascript:void(0)" 
+              class="btn btn-sm btn-danger delete-btn" 
+              (click)="onDelete(record.id!); $event.stopPropagation()"
+            >
+              🗑️<i class="bi bi-trash"></i>
+            </a>
+            <i class="bi bi-chevron-right chevron-icon"></i>
+          </div>
+        </a>
+      </div>
+      
+    </div>
+    <ng-template #noRecords>
+      <div class="alert alert-info mt-3">No veterinarians found in the registry.</div>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <div class="alert alert-warning mt-3">Loading veterinarian records...</div>
+  </ng-template>
+
+  </div>

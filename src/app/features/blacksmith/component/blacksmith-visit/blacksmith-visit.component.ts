@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { BlacksmithVisit } from '../../../../shared/models/blacksmith-visit.model';
-import { BlacksmithService } from '../../../../core/services/blacksmith.service';
+import { BlacksmithVisit } from '../../../../../shared/models/blacksmith-visit.model';
+import { BlacksmithService } from '../../../../../core/services/blacksmith.service';
 
 @Component({
   selector: 'app-blacksmith-visit-list',
@@ -15,6 +15,7 @@ import { BlacksmithService } from '../../../../core/services/blacksmith.service'
 
 export class BlacksmithVisitComponent implements OnInit {
   animalId!: string;
+  animalName!: string;
   visitRecords$!: Observable<BlacksmithVisit[]>;
 
   constructor(

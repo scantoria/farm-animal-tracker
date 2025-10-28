@@ -1,27 +1,27 @@
 <div class="page-container">
   
   <div class="header-bar">
-    <h2>Medication/Treatment Records (Animal ID: {{ animalId }})</h2>
+    <h2>Blacksmith Visit Records (Animal ID: {{ animalId }})</h2>
     <button class="btn btn-primary" [routerLink]="['add']">
-      <i class="bi bi-plus-circle"></i> Add New Record
+      <i class="bi bi-plus-circle"></i> Add New Visit Record
     </button>
   </div>
 
-  <div *ngIf="medicationRecords$ | async as records; else loading">
+  <div *ngIf="visitRecords$ | async as records; else loading">
     <div *ngIf="records.length > 0; else noRecords">
       
-      <div class="list-group medication-list">
+      <div class="list-group blacksmith-list">
         
         <div class="list-header d-none d-lg-grid">
           <div class="header-col date-col">Visit Date</div>
-          <div class="header-col type-col">Treatment Type</div>
-          <div class="header-col med-col">Medication</div>
-          <div class="header-col dose-col">Dosage</div>
           <div class="header-col provider-col">Provider</div>
+          <div class="header-col service-col">Service Provided</div>
+          <div class="header-col next-col">Next Appointment</div>
+          <div class="header-col notes-col">Notes</div>
           <div class="header-col action-col"></div> </div>
 
         <a 
-          class="list-group-item medication-row" 
+          class="list-group-item blacksmith-row" 
           *ngFor="let record of records" 
           [routerLink]="['edit', record.id!]"
         >
@@ -31,24 +31,23 @@
             {{ record.visitDate }}
           </div>
           
-          <div class="record-data type-col">
-            <span class="d-lg-none data-label">Type:</span>
-            {{ record.treatmentType }}
-          </div>
-          
-          <div class="record-data med-col">
-            <span class="d-lg-none data-label">Medication:</span>
-            {{ record.medicationName || '—' }}
-          </div>
-
-          <div class="record-data dose-col d-none d-lg-block text-truncate">
-            <span class="d-lg-none data-label">Dosage:</span>
-            {{ record.dosage || 'N/A' }}
-          </div>
-          
           <div class="record-data provider-col">
             <span class="d-lg-none data-label">Provider:</span>
             {{ record.provider }}
+          </div>
+          
+          <div class="record-data service-col">
+            <span class="d-lg-none data-label">Service:</span>
+            {{ record.serviceProvided }}
+          </div>
+          
+          <div class="record-data next-col">
+            <span class="d-lg-none data-label">Next:</span>
+            {{ record.nextAppointmentDate || 'N/A' }}
+          </div>
+          
+          <div class="record-data notes-col d-none d-lg-block text-truncate">
+            {{ record.notes || '—' }}
           </div>
           
           <div class="record-actions action-col">
@@ -56,7 +55,7 @@
               href="javascript:void(0)" 
               class="btn btn-sm btn-danger delete-btn" 
               (click)="onDelete(record.id!); $event.stopPropagation()"
-            >
+              >
               🗑️<i class="bi bi-trash"></i>
             </a>
             <i class="bi bi-chevron-right chevron-icon"></i>
@@ -66,12 +65,12 @@
       
     </div>
     <ng-template #noRecords>
-      <div class="alert alert-info mt-3">No medication or treatment records found for this animal.</div>
+      <div class="alert alert-info mt-3">No blacksmith visit records found for this animal.</div>
     </ng-template>
   </div>
 
   <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading records...</div>
+    <div class="alert alert-warning mt-3">Loading visit records...</div>
   </ng-template>
 
   <div class="mt-4 text-center">

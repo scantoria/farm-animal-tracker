@@ -1,11 +1,12 @@
-// src/app/features/medication/components/medication-record-list/medication-record-list.component.scss
+// src/app/features/admin/components/veterinarian-list/veterinarian-list.component.scss
 
 // --- VARIABLES (Re-using consistent variables) ---
 $spacing-medium: 1rem;
 $spacing-small: 0.5rem;
 $border-color: #eee;
 $text-color: #333;
-$breakpoint-desktop: 1200px;
+// Re-using the common desktop breakpoint from global styles
+$breakpoint-desktop: 992px; 
 
 // --- HEADER BAR STYLING (Standardized across list views) ---
 .header-bar {
@@ -22,8 +23,8 @@ $breakpoint-desktop: 1200px;
   }
 }
 
-.medication-list {
-  // Overrides Bootstrap's default list-group styling for a better grid look
+.vet-list {
+  // Overrides Bootstrap's default list-group styling
   padding: 0; 
   border-radius: 4px;
 }
@@ -31,18 +32,16 @@ $breakpoint-desktop: 1200px;
 // --- LIST HEADER AND ROW STYLING ---
 
 .list-header {
-  // Styles for the desktop column headers
   font-weight: 600;
-  color: #6c757d; // Secondary text color
+  color: #6c757d; 
   padding: $spacing-small $spacing-medium;
   border-bottom: 1px solid $border-color;
   background-color: #f8f9fa;
   display: none; // Default to hidden on mobile
 }
 
-.list-group-item.medication-row {
-  // Base styles for the entire row (which is an anchor tag)
-  display: flex; // Default to flex for mobile card view
+.list-group-item.vet-row {
+  display: flex; 
   flex-direction: column; 
   align-items: flex-start;
   padding: $spacing-medium;
@@ -54,11 +53,10 @@ $breakpoint-desktop: 1200px;
   .data-label {
     font-weight: 600;
     margin-right: $spacing-small;
-    min-width: 80px; 
+    min-width: 60px; 
     display: inline-block;
   }
 
-  // Row Hover State
   &:hover {
     background-color: #f5f5f5;
   }
@@ -68,14 +66,15 @@ $breakpoint-desktop: 1200px;
 .record-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%; // Takes full width on mobile
+  justify-content: flex-end; // Align actions to the right on mobile
+  width: 100%; 
   margin-top: $spacing-small;
 }
 
 .chevron-icon {
   color: #ccc;
   font-size: 1.25rem;
+  margin-left: $spacing-small; // Space between delete link and chevron
 }
 
 
@@ -85,11 +84,11 @@ $breakpoint-desktop: 1200px;
 @media (min-width: $breakpoint-desktop) {
   
   .list-header, 
-  .list-group-item.medication-row {
+  .list-group-item.vet-row {
     // Convert to CSS Grid for desktop
     display: grid;
-    // Define the columns: Date (Fixed) | Type (Fixed) | Medication (Auto) | Dosage (Fixed) | Provider (Auto) | Actions (Fixed)
-    grid-template-columns: 120px 150px minmax(150px, 1.5fr) 120px minmax(150px, 1fr) 90px;
+    // Define the columns: Name (Auto) | Clinic (Fixed) | Phone (Fixed) | Specialty (Auto) | Actions (Fixed)
+    grid-template-columns: minmax(150px, 1.5fr) minmax(150px, 1fr) 150px 150px 90px;
     align-items: center;
     gap: $spacing-medium;
     padding: $spacing-small $spacing-medium;
@@ -99,16 +98,14 @@ $breakpoint-desktop: 1200px;
     display: grid !important; // Overrides d-none
   }
 
-  .list-group-item.medication-row {
-    flex-direction: initial; // Undo mobile flex-direction
+  .list-group-item.vet-row {
+    flex-direction: initial; 
     
-    // Hide mobile labels on desktop
     .data-label {
       display: none;
     }
   }
 
-  // Column-specific alignments for desktop
   .record-data {
     white-space: nowrap;
     overflow: hidden;
@@ -116,11 +113,7 @@ $breakpoint-desktop: 1200px;
   }
 
   .record-actions {
-    // Desktop: Put the delete link and chevron side-by-side
-    display: flex;
     justify-content: flex-end;
-    align-items: center;
-    gap: $spacing-small;
     width: auto;
     margin: 0;
   }
