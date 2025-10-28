@@ -9,7 +9,7 @@ import { Animal } from '../../shared/models/animal.model';
 @Injectable({
   providedIn: 'root'
 })
-export class AnimalDataService {
+export class AnimalsService {
 
   constructor(private firestore: Firestore) { }
 

@@ -30,8 +30,7 @@ $breakpoint-tablet: 768px;
   input[type="text"],
   input[type="email"],
   input[type="date"],
-  select,
-  textarea {
+  select {
     width: 100%;
     padding: $form-padding;
     font-size: $form-font-size;
@@ -44,16 +43,10 @@ $breakpoint-tablet: 768px;
       outline: none;
     }
   }
-  
-  // Ensure textarea also has the same consistent box styling
-  textarea {
-    resize: vertical;
-  }
 
   // Styles for Angular validation states
   input.ng-invalid.ng-touched,
-  select.ng-invalid.ng-touched,
-  textarea.ng-invalid.ng-touched {
+  select.ng-invalid.ng-touched {
     border-color: $invalid-color;
   }
 
@@ -72,10 +65,9 @@ $breakpoint-tablet: 768px;
       flex-basis: 150px; // Gives labels a fixed width
       margin-right: $spacing-medium;
       margin-bottom: 0;
-      text-align: right; // <-- NEW: Right-aligns label text
     }
 
-    input, select, textarea {
+    input, select {
       flex: 1; // Allows inputs to grow and fill remaining space
     }
   }
@@ -84,6 +76,7 @@ $breakpoint-tablet: 768px;
 .form-actions {
   margin-top: $spacing-medium;
   button {
+    // Style your submit button here
     padding: $spacing-medium $spacing-large;
     font-size: $form-font-size;
   }
@@ -91,46 +84,39 @@ $breakpoint-tablet: 768px;
 
 .navigation-buttons {
   display: flex;
-  flex-wrap: wrap; 
-  gap: $spacing-medium; 
+  flex-wrap: wrap; // Allows buttons to wrap to the next line
+  gap: $spacing-medium; // Adds spacing between buttons
   margin-top: $spacing-medium;
 
   .btn {
-    flex-grow: 1; 
+    flex-grow: 1; // Allows buttons to grow to fill space
     text-align: center;
   }
 }
 
 // Additional styling for the button group from the original template
 .card-footer {
+  // Can be replaced with similar Flexbox styling if needed
   margin-top: $spacing-medium;
 }
 
-// Styling for related record navigation links (like in edit-animal.component.html)
+// Styling for `a` tags in the navigation section
 .list-group-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $form-padding $spacing-medium;
-  cursor: pointer;
-  
-  // Make the link look like a non-link until hovered
-  color: #333;
+  padding: $spacing-medium;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
   text-decoration: none;
+  color: #333;
 
-  // Style the chevron icon
-  i.bi-chevron-right {
-    color: $border-color; 
-    font-size: 0.9rem;
-    transition: color 0.2s ease;
-  }
-  
-  // Add specific hover/focus state for feedback
-  &:hover, &:focus {
-    background-color: #f8f9fa; // Light gray background
-    
-    i.bi-chevron-right {
-      color: #007bff; // Highlight the icon on hover
-    }
+  &:hover {
+    background-color: #f8f9fa;
   }
 }
+
+.bi-chevron-right {
+  margin-left: $spacing-medium;
+}
+
