@@ -15,8 +15,6 @@ export interface Animal {
   sireId?: string;
   damId?: string;
   currentFarmId?: string;
-  // A DocumentReference is a pointer to another document.
-  // We will add logic later to handle these relationships.
   sireRef?: DocumentReference;
   damRef?: DocumentReference;
   currentFarmRef?: DocumentReference;

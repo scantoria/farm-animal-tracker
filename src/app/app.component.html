@@ -1,16 +1,26 @@
 <nav>
-  <div *ngIf="isAuthenticated$ | async">
-    <a [routerLink]="['/']">Home</a>&nbsp;
-    <a [routerLink]="['/profile']">Profile</a>&nbsp; 
-    <a [routerLink]="['/providers']">Providers 🧑‍⚕️</a>&nbsp;
-    <button (click)="onLogout()">Logout</button>
+  <div *ngIf="isAuthenticated$ | async as isAuthenticated" class="nav-links">
+    
+    <ng-container *ngIf="isAuthenticated">
+        <a [routerLink]="['/']"><i class="bi bi-house-door"></i> Home</a> 
+        <a [routerLink]="['/profile']"><i class="bi bi-person-circle"></i> Profile</a> 
+        <a [routerLink]="['/providers']">Providers 🧑‍⚕️</a>
+        <button (click)="onLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+    </ng-container>
+    
+    <ng-container *ngIf="!isAuthenticated">
+        <a [routerLink]="['/login']">Login</a>
+        <a [routerLink]="['/signup']">Sign Up</a>
+    </ng-container>
+    
   </div>
-  <div *ngIf="!(isAuthenticated$ | async)">
-    <a [routerLink]="['/login']">Login</a>&nbsp;
+  <div *ngIf="!(isAuthenticated$ | async)" class="nav-links">
+    <a [routerLink]="['/login']">Login</a>
     <a [routerLink]="['/signup']">Sign Up</a>
   </div>
+
 </nav>
 
-<hr>
-
-<router-outlet></router-outlet>
+<div class="router-outlet-container">
+  <router-outlet></router-outlet>
+</div>

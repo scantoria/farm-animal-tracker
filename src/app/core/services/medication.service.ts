@@ -12,7 +12,7 @@ import {
   , DocumentData 
   , DocumentReference
 } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs'; 
+import { from, Observable, map } from 'rxjs'; 
 import { MedicationRecord } from '../../shared/models/medication-record.model'; 
 
 @Injectable({
@@ -40,13 +40,33 @@ export class MedicationService {
     return collectionData(recordsCollection, { idField: 'id' });
   }
   
+  /*
   getRecord(animalId: string, recordId: string): Observable<MedicationRecord> {
     const recordDoc = doc(
       this.firestore, 
       `animals/${animalId}/medicationRecords/${recordId}`
     ) as DocumentReference<MedicationRecord>;
 
-    return docData(recordDoc, { idField: 'id' }) as Observable<MedicationRecord>;
+    return docData(recordDoc, { idField: 'id' }); // as Observable<MedicationRecord>;
+  }
+  */
+
+  getRecord(animalId: string, recordId: string): Observable<MedicationRecord> {
+    const recordDoc = doc(
+      this.firestore, 
+      `animals/${animalId}/medicationRecords/${recordId}`
+    ) as DocumentReference<MedicationRecord>;
+
+    return docData(recordDoc, { idField: 'id' }).pipe(
+      // FIX: Use map to handle the 'undefined' case explicitly
+      map(record => {
+        if (!record) {
+          // If a record is expected for an 'edit' page but not found, throw an error
+          throw new Error(`Medication record ID ${recordId} not found for animal ${animalId}`);
+        }
+        return record; // Type is now guaranteed as MedicationRecord
+      })
+    );
   }
 
   updateRecord(animalId: string, recordId: string, record: Partial<MedicationRecord>): Observable<void> {

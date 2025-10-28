@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 // src/styles.scss (Global Stylesheet)
 
+@use "sass:color";
+
 // 1. SCSS Variables
 $color-primary: #198754;       // A strong Green (farm/agriculture feel)
 $color-primary-dark: #146c43;  // Darker shade for hover/active states
@@ -85,5 +87,5 @@ body {
   background-color: $color-secondary;
   color: white;
   border: 1px solid $color-secondary;
-  &:hover { background-color: darken($color-secondary, 10%); }
+  &:hover { background-color: color.adjust($color-secondary, $lightness: -10%); }
 }

@@ -1,0 +1,76 @@
+// src/app/app.component.scss
+
+// --- VARIABLES (Copied from SCSS Template) ---
+$spacing-small: 0.5rem;
+$spacing-medium: 1rem;
+$breakpoint-tablet: 768px;
+$primary-color: #007bff;
+$text-color: #333;
+$background-color: #fff;
+$shadow-color: rgba(0, 0, 0, 0.1);
+// FIX: Define the missing variable that caused the error
+$invalid-color: #dc3545; 
+
+
+// 1. Global Navigation Bar Styling
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: $background-color;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 4px $shadow-color;
+  padding: $spacing-small $spacing-medium;
+  
+  // Use a flex container for the main link groups
+  > div {
+    display: flex;
+    flex-wrap: wrap; 
+    align-items: center;
+    justify-content: center; 
+    gap: $spacing-medium; 
+    
+    @media (min-width: $breakpoint-tablet) {
+      justify-content: flex-end; 
+      max-width: 1200px;
+      margin: 0 auto; 
+    }
+  }
+}
+
+// 2. Styling for Links and Buttons (Navigation Items)
+nav a,
+nav button {
+  text-decoration: none;
+  color: $text-color;
+  font-size: 1rem;
+  padding: $spacing-small;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+// Special styling for the Logout button
+nav button {
+  color: $invalid-color; // <-- This is now defined
+  font-weight: 600;
+  
+  &:hover {
+    // FIX: Replace deprecated `darken` function with `color.adjust`
+    color: #a71d2a; // Using a slightly darker hard-coded value for simplicity here, or use: color.adjust($invalid-color, $lightness: -10%);
+  }
+}
+
+// 3. Remove the standard <hr> and style the main content area
+hr {
+  display: none; // The nav border handles separation
+}
+
+.router-outlet-container {
+  padding: $spacing-medium 0;
+}

@@ -9,7 +9,6 @@
 
   <div *ngIf="animals$ | async as animals; else loading">
     <div *ngIf="animals.length > 0; else noAnimals">
-      
       <div class="animal-list list-group">
         
         <a 
@@ -20,7 +19,6 @@
           
           <div class="animal-data animal-name-col">
             <h3 class="animal-name">{{ animal.name }}</h3>
-            <span class="animal-id">{{ animal.id }}</span>
           </div>
           
           <div class="animal-data animal-species-col">
