@@ -8,9 +8,9 @@ import { AuthGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 
 // Blacksmith Admin Imports
-import { BlacksmithAdminComponent } from './features/blacksmith/components/blacksmith-admin/blacksmith-admin.component';
-import { AddBlacksmithComponent } from './features/blacksmith/components/add-blacksmith/add-blacksmith.component';
-import { EditBlacksmithComponent } from './features/blacksmith/components/edit-blacksmith/edit-blacksmith.component';
+import { BlacksmithAdminComponent } from './features/admin/blacksmith/components/blacksmith-admin/blacksmith-admin.component';
+import { AddBlacksmithComponent } from './features/admin/blacksmith/components/add-blacksmith/add-blacksmith.component';
+import { EditBlacksmithComponent } from './features/admin/blacksmith/components/edit-blacksmith/edit-blacksmith.component';
 
 // Animal Health
 import { HealthComponent } from './features/healthRecords/components/health/health.component';
@@ -56,9 +56,9 @@ import { AddMedicationRecordComponent } from './features/medication-record/compo
 import { EditMedicationRecordComponent } from './features/medication-record/components/edit-medication-record/edit-medication-record.component';
 
 // Veterinarian Admin
-import { VeterinarianAdminComponent } from './features/veterinarian/components/veterinarian-admin/veterinarian-admin.component';
-import { AddVeterinarianComponent } from './features/veterinarian/components/add-veterinarian/add-veterinarian.component';
-import { EditVeterinarianComponent } from './features/veterinarian/components/edit-veterinarian/edit-veterinarian.component';
+import { VeterinarianAdminComponent } from './features/admin/veterinarian/components/veterinarian-admin/veterinarian-admin.component';
+import { AddVeterinarianComponent } from './features/admin/veterinarian/components/add-veterinarian/add-veterinarian.component';
+import { EditVeterinarianComponent } from './features/admin/veterinarian/components/edit-veterinarian/edit-veterinarian.component';
 
 
 export const routes: Routes = [

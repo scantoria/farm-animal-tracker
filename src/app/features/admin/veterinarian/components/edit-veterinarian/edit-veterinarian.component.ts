@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
-import { Veterinarian } from '../../../../shared/models/veterinarian.model';
-import { VeterinarianDataService } from '../../../../core/services/veterinarian-data.service';
+import { Veterinarian } from '../../../../../shared/models/veterinarian.model';
+import { VeterinarianDataService } from '../../../../../core/services/veterinarian-data.service';
 
 @Component({
   selector: 'app-edit-veterinarian',

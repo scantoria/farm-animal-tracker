@@ -1,0 +1,133 @@
+// src/app/features/blacksmith/components/blacksmith-visit/blacksmith-visit.component.scss
+
+// --- VARIABLES (Use constants for consistent design) ---
+$spacing-medium: 1rem;
+$spacing-small: 0.5rem;
+$border-color: #eee;
+$primary-color: #007bff;
+$text-color: #333;
+$breakpoint-desktop: 1200px;
+
+// --- HEADER BAR STYLING (Standardized across list views) ---
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-medium;
+  flex-wrap: wrap; 
+  gap: $spacing-small;
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+}
+
+.blacksmith-list {
+  // Overrides Bootstrap's default list-group styling for a better grid look
+  padding: 0; 
+  border-radius: 4px;
+}
+
+// --- LIST HEADER AND ROW STYLING ---
+
+.list-header {
+  // Styles for the desktop column headers
+  font-weight: 600;
+  color: #6c757d; // Bootstrap's secondary text color
+  padding: $spacing-small $spacing-medium;
+  border-bottom: 1px solid $border-color;
+  background-color: #f8f9fa;
+  display: none; // Default to hidden on mobile
+}
+
+.list-group-item.blacksmith-row {
+  // Base styles for the entire row (which is an anchor tag)
+  display: flex; // Default to flex for mobile card view
+  flex-direction: column; 
+  align-items: flex-start;
+  padding: $spacing-medium;
+  color: $text-color; 
+  text-decoration: none; 
+  transition: background-color 0.15s ease;
+  
+  // Mobile data label styling
+  .data-label {
+    font-weight: 600;
+    margin-right: $spacing-small;
+    min-width: 80px; // Give the label a fixed width
+    display: inline-block;
+  }
+
+  // Row Hover State
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+// --- MOBILE ACTION STYLING ---
+.record-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; // Takes full width on mobile
+  margin-top: $spacing-small;
+}
+
+.chevron-icon {
+  color: #ccc;
+  font-size: 1.25rem;
+}
+
+
+// =======================================================
+// --- DESKTOP GRID LAYOUT (Starts at large breakpoint) ---
+// =======================================================
+@media (min-width: $breakpoint-desktop) {
+  
+  .list-header, 
+  .list-group-item.blacksmith-row {
+    // Convert to CSS Grid for desktop
+    display: grid;
+    // Define the columns: Date (Fixed) | Provider (Fixed) | Service (Auto-fill) | Next Appt (Fixed) | Notes (Auto-fill) | Actions (Fixed)
+    grid-template-columns: 120px 150px minmax(150px, 1fr) 150px minmax(100px, 1fr) 90px;
+    align-items: center;
+    gap: $spacing-medium;
+    padding: $spacing-small $spacing-medium;
+  }
+
+  .list-header {
+    display: grid !important; // Overrides d-none
+  }
+
+  .list-group-item.blacksmith-row {
+    flex-direction: initial; // Undo mobile flex-direction
+    
+    // Hide mobile labels on desktop
+    .data-label {
+      display: none;
+    }
+  }
+
+  // Column-specific alignments for desktop
+  .record-data {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+
+  .record-actions {
+    // Desktop: Put the delete button and chevron side-by-side
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: $spacing-small;
+    width: auto;
+    margin: 0;
+  }
+  
+  // Hide the delete button icon text on desktop
+  .delete-btn {
+    padding: 0.25rem 0.5rem; // Make the delete button smaller
+  }
+}

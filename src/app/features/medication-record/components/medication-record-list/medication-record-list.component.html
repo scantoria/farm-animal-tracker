@@ -1,49 +1,69 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="page-container">
+  
+  <div class="header-bar">
     <h2>Medication/Treatment Records (Animal ID: {{ animalId }})</h2>
-    <button class="btn btn-primary" (click)="onAddRecord()">
-      Add New Record
+    <button class="btn btn-primary" [routerLink]="['add']">
+      <i class="bi bi-plus-circle"></i> Add New Record
     </button>
   </div>
 
   <div *ngIf="medicationRecords$ | async as records; else loading">
     <div *ngIf="records.length > 0; else noRecords">
-      <div class="list-group mt-3">
-        <div class="list-group-item" *ngFor="let record of records">
-          <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1">Type: **{{ record.treatmentType }}**</h5>
-            <small>Date: {{ record.visitDate }}</small>
-          </div>
-          <p class="mb-1">
-            **Provider:** {{ record.provider || 'N/A' }}
-          </p>
-          <p class="mb-1">
-            **Medication:** {{ record.medicationName || 'N/A' }} 
-            <span *ngIf="record.dosage">({{ record.dosage }})</span>
-          </p>
-          <p *ngIf="record.notes" class="mb-1 text-secondary small">
-            Notes: {{ record.notes }}
-          </p>
+      
+      <div class="list-group medication-list">
+        
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col date-col">Visit Date</div>
+          <div class="header-col type-col">Treatment Type</div>
+          <div class="header-col med-col">Medication</div>
+          <div class="header-col dose-col">Dosage</div>
+          <div class="header-col provider-col">Provider</div>
+          <div class="header-col action-col"></div> </div>
+
+        <a 
+          class="list-group-item medication-row" 
+          *ngFor="let record of records" 
+          [routerLink]="['edit', record.id!]"
+        >
           
-          <div class="mt-2">
-            <!--//<button class="btn btn-sm btn-info" (click)="onEdit(record.id!)">
-              Edit
-            </button>//-->
-            <a 
-                [routerLink]="['edit', record.id!]" 
-                class="btn btn-sm btn-info"
-            >
-                Edit
-            </a>
-            <button 
-              class="btn btn-sm btn-danger ms-2" 
-              (click)="onDelete(record.id!)"
-            >
-              Delete
-            </button>
+          <div class="record-data date-col">
+            <span class="d-lg-none data-label">Date:</span>
+            {{ record.visitDate }}
           </div>
-        </div>
+          
+          <div class="record-data type-col">
+            <span class="d-lg-none data-label">Type:</span>
+            {{ record.treatmentType }}
+          </div>
+          
+          <div class="record-data med-col">
+            <span class="d-lg-none data-label">Medication:</span>
+            {{ record.medicationName || '—' }}
+          </div>
+
+          <div class="record-data dose-col d-none d-lg-block text-truncate">
+            <span class="d-lg-none data-label">Dosage:</span>
+            {{ record.dosage || 'N/A' }}
+          </div>
+          
+          <div class="record-data provider-col">
+            <span class="d-lg-none data-label">Provider:</span>
+            {{ record.provider }}
+          </div>
+          
+          <div class="record-actions action-col">
+            <a 
+              href="javascript:void(0)" 
+              class="btn btn-sm btn-danger delete-btn" 
+              (click)="onDelete(record.id!); $event.stopPropagation()"
+            >
+              <i class="bi bi-trash"></i>
+            </a>
+            <i class="bi bi-chevron-right chevron-icon"></i>
+          </div>
+        </a>
       </div>
+      
     </div>
     <ng-template #noRecords>
       <div class="alert alert-info mt-3">No medication or treatment records found for this animal.</div>
@@ -54,8 +74,11 @@
     <div class="alert alert-warning mt-3">Loading records...</div>
   </ng-template>
 
-  <div class="mt-4">
-    <button class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
+  <div class="mt-4 text-center">
+    <button 
+        class="btn btn-secondary" 
+        [routerLink]="['/edit-animal', animalId]"
+    >
       &larr; Back to Animal Record
     </button>
   </div>

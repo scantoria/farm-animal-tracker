@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Blacksmith } from '../../../../shared/models/blacksmith.model';
-import { BlacksmithDataService } from '../../../../core/services/blacksmith-data.service';
+import { Blacksmith } from '../../../../../shared/models/blacksmith.model';
+import { BlacksmithDataService } from '../../../../../core/services/blacksmith-data.service';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 

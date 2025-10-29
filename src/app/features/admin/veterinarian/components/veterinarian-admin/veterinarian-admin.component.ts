@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Veterinarian } from '../../../../shared/models/veterinarian.model';
-import { VeterinarianDataService } from '../../../../core/services/veterinarian-data.service';
+import { Veterinarian } from '../../../../../shared/models/veterinarian.model';
+import { VeterinarianDataService } from '../../../../../core/services/veterinarian-data.service';
 
 @Component({
   selector: 'app-veterinarian-admin',

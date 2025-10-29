@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Blacksmith } from '../../../../shared/models/blacksmith.model';
-import { BlacksmithDataService } from '../../../../core/services/blacksmith-data.service';
+import { Blacksmith } from '../../../../../shared/models/blacksmith.model';
+import { BlacksmithDataService } from '../../../../../core/services/blacksmith-data.service';
 
 @Component({
   selector: 'app-add-blacksmith',

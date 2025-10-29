@@ -1,0 +1,96 @@
+// src/app/app.component.scss
+
+// Use variables from styles.scss
+$color-primary: #198754;       
+$color-primary-dark: #146c43;  
+$color-background-light: #f8f9fa;
+$color-border: #e0e0e0;
+$breakpoint-lg: 992px; // Desktop breakpoint
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  padding: 1rem; 
+  background-color: $color-background-light; 
+  border-bottom: 1px solid $color-border;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky; // Keep header visible when scrolling
+  top: 0;
+  z-index: 1000; // Ensure it stays above other content
+  
+  @media (min-width: $breakpoint-lg) {
+    padding: 1rem 2rem; 
+  }
+}
+
+.left-section {
+  .logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.logo {
+  height: 35px; 
+  margin-right: 0.75rem;
+}
+
+.company-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $color-primary-dark;
+  // Hide company name on small screens to save space
+  display: none; 
+  
+  @media (min-width: 576px) {
+    display: block; // Show on most phones and up
+    font-size: 1.5rem;
+  }
+}
+
+.main-nav {
+  // Navigation layout is always horizontal (Flexbox row)
+  .nav-list {
+    display: flex; 
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center; // Vertically align links and button
+    
+    li {
+      margin-left: 0.75rem; 
+      flex-shrink: 0;
+      
+      // Reduce spacing on smaller screens
+      @media (min-width: $breakpoint-lg) {
+        li {
+            margin-left: 1.5rem; // Increase spacing for desktop
+        }
+      }
+    }
+  }
+
+  .nav-link {
+    text-decoration: none; 
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem 0.25rem;
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  .logout-btn {
+    // Ensure the button is properly spaced and styled
+    margin: 0; 
+  }
+}
+
+.page-content {
+  padding-top: 1rem; 
+}

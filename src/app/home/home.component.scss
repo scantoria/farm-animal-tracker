@@ -1,0 +1,63 @@
+// src/app/features/home/components/home/home.component.scss
+
+// Use variables defined in global styles.scss
+$spacing-medium: 1rem;
+$spacing-large: 1.5rem;
+$breakpoint-md: 768px;
+
+.home-page {
+  // Inherits max-width and padding from global .page-container
+  
+  .welcome-message {
+    font-size: 1.25rem;
+    color: #495057; // A nice grey color
+    margin-bottom: $spacing-large;
+    text-align: center;
+    
+    @media (min-width: $breakpoint-md) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column; // Stack vertically on small screens
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: $spacing-large * 2;
+    
+    // Target the anchor tags being used as buttons
+    .btn {
+      width: auto; // Full width on mobile
+      max-width: none; // Cap width for larger screens
+      text-decoration: none; // Ensure link styling is removed
+      
+      // Override default Bootstrap margin for consistent stacking
+      &.me-3 {
+        margin-right: 0 !important; 
+      }
+      &.mb-2 {
+        margin-bottom: $spacing-medium !important; 
+      }
+    }
+    
+    // Desktop layout
+    @media (min-width: $breakpoint-md) {
+      flex-direction: row; // Arrange horizontally on desktop
+      
+      .btn {
+        width: auto;
+        max-width: none;
+        
+        &.me-3 {
+          margin-right: $spacing-large !important; // Restore gap
+        }
+        &.mb-2 {
+          margin-bottom: 0 !important; 
+        }
+      }
+    }
+  }
+}
+
+// Styles for the Animal List component will be handled by its own SCSS.

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Blacksmith } from '../../../../shared/models/blacksmith.model';
-import { BlacksmithDataService } from '../../../../core/services/blacksmith-data.service';
+import { Blacksmith } from '../../../../../shared/models/blacksmith.model';
+import { BlacksmithDataService } from '../../../../../core/services/blacksmith-data.service';
 import { FormsModule } from '@angular/forms'; // Needed for any potential inline forms later
 
 @Component({

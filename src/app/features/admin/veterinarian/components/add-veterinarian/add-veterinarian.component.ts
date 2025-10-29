@@ -3,8 +3,8 @@ import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Firestore } from '@angular/fire/firestore';
-import { Veterinarian } from '../../../../shared/models/veterinarian.model';
-import { VeterinarianDataService } from '../../../../core/services/veterinarian-data.service';
+import { Veterinarian } from '../../../../../shared/models/veterinarian.model';
+import { VeterinarianDataService } from '../../../../../core/services/veterinarian-data.service';
 
 @Component({
   selector: 'app-add-veterinarian',

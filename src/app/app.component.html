@@ -1,16 +1,30 @@
-<nav>
-  <div *ngIf="isAuthenticated$ | async">
-    <a [routerLink]="['/']">Home</a>&nbsp;
-    <a [routerLink]="['/profile']">Profile</a>&nbsp; 
-    <a [routerLink]="['/providers']">Providers 🧑‍⚕️</a>&nbsp;
-    <button (click)="onLogout()">Logout</button>
+<header class="main-header">
+  <div class="left-section">
+    <a [routerLink]="['/']" class="logo-link">
+      <img src="../assets/images/logo-stjo-fat.png" alt="StJo Farm Management System" class="logo">
+      <!--//<span class="company-name">StJo Farm Management System</span>//-->
+    </a>
   </div>
-  <div *ngIf="!(isAuthenticated$ | async)">
-    <a [routerLink]="['/login']">Login</a>&nbsp;
-    <a [routerLink]="['/signup']">Sign Up</a>
-  </div>
-</nav>
 
-<hr>
+  <nav class="main-nav">
+    
+    <ul *ngIf="isAuthenticated$ | async" class="nav-list logged-in">
+      <li><a class="nav-link" [routerLink]="['/']">Home 🏠</a></li>
+      <li><a class="nav-link" [routerLink]="['/profile']">Profile 👤</a></li>
+      <li><a class="nav-link" [routerLink]="['/providers']">Providers ⚙️</a></li>
+      <li>
+        <button class="btn btn-sm btn-danger logout-btn" (click)="onLogout()">Logout</button>
+      </li>
+    </ul>
 
-<router-outlet></router-outlet>
+    <ul *ngIf="!(isAuthenticated$ | async)" class="nav-list logged-out">
+      <li><a class="nav-link" [routerLink]="['/login']">Login</a></li>
+      <li><a class="nav-link" [routerLink]="['/signup']">Sign Up</a></li>
+    </ul>
+  </nav>
+
+</header>
+
+<main class="page-content">
+  <router-outlet></router-outlet>
+</main>
