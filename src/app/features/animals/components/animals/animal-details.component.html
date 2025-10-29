@@ -1,35 +1,84 @@
-<p>List of Farm Animals</p>
-
-<div *ngIf="animals$ | async as animals">
-  <div *ngFor="let animal of animals">
-    <p>
-      <strong>Name:</strong> {{ animal.name }}<br>
-      <strong>Species:</strong> {{ animal.species }}<br>
-      <strong>Breed:</strong> {{ animal.breed }}<br>
-      <strong>Sex:</strong> {{ animal.sex }}<br>
-      <strong>Status:</strong> {{ animal.status }}<br>
-      <strong>Date of Birth:</strong> {{ animal.dob }}
-    </p>
-    <button (click)="deleteAnimal(animal)">Delete</button> 
-    <button [routerLink]="['/edit-animal', animal.id]">Edit</button> 
-    <!--//
-    <button [routerLink]="['/animals', animal.id, 'health']">Health Records</button>
-    
-    <div class="card-footer d-flex justify-content-start">
-      <button 
-          class="btn btn-outline-info me-2" 
-          [routerLink]="['/animals', animal.id, 'health']"
-      >
-          View Health Records
-      </button>
-      
-      <button 
-          class="btn btn-outline-success me-2" 
-          [routerLink]="['/animals', animal.id, 'breeding']"
-      >
-          View Breeding Events
-      </button>
-    </div>
-    //-->
+<div class="page-container">
+  
+  <div class="header-bar">
+    <h1>Farm Animal Registry</h1>
+    <button class="btn btn-primary" [routerLink]="['/animals/add']">
+      <i class="bi bi-plus-circle me-1"></i> Add New Animal
+    </button>
   </div>
+
+  <div *ngIf="animals$ | async as animals; else loading">
+    <div *ngIf="animals.length > 0; else noAnimals">
+      
+      <div class="animal-list list-group">
+        
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col name-col">Name / Tag #</div>
+          <div class="header-col species-col">Species</div>
+          <div class="header-col breed-col">Breed</div>
+          <div class="header-col status-col">Status</div>
+          <div class="header-col dob-col">Date of Birth</div>
+          <div class="header-col action-col"></div>
+        </div>
+
+        <a 
+          class="list-group-item animal-row" 
+          *ngFor="let animal of animals" 
+          [routerLink]="['/edit-animal', animal.id]" 
+        >
+          
+          <div class="animal-data animal-name-col">
+            <span class="d-lg-none data-label">Name/Tag#:</span>
+            <h3 class="animal-name">{{ animal.name }}</h3>
+            <span class="animal-id">{{ animal.id }}</span>
+          </div>
+          
+          <div class="animal-data animal-species-col">
+            <span class="d-lg-none data-label">Species:</span>
+            {{ animal.species }}
+          </div>
+          
+          <div class="animal-data animal-breed-col">
+            <span class="d-lg-none data-label">Breed:</span>
+            {{ animal.breed }}
+          </div>
+          
+          <div class="animal-data animal-status-col">
+            <span class="d-lg-none data-label">Status:</span>
+            <span class="status-badge status-{{ animal.status | lowercase }}">
+              {{ animal.status || 'Active' }}
+            </span>
+          </div>
+          
+          <div class="animal-data animal-dob-col">
+            <span class="d-lg-none data-label">DOB:</span>
+            {{ animal.dob || 'N/A' }}
+          </div>
+          
+          <div class="animal-data animal-chevron-col">
+            <i class="bi bi-chevron-right chevron-icon"></i>
+          </div>
+          
+        </a>
+      </div>
+    </div>
+    
+    <ng-template #noAnimals>
+      <div class="alert alert-info mt-3">No animals found in the registry.</div>
+    </ng-template>
+
+  </div>
+  
+  <ng-template #loading>
+    <div class="alert alert-warning mt-3">Loading animal registry...</div>
+  </ng-template>
+
 </div>
+
+<!--//
+
+<button (click)="deleteAnimal(animal)">Delete</button> 
+
+//-->
+
+    

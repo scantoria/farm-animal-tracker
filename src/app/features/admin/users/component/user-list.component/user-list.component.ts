@@ -34,7 +34,7 @@ export class UserListComponent implements OnInit {
    * Handles the deletion of a user after confirmation.
    * @param id The ID of the user to delete.
    */
-  onDelete(id: string): void {
+  onDelete(id: string, event: Event): void {
     // Crucial: Stop the event from bubbling up to the parent <a> tag (the clickable row)
     event?.stopPropagation(); 
 
