@@ -22,15 +22,15 @@
         </div>
 
         <a 
-          class="list-group-item animal-row" 
-          *ngFor="let animal of animals" 
-          [routerLink]="['/edit-animal', animal.id]" 
-        >
+        class="list-group-item animal-row" 
+        *ngFor="let animal of animals; trackBy: trackByAnimalId" 
+          [routerLink]="['/edit-animal', animal.id!]"  >
           
           <div class="animal-data animal-name-col">
             <span class="d-lg-none data-label">Name/Tag#:</span>
-            <h3 class="animal-name">{{ animal.name }}</h3>
-            <span class="animal-id">{{ animal.id }}</span>
+            <div class="name-id-wrapper"> <h3 class="animal-name">{{ animal.name }}</h3>
+              <!--// <span class="animal-id">{{ animal.id }}</span> //-->
+            </div>
           </div>
           
           <div class="animal-data animal-species-col">
@@ -63,22 +63,9 @@
       </div>
     </div>
     
-    <ng-template #noAnimals>
-      <div class="alert alert-info mt-3">No animals found in the registry.</div>
-    </ng-template>
-
+    <ng-template #noAnimals>...</ng-template>
   </div>
   
-  <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading animal registry...</div>
-  </ng-template>
+  <ng-template #loading>...</ng-template>
 
 </div>
-
-<!--//
-
-<button (click)="deleteAnimal(animal)">Delete</button> 
-
-//-->
-
-    

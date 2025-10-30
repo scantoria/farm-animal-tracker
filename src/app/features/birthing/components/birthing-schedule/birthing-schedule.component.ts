@@ -35,6 +35,11 @@ export class BirthingScheduleComponent implements OnInit {
      this.birthingRecords$ = this.birthingService.getBirthingRecordsByAnimalId(this.animalId);
   }
 
+  // TrackBy function for performance optimization
+  trackByRecordId(index: number, record: BirthingSchedule): string {
+    return record.id || index.toString();
+  }
+
   onAddRecord() {
     // Navigate to the Add form: /animals/:id/birthing/add
     this.router.navigate(['/animals', this.animalId, 'birthing', 'add']);

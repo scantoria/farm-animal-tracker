@@ -25,6 +25,10 @@ export class AnimalsComponent implements OnInit {
     private auth: Auth
   ) { }
 
+  trackByAnimalId(index: number, animal: any): string {
+    return animal.id;
+  }
+
   ngOnInit(): void {
     // 💥 CHECK 1: Log the current user object
     console.log('Current User State:', this.auth.currentUser);

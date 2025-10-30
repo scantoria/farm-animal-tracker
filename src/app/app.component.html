@@ -1,19 +1,19 @@
 <header class="main-header">
   <div class="left-section">
     <a [routerLink]="['/']" class="logo-link">
-      <img src="../assets/images/logo-stjo-fat.png" alt="StJo Farm Management System" class="logo">
-      <!--//<span class="company-name">StJo Farm Management System</span>//-->
+      <img src="assets/images/logo-stjo-fat.png" alt="StJo Farm Management System" class="logo">
+      <span class="company-name">StJo Farm</span>
     </a>
   </div>
 
   <nav class="main-nav">
     
     <ul *ngIf="isAuthenticated$ | async" class="nav-list logged-in">
-      <li><a class="nav-link" [routerLink]="['/']">Home 🏠</a></li>
-      <li><a class="nav-link" [routerLink]="['/profile']">Profile 👤</a></li>
-      <li><a class="nav-link" [routerLink]="['/providers']">Providers ⚙️</a></li>
+      <li><a class="nav-link" [routerLink]="['/']"><span class="nav-icon">🏠</span><span class="nav-text">Home</span></a></li>
+      <li><a class="nav-link" [routerLink]="['/profile']"><span class="nav-icon">👤</span><span class="nav-text">Profile</span></a></li>
+      <li><a class="nav-link" [routerLink]="['/providers']"><span class="nav-icon">⚙️</span><span class="nav-text">Providers</span></a></li>
       <li>
-        <button class="btn btn-sm btn-danger logout-btn" (click)="onLogout()">Logout</button>
+        <button class="btn btn-logout" (click)="onLogout()">Logout</button>
       </li>
     </ul>
 

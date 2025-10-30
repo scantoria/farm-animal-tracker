@@ -1,49 +1,134 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Birthing Records (Dam ID: {{ animalId }})</h2>
+<div class="page-container">
+  
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" [routerLink]="['/edit-animal', animalId]">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Birthing Records</h1>
+        <p class="dam-id">Dam ID: {{ animalId }}</p>
+      </div>
+    </div>
     <button class="btn btn-primary" (click)="onAddRecord()">
-      Add New Birth Record
+      <i class="bi bi-plus-circle me-1"></i> Add Birth Record
     </button>
   </div>
 
+  <!-- Records List -->
   <div *ngIf="birthingRecords$ | async as records; else loading">
     <div *ngIf="records.length > 0; else noRecords">
-      <div class="list-group mt-3">
-        <div class="list-group-item" *ngFor="let record of records">
-          <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1">Tag: **{{ record.tagInfo }}**</h5>
-            <small>DOB: {{ record.dob }}</small>
+      
+      <div class="records-list">
+        
+        <!-- Desktop Table Header -->
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col">Tag / ID</div>
+          <div class="header-col">Date of Birth</div>
+          <div class="header-col">Species / Sex</div>
+          <div class="header-col">Birth Weight</div>
+          <div class="header-col">Sire / Breed</div>
+          <div class="header-col">Calving Ease</div>
+          <div class="header-col">Actions</div>
+        </div>
+
+        <!-- Record Rows/Cards -->
+        <div class="record-row" *ngFor="let record of records; trackBy: trackByRecordId">
+          
+          <!-- Tag/ID Column -->
+          <div class="record-data tag-col">
+            <span class="d-lg-none data-label">Tag / ID:</span>
+            <div class="tag-info">
+              <h3 class="tag-number">{{ record.tagInfo }}</h3>
+            </div>
           </div>
-          <p class="mb-1">
-            **Species:** {{ record.species }} | **Sex:** {{ record.sex | titlecase }} | **Weight:** {{ record.birthWeight }}
-          </p>
-          <p class="mb-1 text-secondary small">
-            Sire: {{ record.sire }} | Breed: {{ record.breed }} | Ease: {{ record.calvingEase }}
-          </p>
-          <p *ngIf="record.notes" class="mb-1 text-secondary small">
-            Notes: {{ record.notes }}
-          </p>
-          <div class="mt-2">
-            <button class="btn btn-sm btn-info" (click)="onEdit(record.id!)">
-              Edit
-            </button>
-            <button 
-              class="btn btn-sm btn-danger ms-2" 
-              (click)="onDelete(record.id!)"
-            >
-              Delete
-            </button>
+
+          <!-- Date of Birth Column -->
+          <div class="record-data dob-col">
+            <span class="d-lg-none data-label">Date of Birth:</span>
+            <span class="dob-value">{{ record.dob }}</span>
           </div>
+
+          <!-- Species/Sex Column -->
+          <div class="record-data species-col">
+            <span class="d-lg-none data-label">Species / Sex:</span>
+            <div class="species-info">
+              <span class="species">{{ record.species }}</span>
+              <span class="sex-badge sex-{{ record.sex | lowercase }}">
+                {{ record.sex | titlecase }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Birth Weight Column -->
+          <div class="record-data weight-col">
+            <span class="d-lg-none data-label">Birth Weight:</span>
+            <span class="weight-value">{{ record.birthWeight }}</span>
+          </div>
+
+          <!-- Sire/Breed Column -->
+          <div class="record-data sire-col">
+            <span class="d-lg-none data-label">Sire / Breed:</span>
+            <div class="sire-info">
+              <span class="sire">{{ record.sire }}</span>
+              <span class="breed">{{ record.breed }}</span>
+            </div>
+          </div>
+
+          <!-- Calving Ease Column -->
+          <div class="record-data ease-col">
+            <span class="d-lg-none data-label">Calving Ease:</span>
+            <span class="ease-badge ease-{{ record.calvingEase | lowercase }}">
+              {{ record.calvingEase }}
+            </span>
+          </div>
+
+          <!-- Notes (Mobile/Tablet only - full width) -->
+          <div class="record-data notes-col" *ngIf="record.notes">
+            <span class="d-lg-none data-label">Notes:</span>
+            <p class="notes-text">{{ record.notes }}</p>
+          </div>
+
+          <!-- Actions Column -->
+          <div class="record-data actions-col">
+            <div class="action-buttons">
+              <button class="btn-action btn-edit" (click)="onEdit(record.id!)" title="Edit Record">
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button class="btn-action btn-delete" (click)="onDelete(record.id!)" title="Delete Record">
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- No Records State -->
     <ng-template #noRecords>
-      <div class="alert alert-info mt-3">No birthing records found for this animal.</div>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-clipboard-data"></i>
+        </div>
+        <h3>No Birthing Records</h3>
+        <p>No birthing records have been logged for this animal yet.</p>
+        <button class="btn btn-primary" (click)="onAddRecord()">
+          <i class="bi bi-plus-circle me-1"></i> Add First Record
+        </button>
+      </div>
     </ng-template>
   </div>
 
+  <!-- Loading State -->
   <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading birthing records...</div>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading birthing records...</p>
+    </div>
   </ng-template>
 
   <div class="mt-4">
@@ -51,4 +136,5 @@
       &larr; Back to Animal Record
     </button>
   </div>
+
 </div>

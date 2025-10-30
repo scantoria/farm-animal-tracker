@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [AnimalsComponent, RouterLink],
+  imports: [AnimalsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
