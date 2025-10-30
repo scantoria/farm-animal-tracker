@@ -26,12 +26,21 @@ export class BreedingEventComponent implements OnInit {
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
-      this.breedingEvents$ = this.breedingService.getBreedingEventsByAnimalId(this.animalId);
+      this.loadEvents();
     }
   }
 
+  loadEvents() {
+    this.breedingEvents$ = this.breedingService.getBreedingEventsByAnimalId(this.animalId);
+  }
+
+  // TrackBy function for performance optimization
+  trackByEventId(index: number, event: BreedingEvent): string {
+    return event.id || index.toString();
+  }
+
   onAddBreedingEvent() {
-    this.router.navigate(['/animals', this.animalId, 'add-breeding']);
+    this.router.navigate(['/animals', this.animalId, 'breeding', 'add']);
   }
 
   onEdit(eventId: string) {
@@ -40,8 +49,14 @@ export class BreedingEventComponent implements OnInit {
 
   onDelete(eventId: string) {
     if (confirm('Are you sure you want to delete this breeding event?')) {
-      this.breedingService.deleteBreedingEvent(this.animalId, eventId).subscribe(() => {
-        console.log('Breeding event deleted successfully!');
+      this.breedingService.deleteBreedingEvent(this.animalId, eventId).subscribe({
+        next: () => {
+          console.log('Breeding event deleted successfully!');
+          this.loadEvents(); // Refresh the list
+        },
+        error: (error) => {
+          console.error('Error deleting breeding event:', error);
+        }
       });
     }
   }

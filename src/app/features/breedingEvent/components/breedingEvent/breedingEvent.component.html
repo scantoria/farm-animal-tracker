@@ -1,56 +1,119 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Breeding Events</h2>
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" [routerLink]="['/edit-animal', animalId]">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Breeding Events</h1>
+        <p class="animal-id">Animal ID: {{ animalId }}</p>
+      </div>
+    </div>
     <button class="btn btn-primary" (click)="onAddBreedingEvent()">
-      Add Breeding Event
+      <i class="bi bi-plus-circle me-1"></i> Add Breeding Event
     </button>
   </div>
 
-  <div *ngIf="breedingEvents$ | async as events">
-    <div class="list-group mt-3">
-      <div class="list-group-item" *ngFor="let event of events">
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{ event.eventType }}</h5>
-          <small>{{ event.date }}</small>
+  <!-- Records List -->
+  <div *ngIf="breedingEvents$ | async as events; else loading">
+    <div *ngIf="events.length > 0; else noRecords">
+
+      <div class="records-list">
+
+        <!-- Desktop Table Header -->
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col">Event Type</div>
+          <div class="header-col">Date</div>
+          <div class="header-col">Notes</div>
+          <div class="header-col">Actions</div>
         </div>
-        <p class="mb-1">{{ event.notes }}</p>
-        <div>
-          <button 
-            class="btn btn-sm btn-success" 
-            [routerLink]="['/animals', animalId, 'breeding', event.id, 'checks']"
-          >
-            View Checks
-          </button>
-          <button class="btn btn-sm btn-info ms-2" (click)="onEdit(event.id!)">
-            Edit
-          </button>
-          <button
-            class="btn btn-sm btn-danger ms-2"
-            (click)="onDelete(event.id!)"
-          >
-            Delete
-          </button>
-          <button 
-            [routerLink]="['/animals', animalId, 'breeding', event.id, 'treatments']" 
-            class="btn btn-sm btn-secondary"
-          >
-            View Treatments
-          </button>
+
+        <!-- Record Rows/Cards -->
+        <div class="record-row" *ngFor="let event of events; trackBy: trackByEventId">
+
+          <!-- Event Type Column -->
+          <div class="record-data type-col">
+            <span class="d-lg-none data-label">Event Type:</span>
+            <span class="type-value">{{ event.eventType }}</span>
+          </div>
+
+          <!-- Date Column -->
+          <div class="record-data date-col">
+            <span class="d-lg-none data-label">Date:</span>
+            <span class="date-value">{{ event.date }}</span>
+          </div>
+
+          <!-- Notes Column -->
+          <div class="record-data notes-col" *ngIf="event.notes">
+            <span class="d-lg-none data-label">Notes:</span>
+            <p class="notes-text">{{ event.notes }}</p>
+          </div>
+
+          <!-- Actions Column -->
+          <div class="record-data actions-col">
+            <div class="action-buttons">
+              <button
+                class="btn-action btn-checks"
+                [routerLink]="['/animals', animalId, 'breeding', event.id, 'checks']"
+                title="View Pregnancy Checks"
+              >
+                <i class="bi bi-clipboard-check"></i>
+                <span class="btn-text">Checks</span>
+              </button>
+              <button
+                class="btn-action btn-treatments"
+                [routerLink]="['/animals', animalId, 'breeding', event.id, 'treatments']"
+                title="View Hormone Treatments"
+              >
+                <i class="bi bi-capsule"></i>
+                <span class="btn-text">Treatments</span>
+              </button>
+              <button
+                class="btn-action btn-edit"
+                (click)="onEdit(event.id!)"
+                title="Edit Event"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                class="btn-action btn-delete"
+                (click)="onDelete(event.id!)"
+                title="Delete Event"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- No Records State -->
+    <ng-template #noRecords>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-heart-pulse"></i>
+        </div>
+        <h3>No Breeding Events</h3>
+        <p>No breeding events have been logged for this animal yet.</p>
+        <button class="btn btn-primary" (click)="onAddBreedingEvent()">
+          <i class="bi bi-plus-circle me-1"></i> Add First Event
+        </button>
+      </div>
+    </ng-template>
   </div>
 
-  <div class="mt-3">
-    <!--// 
-    <button class="btn btn-secondary" [routerLink]="['/']">
-      Back to Animal Record
-    </button>
-    //-->
-    
-    <button
-      class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
-      Back to Animal Record
-    </button>
-  </div>
+  <!-- Loading State -->
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading breeding events...</p>
+    </div>
+  </ng-template>
+
 </div>
