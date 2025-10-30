@@ -1,74 +1,156 @@
-<div class="container">
-  <h2>Edit Blacksmith Visit Record: {{recordId}}</h2>
+<div class="page-container">
   
-  <form #visitForm="ngForm" (ngSubmit)="onSubmit(visitForm)">
-
-    <label for="visitDate">Visit Date:</label>
-    <input 
-      type="date" 
-      id="visitDate" 
-      name="visitDate" 
-      [(ngModel)]="visitData.visitDate" 
-      required 
-      #visitDate="ngModel"
-    >
-    <div *ngIf="visitDate.invalid && (visitDate.dirty || visitDate.touched)">
-      <div *ngIf="visitDate.errors?.['required']" class="text-danger small">Visit Date is required.</div>
+  <!-- Header Section -->
+  <div class="form-header">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        &larr; <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit Blacksmith Visit</h1>
+        <p class="record-id">Record ID: {{ recordId }}</p>
+      </div>
     </div>
-    
-    <label for="provider">Blacksmith (Provider Name):</label>
-    <select 
-      id="provider" 
-      name="provider" 
-      [(ngModel)]="visitData.provider" 
-      required 
-      #providerControl="ngModel"
-    >
-      <option value="" disabled>Select Blacksmith</option>
-      <option *ngFor="let bs of blacksmiths$ | async" [value]="bs.name">
-        {{ bs.name }}
-      </option>
-    </select>
-    <div *ngIf="providerControl.invalid && (providerControl.dirty || providerControl.touched)">
-      <div *ngIf="providerControl.errors?.['required']" class="text-danger small">Blacksmith is required.</div>
-    </div>
-    
-    <label for="serviceProvided">Service Provided:</label>
-    <select 
-      id="serviceProvided" 
-      name="serviceProvided" 
-      [(ngModel)]="visitData.serviceProvided" 
-      required 
-      #serviceProvided="ngModel"
-    >
-      <option value="" disabled>Select Service</option>
-      <option *ngFor="let service of serviceOptions" [value]="service">
-        {{ service }}
-      </option>
-    </select>
-    <div *ngIf="serviceProvided.invalid && (serviceProvided.dirty || serviceProvided.touched)">
-      <div *ngIf="serviceProvided.errors?.['required']" class="text-danger small">Service Provided is required.</div>
-    </div>
+  </div>
 
-    <label for="nextAppointmentDate">Next Appointment Date (Optional):</label>
-    <input 
-      type="date" 
-      id="nextAppointmentDate" 
-      name="nextAppointmentDate" 
-      [(ngModel)]="visitData.nextAppointmentDate"
-    >
+  <!-- Loading State -->
+  <div *ngIf="!visitData.visitDate" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading visit record...</p>
+  </div>
 
-    <label for="notes">Notes:</label>
-    <textarea 
-      id="notes" 
-      name="notes" 
-      rows="3" 
-      [(ngModel)]="visitData.notes"
-    ></textarea>
+  <!-- Form Card -->
+  <div *ngIf="visitData.visitDate" class="form-card">
+    <form #visitForm="ngForm" (ngSubmit)="onSubmit(visitForm)" class="visit-form">
+      
+      <!-- Form Grid - Two columns on larger screens -->
+      <div class="form-grid">
+        
+        <!-- Visit Date -->
+        <div class="form-group">
+          <label for="visitDate" class="form-label">
+            Visit Date <span class="required">*</span>
+          </label>
+          <input 
+            type="date" 
+            class="form-control" 
+            id="visitDate" 
+            name="visitDate" 
+            [(ngModel)]="visitData.visitDate" 
+            required
+            #visitDateField="ngModel"
+          >
+          <div class="form-error" *ngIf="visitDateField.invalid && visitDateField.touched">
+            Visit date is required
+          </div>
+        </div>
 
-    <div class="mt-4">
-      <button type="submit" class="btn btn-success" [disabled]="visitForm.invalid">Save Changes</button>
-      <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
-    </div>
-  </form>
+        <!-- Blacksmith Provider -->
+        <div class="form-group">
+          <label for="provider" class="form-label">
+            Blacksmith Provider <span class="required">*</span>
+          </label>
+          <select 
+            class="form-control" 
+            id="provider" 
+            name="provider" 
+            [(ngModel)]="visitData.provider" 
+            required 
+            #providerControl="ngModel"
+          >
+            <option value="" disabled>Select Blacksmith</option>
+            <option *ngFor="let bs of blacksmiths$ | async" [value]="bs.name">
+              {{ bs.name }}
+            </option>
+          </select>
+          <div class="form-error" *ngIf="providerControl.invalid && providerControl.touched">
+            Blacksmith provider is required
+          </div>
+        </div>
+
+        <!-- Service Provided -->
+        <div class="form-group">
+          <label for="serviceProvided" class="form-label">
+            Service Provided <span class="required">*</span>
+          </label>
+          <select 
+            class="form-control" 
+            id="serviceProvided" 
+            name="serviceProvided" 
+            [(ngModel)]="visitData.serviceProvided" 
+            required 
+            #serviceField="ngModel"
+          >
+            <option value="" disabled>Select Service</option>
+            <option *ngFor="let service of serviceOptions" [value]="service">
+              {{ service }}
+            </option>
+          </select>
+          <div class="form-error" *ngIf="serviceField.invalid && serviceField.touched">
+            Service type is required
+          </div>
+        </div>
+
+        <!-- Next Appointment Date -->
+        <div class="form-group">
+          <label for="nextAppointmentDate" class="form-label">
+            Next Appointment <span class="optional">(Optional)</span>
+          </label>
+          <input 
+            type="date" 
+            class="form-control" 
+            id="nextAppointmentDate" 
+            name="nextAppointmentDate" 
+            [(ngModel)]="visitData.nextAppointmentDate"
+          >
+          <small class="form-help">Schedule the next visit if known</small>
+        </div>
+
+        <!-- Notes - Full Width -->
+        <div class="form-group form-group-full">
+          <label for="notes" class="form-label">
+            Visit Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea 
+            class="form-control" 
+            id="notes" 
+            name="notes" 
+            rows="4" 
+            [(ngModel)]="visitData.notes"
+            placeholder="Add any notes about the visit, horse condition, or recommendations..."
+          ></textarea>
+          <small class="form-help">Document any observations, issues, or special instructions</small>
+        </div>
+
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="onCancel()"
+        >
+          <i class="bi bi-x-circle"></i>
+          <span>Cancel</span>
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="visitForm.invalid"
+        >
+          <i class="bi bi-save"></i>
+          <span>Update Visit Record</span>
+        </button>
+      </div>
+
+      <!-- Form Validation Summary -->
+      <div class="validation-summary" *ngIf="visitForm.invalid && visitForm.submitted">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span>Please fill in all required fields before submitting.</span>
+      </div>
+
+    </form>
+  </div>
+
 </div>

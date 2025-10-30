@@ -34,6 +34,11 @@ export class BlacksmithVisitComponent implements OnInit {
      this.visitRecords$ = this.blacksmithService.getVisitsByAnimalId(this.animalId);
   }
 
+  // TrackBy function for performance optimization
+  trackByRecordId(index: number, record: BlacksmithVisit): string {
+    return record.id || index.toString();
+  }
+
   onAddRecord() {
     this.router.navigate(['/animals', this.animalId, 'blacksmith', 'add']);
   }

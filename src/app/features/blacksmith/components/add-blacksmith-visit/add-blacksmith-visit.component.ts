@@ -1,5 +1,3 @@
-// src/app/features/blacksmith/components/add-blacksmith-visit/add-blacksmith-visit.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -18,14 +16,20 @@ import { Observable } from 'rxjs';
   templateUrl: './add-blacksmith-visit.component.html',
   styleUrl: './add-blacksmith-visit.component.scss'
 })
-
 export class AddBlacksmithVisitComponent implements OnInit {
   animalId!: string;
-  selectedProviderName: string = ''; 
   blacksmiths$!: Observable<Blacksmith[]>;
   visitData: Partial<BlacksmithVisit> = {}; 
-  serviceOptions: string[] = ['Select Service','Trim - All Four', 'Shoeing - Front', 'Shoeing - All Four', 'Corrective Trim'];
-
+  
+  serviceOptions: string[] = [
+    'Trim - All Four',
+    'Shoeing - Front',
+    'Shoeing - All Four',
+    'Corrective Trim',
+    'Therapeutic Shoeing',
+    'Hoof Repair',
+    'Custom Shoes'
+  ];
 
   constructor(
     private blacksmithService: BlacksmithService,
@@ -38,6 +42,9 @@ export class AddBlacksmithVisitComponent implements OnInit {
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.loadBlacksmiths();
+    
+    // Set default visit date to today for convenience
+    this.visitData.visitDate = new Date().toISOString().substring(0, 10);
   }
 
   loadBlacksmiths() {
@@ -51,13 +58,13 @@ export class AddBlacksmithVisitComponent implements OnInit {
     }
     
     const animalRef: DocumentReference = doc(this.firestore, `animals/${this.animalId}`);
+    
     const newVisit: any = {
       ...form.value,
       animalRef: animalRef,
-      
-    };// as BlacksmithVisit;
+    };
 
-    console.log(form.value);
+    console.log('Submitting visit data:', form.value);
 
     this.blacksmithService.addVisitRecord(this.animalId, newVisit)
       .subscribe({
