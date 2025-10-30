@@ -1,51 +1,121 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Pregnancy Checks (Event: {{ eventId }})</h2>
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" (click)="onBackToBreedingEvents()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Pregnancy Checks</h1>
+        <p class="animal-id">Animal ID: {{ animalId }} | Event ID: {{ eventId }}</p>
+      </div>
+    </div>
     <button class="btn btn-primary" (click)="onAddCheck()">
-      Add New Check
+      <i class="bi bi-plus-circle me-1"></i> Add Check
     </button>
   </div>
 
+  <!-- Records List -->
   <div *ngIf="pregnancyChecks$ | async as checks; else loading">
     <div *ngIf="checks.length > 0; else noChecks">
-      <div class="list-group mt-3">
-        <div class="list-group-item" *ngFor="let check of checks">
-          <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1">Result: **{{ check.result }}**</h5>
-            <small>Check Date: {{ check.checkDate }}</small>
+
+      <div class="records-list">
+
+        <!-- Desktop Table Header -->
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col">Check Date</div>
+          <div class="header-col">Result</div>
+          <div class="header-col">Method</div>
+          <div class="header-col">Next Check</div>
+          <div class="header-col">Notes</div>
+          <div class="header-col">Actions</div>
+        </div>
+
+        <!-- Record Rows/Cards -->
+        <div class="record-row" *ngFor="let check of checks; trackBy: trackByCheckId">
+
+          <!-- Check Date Column -->
+          <div class="record-data date-col">
+            <span class="d-lg-none data-label">Check Date:</span>
+            <span class="date-value">{{ check.checkDate }}</span>
           </div>
-          <p class="mb-1">
-            **Method:** {{ check.confirmationMethod }} | **Next Check:** {{ check.nextCheckDate || 'N/A' }}
-          </p>
-          <p *ngIf="check.notes" class="mb-1 text-secondary small">
-            Notes: {{ check.notes }}
-          </p>
-          <div class="mt-2">
-            <button class="btn btn-sm btn-info" (click)="onEdit(check.id!)">
-              Edit
-            </button>
-            <button 
-              class="btn btn-sm btn-danger ms-2" 
-              (click)="onDelete(check.id!)"
-            >
-              Delete
-            </button>
+
+          <!-- Result Column -->
+          <div class="record-data result-col">
+            <span class="d-lg-none data-label">Result:</span>
+            <span class="result-badge" [class]="'badge-' + check.result.toLowerCase()">
+              {{ check.result }}
+            </span>
           </div>
+
+          <!-- Method Column -->
+          <div class="record-data method-col">
+            <span class="d-lg-none data-label">Method:</span>
+            <span class="method-value">{{ check.confirmationMethod }}</span>
+          </div>
+
+          <!-- Next Check Column -->
+          <div class="record-data next-col">
+            <span class="d-lg-none data-label">Next Check:</span>
+            <span class="next-value" [class.no-value]="!check.nextCheckDate">
+              {{ check.nextCheckDate || 'Not Scheduled' }}
+            </span>
+          </div>
+
+          <!-- Notes Column -->
+          <div class="record-data notes-col" *ngIf="check.notes">
+            <span class="d-lg-none data-label">Notes:</span>
+            <p class="notes-text">{{ check.notes }}</p>
+          </div>
+
+          <!-- Actions Column -->
+          <div class="record-data actions-col">
+            <div class="action-buttons">
+              <button
+                class="btn-action btn-edit"
+                (click)="onEdit(check.id!)"
+                title="Edit Check"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                class="btn-action btn-delete"
+                (click)="onDelete(check.id!)"
+                title="Delete Check"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- No Records State -->
     <ng-template #noChecks>
-      <div class="alert alert-info mt-3">No pregnancy checks have been recorded for this breeding event yet.</div>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-clipboard-check"></i>
+        </div>
+        <h3>No Pregnancy Checks</h3>
+        <p>No pregnancy checks have been recorded for this breeding event yet.</p>
+        <button class="btn btn-primary" (click)="onAddCheck()">
+          <i class="bi bi-plus-circle me-1"></i> Add First Check
+        </button>
+      </div>
     </ng-template>
   </div>
 
+  <!-- Loading State -->
   <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading pregnancy check records...</div>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading pregnancy checks...</p>
+    </div>
   </ng-template>
 
-  <div class="mt-4">
-    <button class="btn btn-secondary" (click)="onBackToBreedingEvents()">
-      &larr; Back to Breeding Events
-    </button>
-  </div>
 </div>

@@ -1,64 +1,136 @@
-<div class="container">
-  <h2>Add New Pregnancy Check</h2>
-  <p class="text-muted">For Breeding Event: **{{ eventId }}**</p>
-  <form #checkForm="ngForm" (ngSubmit)="onSubmit(checkForm)">
-    <div class="form-group mb-3">
-      <label for="checkDate">Check Date</label>
-      <input type="date" id="checkDate" name="checkDate" ngModel required class="form-control" />
-    </div>
+<div class="page-container">
 
-    <div class="form-group mb-3">
-      <label for="result">Result</label>
-      <select id="result" name="result" ngModel required class="form-control">
-        <option value="" disabled selected>Select Result</option>
-        <option *ngFor="let result of checkResults" [value]="result">
-          {{ result }}
-        </option>
-      </select>
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Add Pregnancy Check</h1>
+        <p class="animal-id">Animal ID: {{ animalId }} | Event ID: {{ eventId }}</p>
+      </div>
     </div>
+  </div>
 
-    <div class="form-group mb-4">
-      <label for="confirmationMethod">Confirmation Method</label>
-      <select
-        id="confirmationMethod"
-        name="confirmationMethod"
-        ngModel
-        required
-        class="form-control"
-      >
-        <option value="" disabled selected>Select Method</option>
-        <option *ngFor="let method of checkMethods" [value]="method">
-          {{ method }}
-        </option>
-      </select>
-    </div>
-    <div class="form-group mb-4">
-      <label for="nextCheckDate">Next Check Date</label>
-      <input 
-        type="date" 
-        id="nextCheckDate" 
-        name="nextCheckDate" 
-        ngModel
-        required 
-        class="form-control" 
-      />
-    </div>
-    <div class="form-group mb-4">
-      <label for="notes">Notes</label>
-      <input 
-        type="text" 
-        id="notes" 
-        name="notes" 
-        ngModel
-        class="form-control"
-      />
-    </div>
+  <!-- Form Card -->
+  <div class="form-card">
+    <form #checkForm="ngForm" (ngSubmit)="onSubmit(checkForm)">
 
-    <button type="submit" class="btn btn-primary" [disabled]="checkForm.invalid">
-      Add Check
-    </button>
-    <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">
-      Cancel
-    </button>
-  </form>
+      <!-- Check Date Field -->
+      <div class="form-group">
+        <label for="checkDate" class="form-label">
+          Check Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="checkDate"
+          name="checkDate"
+          #checkDateField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          [class.is-invalid]="checkDateField.invalid && checkDateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="checkDateField.invalid && checkDateField.touched">
+          Check date is required.
+        </div>
+      </div>
+
+      <!-- Result Field -->
+      <div class="form-group">
+        <label for="result" class="form-label">
+          Result <span class="required">*</span>
+        </label>
+        <select
+          id="result"
+          name="result"
+          #resultField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          [class.is-invalid]="resultField.invalid && resultField.touched"
+        >
+          <option value="" disabled selected>Select result...</option>
+          <option *ngFor="let result of checkResults" [value]="result">
+            {{ result }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="resultField.invalid && resultField.touched">
+          Result is required.
+        </div>
+      </div>
+
+      <!-- Confirmation Method Field -->
+      <div class="form-group">
+        <label for="confirmationMethod" class="form-label">
+          Confirmation Method <span class="required">*</span>
+        </label>
+        <select
+          id="confirmationMethod"
+          name="confirmationMethod"
+          #methodField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          [class.is-invalid]="methodField.invalid && methodField.touched"
+        >
+          <option value="" disabled selected>Select method...</option>
+          <option *ngFor="let method of checkMethods" [value]="method">
+            {{ method }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="methodField.invalid && methodField.touched">
+          Confirmation method is required.
+        </div>
+      </div>
+
+      <!-- Next Check Date Field -->
+      <div class="form-group">
+        <label for="nextCheckDate" class="form-label">
+          Next Check Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="nextCheckDate"
+          name="nextCheckDate"
+          #nextCheckField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          [class.is-invalid]="nextCheckField.invalid && nextCheckField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="nextCheckField.invalid && nextCheckField.touched">
+          Next check date is required.
+        </div>
+      </div>
+
+      <!-- Notes Field -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          ngModel
+          rows="4"
+          placeholder="Enter any additional notes about this pregnancy check..."
+          class="form-control"
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="checkForm.invalid">
+          <i class="bi bi-check-circle me-1"></i> Add Check
+        </button>
+      </div>
+
+    </form>
+  </div>
+
 </div>

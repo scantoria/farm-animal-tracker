@@ -40,9 +40,14 @@ export class PregnancyCheckComponent implements OnInit {
 
   loadPregnancyChecks() {
      this.pregnancyChecks$ = this.breedingService.getPregnancyChecksByBreedingEventId(
-        this.animalId, 
+        this.animalId,
         this.eventId
       );
+  }
+
+  // TrackBy function for performance optimization
+  trackByCheckId(index: number, check: PregnancyCheck): string {
+    return check.id || index.toString();
   }
 
   onAddCheck() {
