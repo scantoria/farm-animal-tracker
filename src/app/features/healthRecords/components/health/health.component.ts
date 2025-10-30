@@ -25,10 +25,18 @@ export class HealthComponent implements OnInit {
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
-      this.healthModel$ = this.healthService.getHealthRecordsByAnimalId(
-        this.animalId
-      );
+      this.loadRecords();
     }
+  }
+
+  loadRecords() {
+    this.healthModel$ = this.healthService.getHealthRecordsByAnimalId(
+      this.animalId
+    );
+  }
+
+  trackByRecordId(index: number, record: HealthModel): string {
+    return record.id || index.toString();
   }
 
   onAddHealthRecord() {
@@ -47,8 +55,14 @@ export class HealthComponent implements OnInit {
 
   onDelete(recordId: string) {
     if (confirm('Are you sure you want to delete this health record?')) {
-      this.healthService.deleteHealthRecord(this.animalId, recordId).subscribe(() => {
-        console.log('Record deleted successfully!');
+      this.healthService.deleteHealthRecord(this.animalId, recordId).subscribe({
+        next: () => {
+          console.log('Record deleted successfully!');
+          this.loadRecords();
+        },
+        error: (error) => {
+          console.error('Error deleting health record:', error);
+        }
       });
     }
   }

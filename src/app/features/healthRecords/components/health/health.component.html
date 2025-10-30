@@ -1,45 +1,90 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Health Records</h2>
-    <button class="btn btn-primary" (click)="onAddHealthRecord()">
-      Add Health Record
-    </button>
-  </div>
-  <div *ngIf="healthModel$ | async as records">
-    <div class="list-group mt-3">
-      <div class="list-group-item" *ngFor="let record of records">
-        <!--
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{ record.eventType }}</h5>
-          <small>{{ record.date }}</small>
-        </div>
-        -->
-        <p class="mb-1">{{ record.eventType }}&nbsp; | &nbsp;{{ record.date }}&nbsp; | &nbsp;{{ record.description }}&nbsp; | &nbsp;{{record.dosage}}</p>
-        <div>
-          <button class="btn btn-sm btn-info" (click)="onEdit(record.id!)">
-            Edit
-          </button>
-          <button
-            class="btn btn-sm btn-danger ms-2"
-            (click)="onDelete(record.id!)"
-          >
-            Delete
-          </button>
-        </div>
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onBackToAnimal()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Health Records</h1>
+        <p class="animal-id">Animal ID: {{ animalId }}</p>
       </div>
     </div>
-  </div>
-  <div class="mt-3">
-    
-    <button
-      class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
-      Back to Animal Record
+    <button type="button" class="btn-add" (click)="onAddHealthRecord()">
+      <i class="bi bi-plus-circle"></i>
+      <span class="btn-text">Add Record</span>
     </button>
-  <!--//
-    <button
-      class="btn btn-secondary" [routerLink]="['/']">
-      Back to Animal Record
-    </button>
-  //-->
   </div>
+
+  <!-- Records List -->
+  <div class="records-container" *ngIf="healthModel$ | async as records">
+
+    <!-- Desktop Header (hidden on mobile) -->
+    <div class="list-header d-none d-lg-grid">
+      <div class="header-col">Date</div>
+      <div class="header-col">Event Type</div>
+      <div class="header-col">Description</div>
+      <div class="header-col">Dosage</div>
+      <div class="header-col">Actions</div>
+    </div>
+
+    <!-- Records List -->
+    <div class="records-list" *ngIf="records.length > 0">
+      <div class="record-row" *ngFor="let record of records; trackBy: trackByRecordId">
+
+        <!-- Date Column -->
+        <div class="record-data date-col">
+          <span class="mobile-label">Date:</span>
+          <span class="date-value">{{ record.date }}</span>
+        </div>
+
+        <!-- Event Type Column -->
+        <div class="record-data type-col">
+          <span class="mobile-label">Event Type:</span>
+          <span class="type-value">{{ record.eventType }}</span>
+        </div>
+
+        <!-- Description Column -->
+        <div class="record-data description-col">
+          <span class="mobile-label">Description:</span>
+          <span class="description-text">{{ record.description || 'N/A' }}</span>
+        </div>
+
+        <!-- Dosage Column -->
+        <div class="record-data dosage-col">
+          <span class="mobile-label">Dosage:</span>
+          <span class="dosage-text">{{ record.dosage || 'N/A' }}</span>
+        </div>
+
+        <!-- Actions Column -->
+        <div class="record-actions">
+          <button type="button" class="btn-action btn-edit" (click)="onEdit(record.id!)">
+            <i class="bi bi-pencil"></i>
+            <span class="btn-text">Edit</span>
+          </button>
+          <button type="button" class="btn-action btn-delete" (click)="onDelete(record.id!)">
+            <i class="bi bi-trash"></i>
+            <span class="btn-text">Delete</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="records.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-clipboard2-pulse"></i>
+      </div>
+      <h3>No Health Records</h3>
+      <p>No health records have been added for this animal yet.</p>
+      <button type="button" class="btn-primary" (click)="onAddHealthRecord()">
+        <i class="bi bi-plus-circle"></i>
+        Add First Record
+      </button>
+    </div>
+
+  </div>
+
 </div>

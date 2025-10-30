@@ -1,40 +1,121 @@
-<div class="container">
-  <h2>Edit Health Record</h2>
-  <form [formGroup]="editHealthRecordForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="date">Date</label>
-      <input type="date" id="date" formControlName="date" class="form-control" />
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit Health Record</h1>
+        <p class="animal-id">Animal ID: {{ animalId }} | Record ID: {{ recordId }}</p>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="eventType">Event Type</label>
-      <input
-        type="text"
-        id="eventType"
-        formControlName="eventType"
-        class="form-control"
-      />
-    </div>
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea
-        id="description"
-        formControlName="description"
-        class="form-control"
-      ></textarea>
-    </div>
-    <div class="form-group">
-      <label for="dosage">Dosage</label>
-      <textarea
-        id="dosage"
-        formControlName="dosage"
-        class="form-control"
-      ></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary" [disabled]="!editHealthRecordForm.valid">
-      Update Record
-    </button>
-    <button type="button" class="btn btn-secondary" (click)="onCancel()">
-      Cancel
-    </button>
-  </form>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="!editHealthRecordForm.value.date">
+    <div class="spinner"></div>
+    <p>Loading health record...</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card" *ngIf="editHealthRecordForm.value.date">
+    <form [formGroup]="editHealthRecordForm" (ngSubmit)="onSubmit()">
+
+      <!-- Date Field -->
+      <div class="form-group">
+        <label for="date" class="form-label">
+          Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="date"
+          formControlName="date"
+          class="form-control"
+          [class.is-invalid]="editHealthRecordForm.get('date')?.invalid && editHealthRecordForm.get('date')?.touched"
+        />
+        <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('date')?.invalid && editHealthRecordForm.get('date')?.touched">
+          Date is required.
+        </div>
+      </div>
+
+      <!-- Event Type Field -->
+      <div class="form-group">
+        <label for="eventType" class="form-label">
+          Event Type <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="eventType"
+          formControlName="eventType"
+          class="form-control"
+          placeholder="e.g., Vaccination, Treatment, Checkup"
+          [class.is-invalid]="editHealthRecordForm.get('eventType')?.invalid && editHealthRecordForm.get('eventType')?.touched"
+        />
+        <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('eventType')?.invalid && editHealthRecordForm.get('eventType')?.touched">
+          Event type is required.
+        </div>
+      </div>
+
+      <!-- Description Field -->
+      <div class="form-group">
+        <label for="description" class="form-label">
+          Description <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="4"
+          class="form-control"
+          placeholder="Enter details about the health event..."
+        ></textarea>
+      </div>
+
+      <!-- Administered By Field -->
+      <div class="form-group">
+        <label for="administeredBy" class="form-label">
+          Administered By <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="administeredBy"
+          formControlName="administeredBy"
+          class="form-control"
+          placeholder="Veterinarian or staff name"
+          [class.is-invalid]="editHealthRecordForm.get('administeredBy')?.invalid && editHealthRecordForm.get('administeredBy')?.touched"
+        />
+        <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('administeredBy')?.invalid && editHealthRecordForm.get('administeredBy')?.touched">
+          Administrator name is required.
+        </div>
+      </div>
+
+      <!-- Dosage Field -->
+      <div class="form-group">
+        <label for="dosage" class="form-label">
+          Dosage <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="text"
+          id="dosage"
+          formControlName="dosage"
+          class="form-control"
+          placeholder="e.g., 2 ml IM"
+        />
+        <small class="form-text">Include amount and administration method if applicable</small>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!editHealthRecordForm.valid">
+          <i class="bi bi-check-circle me-1"></i> Update Record
+        </button>
+      </div>
+
+    </form>
+  </div>
+
 </div>

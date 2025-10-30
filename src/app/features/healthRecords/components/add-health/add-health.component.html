@@ -1,26 +1,126 @@
-<div class="container">
-  <h2>Add Health Record</h2>
-  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-    <div>
-      <label for="date">Date:</label>
-      <input type="date" id="date" name="date" ngModel required>
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Add Health Record</h1>
+        <p class="animal-id">Animal ID: {{ animalId }}</p>
+      </div>
     </div>
-    <div>
-      <label for="eventType">Event Type:</label>
-      <input type="text" id="eventType" name="eventType" ngModel required>
-    </div>
-    <div>
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" ngModel></textarea>
-    </div>
-    <div>
-      <label for="administeredBy">Administered By:</label>
-      <input type="text" id="administeredBy" name="administeredBy" ngModel required>
-    </div>
-    <div>
-      <label for="dosage">Dosage (Optional):</label>
-      <input type="text" id="dosage" name="dosage" ngModel>
-    </div>
-    <button type="submit" [disabled]="f.invalid">Add Record</button>
-  </form>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+
+      <!-- Date Field -->
+      <div class="form-group">
+        <label for="date" class="form-label">
+          Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="date"
+          name="date"
+          #dateField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          [class.is-invalid]="dateField.invalid && dateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="dateField.invalid && dateField.touched">
+          Date is required.
+        </div>
+      </div>
+
+      <!-- Event Type Field -->
+      <div class="form-group">
+        <label for="eventType" class="form-label">
+          Event Type <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="eventType"
+          name="eventType"
+          #eventTypeField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          placeholder="e.g., Vaccination, Treatment, Checkup"
+          [class.is-invalid]="eventTypeField.invalid && eventTypeField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="eventTypeField.invalid && eventTypeField.touched">
+          Event type is required.
+        </div>
+      </div>
+
+      <!-- Description Field -->
+      <div class="form-group">
+        <label for="description" class="form-label">
+          Description <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="description"
+          name="description"
+          ngModel
+          rows="4"
+          class="form-control"
+          placeholder="Enter details about the health event..."
+        ></textarea>
+      </div>
+
+      <!-- Administered By Field -->
+      <div class="form-group">
+        <label for="administeredBy" class="form-label">
+          Administered By <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="administeredBy"
+          name="administeredBy"
+          #administeredByField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          placeholder="Veterinarian or staff name"
+          [class.is-invalid]="administeredByField.invalid && administeredByField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="administeredByField.invalid && administeredByField.touched">
+          Administrator name is required.
+        </div>
+      </div>
+
+      <!-- Dosage Field -->
+      <div class="form-group">
+        <label for="dosage" class="form-label">
+          Dosage <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="text"
+          id="dosage"
+          name="dosage"
+          ngModel
+          class="form-control"
+          placeholder="e.g., 2 ml IM"
+        />
+        <small class="form-text">Include amount and administration method if applicable</small>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
+          <i class="bi bi-check-circle me-1"></i> Add Record
+        </button>
+      </div>
+
+    </form>
+  </div>
+
 </div>
