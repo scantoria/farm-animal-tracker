@@ -40,6 +40,14 @@ export class MedicationRecordListComponent implements OnInit {
     this.medicationRecords$ = this.medicationService.getRecordsByAnimalId(this.animalId);
   }
 
+  trackByRecordId(index: number, record: MedicationRecord): string {
+    return record.id || index.toString();
+  }
+
+  onBackToAnimal() {
+    this.router.navigate(['/edit-animal', this.animalId]);
+  }
+
   onAddRecord() {
     // Navigate to the "Add" route
     this.router.navigate(['/animals', this.animalId, 'medication-record', 'add']);
