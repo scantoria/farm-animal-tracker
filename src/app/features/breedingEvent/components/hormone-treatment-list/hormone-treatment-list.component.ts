@@ -32,12 +32,20 @@ export class HormoneTreatmentListComponent implements OnInit {
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
 
     if (this.animalId && this.eventId) {
-      // Fetch the treatments for the specific Breeding Event
-      this.hormoneTreatments$ = this.breedingService.getHormoneTreatmentsByBreedingEventId(
-        this.animalId, 
-        this.eventId
-      );
+      this.loadTreatments();
     }
+  }
+
+  loadTreatments() {
+    this.hormoneTreatments$ = this.breedingService.getHormoneTreatmentsByBreedingEventId(
+      this.animalId,
+      this.eventId
+    );
+  }
+
+  // TrackBy function for performance optimization
+  trackByTreatmentId(index: number, treatment: HormoneTreatment): string {
+    return treatment.id || index.toString();
   }
 
   onAddTreatment() {
@@ -69,11 +77,7 @@ export class HormoneTreatmentListComponent implements OnInit {
         .subscribe({
           next: () => {
             console.log('Hormone treatment deleted successfully!');
-            // Re-fetch the list to update the view
-            this.hormoneTreatments$ = this.breedingService.getHormoneTreatmentsByBreedingEventId(
-              this.animalId, 
-              this.eventId
-            );
+            this.loadTreatments(); // Refresh the list
           },
           error: (error) => {
             console.error('Error deleting hormone treatment:', error);

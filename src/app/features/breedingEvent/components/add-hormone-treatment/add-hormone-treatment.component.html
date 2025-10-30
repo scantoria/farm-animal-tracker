@@ -1,79 +1,159 @@
-<div class="container">
-  <h2>Add Hormone Treatment</h2>
-  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-    
-    <div class="form-group mb-3">
-      <label for="hormoneType">Hormone Type</label>
-      <select 
-        id="hormoneType" 
-        name="hormoneType" 
-        ngModel
-        required
-        class="form-control"
-      >
-        <option *ngFor="let type of hormoneTypes" [value]="type">{{ type }}</option>
-      </select>
-    </div>
-    
-    <div class="form-group mb-3">
-      <label for="productUsed">Product Used (Specific Drug Name)</label>
-      <input 
-        type="text" 
-        id="productUsed" 
-        name="productUsed" 
-        ngModel
-        required
-        class="form-control"
-        placeholder="e.g., Lutalyse, Factrel"
-        list="productSuggestions"
-      />
-      <datalist id="productSuggestions">
-        <option *ngFor="let suggestion of productSuggestions" [value]="suggestion"></option>
-      </datalist>
-    </div>
+<div class="page-container">
 
-    <div class="form-group mb-3">
-      <label for="dosage">Dosage</label>
-      <input 
-        type="text" 
-        id="dosage" 
-        name="dosage" 
-        ngModel
-        required
-        class="form-control"
-        placeholder="e.g., 2 ml IM"
-      />
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Add Hormone Treatment</h1>
+        <p class="animal-id">Animal ID: {{ animalId }} | Event ID: {{ eventId }}</p>
+      </div>
     </div>
+  </div>
 
-    <div class="form-group mb-3">
-      <label for="administeredBy">Administered By</label>
-      <input 
-        type="text" 
-        id="administeredBy" 
-        name="administeredBy" 
-        ngModel
-        required
-        class="form-control"
-        placeholder="Vet name or User name"
-      />
-    </div>
+  <!-- Form Card -->
+  <div class="form-card">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
 
-    <div class="form-group mb-4">
-      <label for="notes">Notes</label>
-      <textarea 
-        id="notes" 
-        name="notes" 
-        ngModel
-        rows="3"
-        class="form-control"
-      ></textarea>
-    </div>
+      <!-- Treatment Date Field -->
+      <div class="form-group">
+        <label for="treatmentDate" class="form-label">
+          Treatment Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="treatmentDate"
+          name="treatmentDate"
+          #treatmentDateField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          [class.is-invalid]="treatmentDateField.invalid && treatmentDateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="treatmentDateField.invalid && treatmentDateField.touched">
+          Treatment date is required.
+        </div>
+      </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
-      Add Treatment
-    </button>
-    <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">
-      Cancel
-    </button>
-  </form>
+      <!-- Hormone Type Field -->
+      <div class="form-group">
+        <label for="hormoneType" class="form-label">
+          Hormone Type <span class="required">*</span>
+        </label>
+        <select
+          id="hormoneType"
+          name="hormoneType"
+          #hormoneTypeField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          [class.is-invalid]="hormoneTypeField.invalid && hormoneTypeField.touched"
+        >
+          <option value="" disabled selected>Select hormone type...</option>
+          <option *ngFor="let type of hormoneTypes" [value]="type">{{ type }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="hormoneTypeField.invalid && hormoneTypeField.touched">
+          Hormone type is required.
+        </div>
+      </div>
+
+      <!-- Product Used Field -->
+      <div class="form-group">
+        <label for="productUsed" class="form-label">
+          Product Used <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="productUsed"
+          name="productUsed"
+          #productUsedField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          placeholder="e.g., Lutalyse, Factrel"
+          list="productSuggestions"
+          [class.is-invalid]="productUsedField.invalid && productUsedField.touched"
+        />
+        <datalist id="productSuggestions">
+          <option *ngFor="let suggestion of productSuggestions" [value]="suggestion"></option>
+        </datalist>
+        <div class="invalid-feedback" *ngIf="productUsedField.invalid && productUsedField.touched">
+          Product used is required.
+        </div>
+        <small class="form-text">Specific drug name or brand</small>
+      </div>
+
+      <!-- Dosage Field -->
+      <div class="form-group">
+        <label for="dosage" class="form-label">
+          Dosage <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="dosage"
+          name="dosage"
+          #dosageField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          placeholder="e.g., 2 ml IM"
+          [class.is-invalid]="dosageField.invalid && dosageField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="dosageField.invalid && dosageField.touched">
+          Dosage is required.
+        </div>
+        <small class="form-text">Include amount and administration method</small>
+      </div>
+
+      <!-- Administered By Field -->
+      <div class="form-group">
+        <label for="administeredBy" class="form-label">
+          Administered By <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="administeredBy"
+          name="administeredBy"
+          #administeredByField="ngModel"
+          ngModel
+          required
+          class="form-control"
+          placeholder="Veterinarian or staff name"
+          [class.is-invalid]="administeredByField.invalid && administeredByField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="administeredByField.invalid && administeredByField.touched">
+          Administrator name is required.
+        </div>
+      </div>
+
+      <!-- Notes Field -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          ngModel
+          rows="4"
+          class="form-control"
+          placeholder="Enter any additional notes about this treatment..."
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
+          <i class="bi bi-check-circle me-1"></i> Add Treatment
+        </button>
+      </div>
+
+    </form>
+  </div>
+
 </div>

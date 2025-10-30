@@ -1,54 +1,124 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Hormone Treatments (Event: {{ eventId }})</h2>
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" (click)="onBackToBreedingEvents()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Hormone Treatments</h1>
+        <p class="animal-id">Animal ID: {{ animalId }} | Event ID: {{ eventId }}</p>
+      </div>
+    </div>
     <button class="btn btn-primary" (click)="onAddTreatment()">
-      Add New Treatment
+      <i class="bi bi-plus-circle me-1"></i> Add Treatment
     </button>
   </div>
 
+  <!-- Records List -->
   <div *ngIf="hormoneTreatments$ | async as treatments; else loading">
     <div *ngIf="treatments.length > 0; else noTreatments">
-      <div class="list-group mt-3">
-        <div class="list-group-item" *ngFor="let treatment of treatments">
-          <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1">
-              {{ treatment.hormoneType }} - 
-              <span class="text-muted small">{{ treatment.productUsed }}</span>
-            </h5>
-            <small>Date: {{ treatment.treatmentDate }}</small>
+
+      <div class="records-list">
+
+        <!-- Desktop Table Header -->
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col">Treatment Date</div>
+          <div class="header-col">Hormone Type</div>
+          <div class="header-col">Product Used</div>
+          <div class="header-col">Dosage</div>
+          <div class="header-col">Administered By</div>
+          <div class="header-col">Notes</div>
+          <div class="header-col">Actions</div>
+        </div>
+
+        <!-- Record Rows/Cards -->
+        <div class="record-row" *ngFor="let treatment of treatments; trackBy: trackByTreatmentId">
+
+          <!-- Treatment Date Column -->
+          <div class="record-data date-col">
+            <span class="d-lg-none data-label">Treatment Date:</span>
+            <span class="date-value">{{ treatment.treatmentDate }}</span>
           </div>
-          <p class="mb-1">
-            **Dosage:** {{ treatment.dosage }} | **Administered By:** {{ treatment.administeredBy }}
-          </p>
-          <p *ngIf="treatment.notes" class="mb-1 text-secondary small">
-            Notes: {{ treatment.notes }}
-          </p>
-          <div class="mt-2">
-            <button class="btn btn-sm btn-info" (click)="onEdit(treatment.id!)">
-              Edit
-            </button>
-            <button 
-              class="btn btn-sm btn-danger ms-2" 
-              (click)="onDelete(treatment.id!)"
-            >
-              Delete
-            </button>
+
+          <!-- Hormone Type Column -->
+          <div class="record-data type-col">
+            <span class="d-lg-none data-label">Hormone Type:</span>
+            <span class="type-value">{{ treatment.hormoneType }}</span>
           </div>
+
+          <!-- Product Used Column -->
+          <div class="record-data product-col">
+            <span class="d-lg-none data-label">Product Used:</span>
+            <span class="product-value">{{ treatment.productUsed }}</span>
+          </div>
+
+          <!-- Dosage Column -->
+          <div class="record-data dosage-col">
+            <span class="d-lg-none data-label">Dosage:</span>
+            <span class="dosage-value">{{ treatment.dosage }}</span>
+          </div>
+
+          <!-- Administered By Column -->
+          <div class="record-data admin-col">
+            <span class="d-lg-none data-label">Administered By:</span>
+            <span class="admin-value">{{ treatment.administeredBy }}</span>
+          </div>
+
+          <!-- Notes Column -->
+          <div class="record-data notes-col" *ngIf="treatment.notes">
+            <span class="d-lg-none data-label">Notes:</span>
+            <p class="notes-text">{{ treatment.notes }}</p>
+          </div>
+
+          <!-- Actions Column -->
+          <div class="record-data actions-col">
+            <div class="action-buttons">
+              <button
+                class="btn-action btn-edit"
+                (click)="onEdit(treatment.id!)"
+                title="Edit Treatment"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                class="btn-action btn-delete"
+                (click)="onDelete(treatment.id!)"
+                title="Delete Treatment"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- No Records State -->
     <ng-template #noTreatments>
-      <div class="alert alert-info mt-3">No hormone treatments have been recorded for this breeding event yet.</div>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-capsule"></i>
+        </div>
+        <h3>No Hormone Treatments</h3>
+        <p>No hormone treatments have been recorded for this breeding event yet.</p>
+        <button class="btn btn-primary" (click)="onAddTreatment()">
+          <i class="bi bi-plus-circle me-1"></i> Add First Treatment
+        </button>
+      </div>
     </ng-template>
   </div>
 
+  <!-- Loading State -->
   <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading hormone treatment records...</div>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading hormone treatments...</p>
+    </div>
   </ng-template>
 
-  <div class="mt-4">
-    <button class="btn btn-secondary" (click)="onBackToBreedingEvents()">
-      &larr; Back to Breeding Events
-    </button>
-  </div>
 </div>
