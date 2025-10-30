@@ -1,48 +1,83 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Weaning Records (Animal ID: {{ animalId }})</h2>
-    <button class="btn btn-primary" (click)="onAddRecord()">
-      Add New Weaning Record
-    </button>
-  </div>
+<div class="page-container">
 
-  <div *ngIf="weaningRecords$ | async as records; else loading">
-    <div *ngIf="records.length > 0; else noRecords">
-      <div class="list-group mt-3">
-        <div class="list-group-item" *ngFor="let record of records">
-          <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1">Wean Date: **{{ record.weanDate }}**</h5>
-            <small>Method: {{ record.method }}</small>
-          </div>
-          <p *ngIf="record.notes" class="mb-1 text-secondary small">
-            Notes: {{ record.notes }}
-          </p>
-          <div class="mt-2">
-            <button class="btn btn-sm btn-info" (click)="onEdit(record.id!)">
-              Edit
-            </button>
-            <button 
-              class="btn btn-sm btn-danger ms-2" 
-              (click)="onDelete(record.id!)"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onBackToAnimal()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Weaning Records</h1>
+        <p class="animal-id">Animal ID: {{ animalId }}</p>
       </div>
     </div>
-    <ng-template #noRecords>
-      <div class="alert alert-info mt-3">No weaning records found for this animal.</div>
-    </ng-template>
-  </div>
-
-  <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading weaning records...</div>
-  </ng-template>
-
-  <div class="mt-4">
-    <button class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
-      &larr; Back to Animal Record
+    <button type="button" class="btn-add" (click)="onAddRecord()">
+      <i class="bi bi-plus-circle"></i>
+      <span class="btn-text">Add Record</span>
     </button>
   </div>
+
+  <!-- Records List -->
+  <div class="records-container" *ngIf="weaningRecords$ | async as records">
+
+    <!-- Desktop Header (hidden on mobile) -->
+    <div class="list-header d-none d-lg-grid">
+      <div class="header-col">Wean Date</div>
+      <div class="header-col">Method</div>
+      <div class="header-col">Notes</div>
+      <div class="header-col">Actions</div>
+    </div>
+
+    <!-- Records List -->
+    <div class="records-list" *ngIf="records.length > 0">
+      <div class="record-row" *ngFor="let record of records; trackBy: trackByRecordId">
+
+        <!-- Wean Date Column -->
+        <div class="record-data date-col">
+          <span class="mobile-label">Wean Date:</span>
+          <span class="date-value">{{ record.weanDate }}</span>
+        </div>
+
+        <!-- Method Column -->
+        <div class="record-data method-col">
+          <span class="mobile-label">Method:</span>
+          <span class="method-value">{{ record.method }}</span>
+        </div>
+
+        <!-- Notes Column -->
+        <div class="record-data notes-col">
+          <span class="mobile-label">Notes:</span>
+          <span class="notes-text">{{ record.notes || 'N/A' }}</span>
+        </div>
+
+        <!-- Actions Column -->
+        <div class="record-actions">
+          <button type="button" class="btn-action btn-edit" (click)="onEdit(record.id!)">
+            <i class="bi bi-pencil"></i>
+            <span class="btn-text">Edit</span>
+          </button>
+          <button type="button" class="btn-action btn-delete" (click)="onDelete(record.id!)">
+            <i class="bi bi-trash"></i>
+            <span class="btn-text">Delete</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="records.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+      <h3>No Weaning Records</h3>
+      <p>No weaning records have been added for this animal yet.</p>
+      <button type="button" class="btn-primary" (click)="onAddRecord()">
+        <i class="bi bi-plus-circle"></i>
+        Add First Record
+      </button>
+    </div>
+
+  </div>
+
 </div>

@@ -33,6 +33,14 @@ export class WeaningScheduleComponent implements OnInit {
      this.weaningRecords$ = this.weaningService.getWeaningRecordsByAnimalId(this.animalId);
   }
 
+  trackByRecordId(index: number, record: WeaningSchedule): string {
+    return record.id || index.toString();
+  }
+
+  onBackToAnimal() {
+    this.router.navigate(['/edit-animal', this.animalId]);
+  }
+
   onAddRecord() {
     this.router.navigate(['/animals', this.animalId, 'weaning', 'add']);
   }
