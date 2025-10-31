@@ -1,0 +1,264 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Add Feed Supplier</h1>
+        <p class="subtitle">Create a new feed supplier record</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+      <!-- Basic Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Basic Information</h2>
+
+        <!-- Supplier Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            Supplier Name <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="supplier.name"
+            required
+            #nameField="ngModel"
+            class="form-control"
+            [class.is-invalid]="nameField.invalid && nameField.touched"
+            placeholder="Enter supplier name"
+          />
+          <div class="invalid-feedback" *ngIf="nameField.invalid && nameField.touched">
+            Supplier name is required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Contact Information</h2>
+
+        <!-- Contact Person -->
+        <div class="form-group">
+          <label for="contactPerson" class="form-label">
+            Contact Person <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="text"
+            id="contactPerson"
+            name="contactPerson"
+            [(ngModel)]="supplier.contact!.contactPerson"
+            class="form-control"
+            placeholder="Enter contact person name"
+          />
+        </div>
+
+        <!-- Phone and Alternate Phone Row -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone" class="form-label">
+              Phone <span class="optional">(Optional)</span>
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              [(ngModel)]="supplier.contact!.phone"
+              class="form-control"
+              placeholder="(555) 123-4567"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="alternatePhone" class="form-label">
+              Alternate Phone <span class="optional">(Optional)</span>
+            </label>
+            <input
+              type="tel"
+              id="alternatePhone"
+              name="alternatePhone"
+              [(ngModel)]="supplier.contact!.alternatePhone"
+              class="form-control"
+              placeholder="(555) 987-6543"
+            />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            Email <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="supplier.contact!.email"
+            class="form-control"
+            placeholder="supplier@example.com"
+          />
+        </div>
+      </div>
+
+      <!-- Address Section -->
+      <div class="form-section">
+        <h2 class="section-title">Address</h2>
+
+        <!-- Street -->
+        <div class="form-group">
+          <label for="street" class="form-label">
+            Street Address <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="text"
+            id="street"
+            name="street"
+            [(ngModel)]="supplier.address!.street"
+            class="form-control"
+            placeholder="Enter street address"
+          />
+        </div>
+
+        <!-- City -->
+        <div class="form-group">
+          <label for="city" class="form-label">
+            City <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            [(ngModel)]="supplier.address!.city"
+            class="form-control"
+            placeholder="Enter city"
+          />
+        </div>
+
+        <!-- State and Zip Code Row -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="state" class="form-label">
+              State <span class="optional">(Optional)</span>
+            </label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              [(ngModel)]="supplier.address!.state"
+              class="form-control"
+              placeholder="State"
+              maxlength="2"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="zipCode" class="form-label">
+              Zip Code <span class="optional">(Optional)</span>
+            </label>
+            <input
+              type="text"
+              id="zipCode"
+              name="zipCode"
+              [(ngModel)]="supplier.address!.zipCode"
+              class="form-control"
+              placeholder="Zip code"
+              maxlength="10"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Offered Section -->
+      <div class="form-section">
+        <h2 class="section-title">Products Offered</h2>
+
+        <div class="checkbox-grid">
+          <div class="form-group-checkbox" *ngFor="let product of availableProducts">
+            <input
+              type="checkbox"
+              [id]="'product-' + product"
+              [name]="'product-' + product"
+              [(ngModel)]="selectedProducts[product]"
+              class="form-checkbox"
+            />
+            <label [for]="'product-' + product" class="checkbox-label">
+              {{ product }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery & Order Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Delivery & Order Information</h2>
+
+        <!-- Delivery Available Checkbox -->
+        <div class="form-group-checkbox">
+          <input
+            type="checkbox"
+            id="deliveryAvailable"
+            name="deliveryAvailable"
+            [(ngModel)]="supplier.deliveryAvailable"
+            class="form-checkbox"
+          />
+          <label for="deliveryAvailable" class="checkbox-label">
+            <i class="bi bi-truck"></i> Delivery Available
+          </label>
+        </div>
+
+        <!-- Minimum Order -->
+        <div class="form-group">
+          <label for="minimumOrder" class="form-label">
+            Minimum Order Quantity <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="number"
+            id="minimumOrder"
+            name="minimumOrder"
+            [(ngModel)]="supplier.minimumOrder"
+            min="0"
+            class="form-control"
+            placeholder="Enter minimum order quantity"
+          />
+          <small class="form-text">Minimum quantity required for orders</small>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label for="notes" class="form-label">
+            Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea
+            id="notes"
+            name="notes"
+            rows="4"
+            [(ngModel)]="supplier.notes"
+            class="form-control"
+            placeholder="Enter any additional notes about this supplier..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          <i class="bi bi-check-circle"></i> Create Supplier
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

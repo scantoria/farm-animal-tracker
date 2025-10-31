@@ -1,0 +1,184 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit Veterinarian Visit</h1>
+        <p class="subtitle">Animal ID: {{ animalId }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading visit record...</p>
+  </div>
+
+  <!-- Form Card -->
+  <div *ngIf="!isLoading" class="form-card">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+      <!-- Visit Date Field -->
+      <div class="form-group">
+        <label for="visitDate" class="form-label">
+          Visit Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="visitDate"
+          name="visitDate"
+          [(ngModel)]="visitRecord.visitDate"
+          required
+          #visitDateField="ngModel"
+          class="form-control"
+          [class.is-invalid]="visitDateField.invalid && visitDateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="visitDateField.invalid && visitDateField.touched">
+          Visit date is required.
+        </div>
+      </div>
+
+      <!-- Veterinarian Field -->
+      <div class="form-group">
+        <label for="veterinarianName" class="form-label">
+          Veterinarian <span class="required">*</span>
+        </label>
+        <select
+          id="veterinarianName"
+          name="veterinarianName"
+          [(ngModel)]="visitRecord.veterinarianName"
+          required
+          #veterinarianField="ngModel"
+          class="form-control"
+          [class.is-invalid]="veterinarianField.invalid && veterinarianField.touched"
+        >
+          <option value="" disabled>Select veterinarian...</option>
+          <option *ngFor="let vet of veterinarians$ | async" [value]="vet.name">
+            {{ vet.name }}{{ vet.clinic ? ' - ' + vet.clinic : '' }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="veterinarianField.invalid && veterinarianField.touched">
+          Veterinarian is required.
+        </div>
+        <small class="form-text">Select the veterinarian who performed the visit</small>
+      </div>
+
+      <!-- Visit Type Field -->
+      <div class="form-group">
+        <label for="visitType" class="form-label">
+          Visit Type <span class="required">*</span>
+        </label>
+        <select
+          id="visitType"
+          name="visitType"
+          [(ngModel)]="visitRecord.visitType"
+          required
+          #visitTypeField="ngModel"
+          class="form-control"
+          [class.is-invalid]="visitTypeField.invalid && visitTypeField.touched"
+        >
+          <option value="" disabled>Select visit type...</option>
+          <option *ngFor="let type of visitTypeOptions" [value]="type">{{ type }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="visitTypeField.invalid && visitTypeField.touched">
+          Visit type is required.
+        </div>
+      </div>
+
+      <!-- Diagnosis Field -->
+      <div class="form-group">
+        <label for="diagnosis" class="form-label">
+          Diagnosis <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="diagnosis"
+          name="diagnosis"
+          rows="3"
+          [(ngModel)]="visitRecord.diagnosis"
+          class="form-control"
+          placeholder="Enter diagnosis details..."
+        ></textarea>
+        <small class="form-text">Veterinarian's diagnosis or findings</small>
+      </div>
+
+      <!-- Treatment Provided Field -->
+      <div class="form-group">
+        <label for="treatmentProvided" class="form-label">
+          Treatment Provided <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="treatmentProvided"
+          name="treatmentProvided"
+          rows="3"
+          [(ngModel)]="visitRecord.treatmentProvided"
+          class="form-control"
+          placeholder="Describe the treatment provided..."
+        ></textarea>
+        <small class="form-text">Details of treatment or procedures performed</small>
+      </div>
+
+      <!-- Medications Administered Field -->
+      <div class="form-group">
+        <label for="medicationsAdministered" class="form-label">
+          Medications Administered <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="medicationsAdministered"
+          name="medicationsAdministered"
+          rows="3"
+          [(ngModel)]="visitRecord.medicationsAdministered"
+          class="form-control"
+          placeholder="List medications administered by the veterinarian..."
+        ></textarea>
+        <small class="form-text">Controlled medications requiring veterinary administration</small>
+      </div>
+
+      <!-- Next Appointment Date Field -->
+      <div class="form-group">
+        <label for="nextAppointmentDate" class="form-label">
+          Next Appointment Date <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="date"
+          id="nextAppointmentDate"
+          name="nextAppointmentDate"
+          [(ngModel)]="visitRecord.nextAppointmentDate"
+          class="form-control"
+        />
+        <small class="form-text">Schedule the next follow-up appointment</small>
+      </div>
+
+      <!-- Notes Field -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows="4"
+          [(ngModel)]="visitRecord.notes"
+          class="form-control"
+          placeholder="Enter any additional notes about the visit..."
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          <i class="bi bi-check-circle"></i> Update Visit
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

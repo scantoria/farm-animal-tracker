@@ -1,0 +1,123 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onBackToAnimal()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Veterinarian Visit Records</h1>
+        <p class="animal-id">Animal ID: {{ animalId }}</p>
+      </div>
+    </div>
+    <button type="button" class="btn-add" (click)="onAddRecord()">
+      <i class="bi bi-plus-circle"></i>
+      <span class="btn-text">Add Visit</span>
+    </button>
+  </div>
+
+  <!-- Records List -->
+  <div *ngIf="visitRecords$ | async as records; else loading">
+    <div *ngIf="records.length > 0; else noRecords">
+
+      <!-- Records Grid -->
+      <div class="records-grid">
+
+        <!-- Desktop Grid Header -->
+        <div class="grid-header">
+          <div class="grid-cell">Visit Date</div>
+          <div class="grid-cell">Veterinarian</div>
+          <div class="grid-cell">Visit Type</div>
+          <div class="grid-cell">Diagnosis</div>
+          <div class="grid-cell">Treatment</div>
+          <div class="grid-cell">Medications</div>
+          <div class="grid-cell">Actions</div>
+        </div>
+
+        <!-- Record Rows -->
+        <div class="grid-row" *ngFor="let record of records; trackBy: trackByRecordId">
+
+          <!-- Visit Date -->
+          <div class="grid-cell" data-label="Visit Date">
+            <span class="cell-content">{{ record.visitDate }}</span>
+          </div>
+
+          <!-- Veterinarian -->
+          <div class="grid-cell" data-label="Veterinarian">
+            <span class="cell-content">{{ record.veterinarianName }}</span>
+          </div>
+
+          <!-- Visit Type -->
+          <div class="grid-cell" data-label="Visit Type">
+            <span class="cell-content">{{ record.visitType }}</span>
+          </div>
+
+          <!-- Diagnosis -->
+          <div class="grid-cell" data-label="Diagnosis">
+            <span class="cell-content">{{ record.diagnosis || 'N/A' }}</span>
+          </div>
+
+          <!-- Treatment -->
+          <div class="grid-cell" data-label="Treatment">
+            <span class="cell-content">{{ record.treatmentProvided || 'N/A' }}</span>
+          </div>
+
+          <!-- Medications -->
+          <div class="grid-cell" data-label="Medications">
+            <span class="cell-content">{{ record.medicationsAdministered || 'N/A' }}</span>
+          </div>
+
+          <!-- Actions -->
+          <div class="grid-cell actions-cell" data-label="Actions">
+            <div class="action-buttons">
+              <button
+                type="button"
+                class="btn-action btn-edit"
+                (click)="onEdit(record.id!)"
+                title="Edit visit"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                type="button"
+                class="btn-action btn-delete"
+                (click)="onDelete(record.id!)"
+                title="Delete visit"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <ng-template #noRecords>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-heart-pulse"></i>
+        </div>
+        <h3>No Veterinarian Visits</h3>
+        <p>No veterinarian visit records have been logged for this animal yet.</p>
+        <button type="button" class="btn-primary" (click)="onAddRecord()">
+          <i class="bi bi-plus-circle"></i>
+          Add First Visit
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Loading State -->
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading visit records...</p>
+    </div>
+  </ng-template>
+
+</div>

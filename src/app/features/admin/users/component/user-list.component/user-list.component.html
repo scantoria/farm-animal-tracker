@@ -1,65 +1,95 @@
 <div class="page-container">
-  
+
+  <!-- Header Section -->
   <div class="header-bar">
-    <h2>Admin User Management</h2>
-    <button class="btn btn-primary" [routerLink]="['add']">
-      <i class="bi bi-person-plus"></i> Add New User
+    <div class="header-content">
+      <button type="button" class="btn-back" [routerLink]="['/admin/providers']">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>User Management</h1>
+        <p class="subtitle">Manage system users and access control</p>
+      </div>
+    </div>
+    <button type="button" class="btn-add" [routerLink]="['add']">
+      <i class="bi bi-person-plus"></i>
+      <span class="btn-text">Add User</span>
     </button>
   </div>
 
-  <div *ngIf="users$ | async as records; else loading">
-    <div *ngIf="records.length > 0; else noRecords">
-      
-      <div class="list-group user-list">
-        
-        <div class="list-header d-none d-lg-grid">
-          <div class="header-col name-col">Name</div>
-          <div class="header-col email-col">Email</div>
-          <div class="header-col role-col">Role</div>
-          <div class="header-col action-col"></div> </div>
-
-        <a 
-          class="list-group-item user-row" 
-          *ngFor="let record of records" 
-          [routerLink]="['edit', record.id!]"
-        >
-          
-          <div class="record-data name-col">
-            <span class="d-lg-none data-label">Name:</span>
-            {{ record.name || record.name || 'N/A' }}
-          </div>
-          
-          <div class="record-data email-col text-truncate">
-            <span class="d-lg-none data-label">Email:</span>
-            {{ record.email }}
-          </div>
-          
-          <div class="record-data role-col">
-            <span class="d-lg-none data-label">Role:</span>
-            <span class="badge rounded-pill bg-secondary">{{ record.role || 'User' }}</span>
-          </div>
-          
-          <div class="record-actions action-col">
-            <a 
-              href="javascript:void(0)" 
-              class="btn btn-sm btn-danger delete-btn" 
-              (click)="onDelete(record.id!, $event); $event.stopPropagation()"
-            >
-              <i class="bi bi-trash"></i>
-            </a>
-            <i class="bi bi-chevron-right chevron-icon"></i>
-          </div>
-        </a>
-      </div>
-      
-    </div>
-    <ng-template #noRecords>
-      <div class="alert alert-info mt-3">No users found in the registry.</div>
-    </ng-template>
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="!(users$ | async)">
+    <div class="spinner"></div>
+    <p>Loading user records...</p>
   </div>
 
-  <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading user records...</div>
-  </ng-template>
+  <!-- Records List -->
+  <div *ngIf="users$ | async as records">
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="records.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-people"></i>
+      </div>
+      <h3>No Users Found</h3>
+      <p>Get started by adding your first user record.</p>
+      <button type="button" class="btn-primary" [routerLink]="['add']">
+        <i class="bi bi-person-plus"></i>
+        Add User
+      </button>
+    </div>
+
+    <!-- Records Grid -->
+    <div class="records-grid" *ngIf="records.length > 0">
+      <div class="grid-header">
+        <div class="grid-cell">Name</div>
+        <div class="grid-cell">Email</div>
+        <div class="grid-cell">Role</div>
+        <div class="grid-cell">Actions</div>
+      </div>
+
+      <div class="grid-row" *ngFor="let record of records; trackBy: trackByUserId">
+        <!-- Name -->
+        <div class="grid-cell" data-label="Name">
+          <span class="cell-content">{{ record.name || 'N/A' }}</span>
+        </div>
+
+        <!-- Email -->
+        <div class="grid-cell" data-label="Email">
+          <span class="cell-content">{{ record.email }}</span>
+        </div>
+
+        <!-- Role -->
+        <div class="grid-cell" data-label="Role">
+          <span class="role-badge">{{ record.role || 'User' }}</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="grid-cell actions-cell" data-label="Actions">
+          <div class="action-buttons">
+            <button
+              type="button"
+              class="btn-action btn-edit"
+              [routerLink]="['edit', record.id!]"
+              title="Edit user"
+            >
+              <i class="bi bi-pencil"></i>
+              <span class="btn-text">Edit</span>
+            </button>
+            <button
+              type="button"
+              class="btn-action btn-delete"
+              (click)="onDelete(record.id!, $event)"
+              title="Delete user"
+            >
+              <i class="bi bi-trash"></i>
+              <span class="btn-text">Delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 </div>

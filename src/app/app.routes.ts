@@ -48,7 +48,7 @@ import { AddBlacksmithVisitComponent } from './features/blacksmith/components/ad
 import { EditBlacksmithVisitComponent } from './features/blacksmith/components/edit-blacksmith-visit/edit-blacksmith-visit.component';
 
 // Provider Dashboard
-import { ProvidersComponent } from './features/providers/components/providers/providers.component';
+import { ProvidersComponent } from './features/admin/providers/components/providers/providers.component';
 
 // Medication Record
 import { MedicationRecordListComponent } from './features/medication-record/components/medication-record-list/medication-record-list.component';
@@ -60,6 +60,21 @@ import { VeterinarianAdminComponent } from './features/admin/veterinarian/compon
 import { AddVeterinarianComponent } from './features/admin/veterinarian/components/add-veterinarian/add-veterinarian.component';
 import { EditVeterinarianComponent } from './features/admin/veterinarian/components/edit-veterinarian/edit-veterinarian.component';
 
+// Veterinarian Visit
+import { VeterinarianVisitComponent } from './features/veterinarian-visit/components/veterinarian-visit/veterinarian-visit.component';
+import { AddVeterinarianVisitComponent } from './features/veterinarian-visit/components/add-veterinarian-visit/add-veterinarian-visit.component';
+import { EditVeterinarianVisitComponent } from './features/veterinarian-visit/components/edit-veterinarian-visit/edit-veterinarian-visit.component';
+
+// Farm Management
+import { FarmListComponent } from './features/farms/component/farm-list.component/farm-list.component';
+import { FarmAddComponent } from './features/farms/component/farm-add.component/farm-add.component';
+import { FarmEditComponent } from './features/farms/component/farm-edit.component/farm-edit.component';
+
+// Feed Supplier Admin
+import { FeedSupplierComponent } from './features/admin/feedSupplier/component/feed-supplier.component/feed-supplier.component';
+import { AddFeedSupplierComponent } from './features/admin/feedSupplier/component/add-feed-supplier.component/add-feed-supplier.component';
+import { EditFeedSupplierComponent } from './features/admin/feedSupplier/component/edit-feed-supplier.component/edit-feed-supplier.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -69,18 +84,18 @@ export const routes: Routes = [
     { path: 'edit-animal/:id', component: EditAnimalComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
 
-    // Providers
-    { path: 'providers', component: ProvidersComponent, canActivate: [AuthGuard] },
+    // Admin Providers Dashboard
+    { path: 'admin/providers', component: ProvidersComponent, canActivate: [AuthGuard] },
 
     // Blacksmith Admin Routes
     { path: 'admin/blacksmiths', component: BlacksmithAdminComponent, canActivate: [AuthGuard] },
     { path: 'admin/blacksmiths/add', component: AddBlacksmithComponent, canActivate: [AuthGuard] },
     { path: 'admin/blacksmiths/edit/:blacksmithId', component: EditBlacksmithComponent, canActivate: [AuthGuard] },
 
-    // Veterinarian admin path
-    { path: 'admin/veterinarian', component: VeterinarianAdminComponent },
-    { path: 'admin/veterinarian/add', component: AddVeterinarianComponent },
-    { path: 'admin/veterinarian/edit/:recordId', component: EditVeterinarianComponent },
+    // Veterinarian Admin Routes
+    { path: 'admin/veterinarian', component: VeterinarianAdminComponent, canActivate: [AuthGuard] },
+    { path: 'admin/veterinarian/add', component: AddVeterinarianComponent, canActivate: [AuthGuard] },
+    { path: 'admin/veterinarian/edit/:recordId', component: EditVeterinarianComponent, canActivate: [AuthGuard] },
 
     // Health Records Module Routes
     { path: 'animals/:id/health', component: HealthComponent }, 
@@ -121,6 +136,21 @@ export const routes: Routes = [
     { path: 'animals/:id/medication-record', component: MedicationRecordListComponent },
     { path: 'animals/:id/medication-record/add', component: AddMedicationRecordComponent },
     { path: 'animals/:id/medication-record/edit/:recordId', component: EditMedicationRecordComponent},
+
+    // Veterinarian Visit
+    { path: 'animals/:id/veterinarian-visit', component: VeterinarianVisitComponent },
+    { path: 'animals/:id/veterinarian-visit/add', component: AddVeterinarianVisitComponent },
+    { path: 'animals/:id/veterinarian-visit/edit/:recordId', component: EditVeterinarianVisitComponent },
+
+    // Farm Management
+    { path: 'farms', component: FarmListComponent, canActivate: [AuthGuard] },
+    { path: 'farms/add', component: FarmAddComponent, canActivate: [AuthGuard] },
+    { path: 'farms/edit/:id', component: FarmEditComponent, canActivate: [AuthGuard] },
+
+    // Feed Supplier Admin
+    { path: 'admin/feed-suppliers', component: FeedSupplierComponent, canActivate: [AuthGuard] },
+    { path: 'admin/feed-suppliers/add', component: AddFeedSupplierComponent, canActivate: [AuthGuard] },
+    { path: 'admin/feed-suppliers/edit/:id', component: EditFeedSupplierComponent, canActivate: [AuthGuard] },
 
     /*{
         path: ':id/edit',

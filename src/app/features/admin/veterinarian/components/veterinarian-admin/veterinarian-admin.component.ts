@@ -46,12 +46,16 @@ export class VeterinarianAdminComponent implements OnInit {
         .subscribe({
           next: () => {
             console.log('Veterinarian deleted successfully!');
-            // The Observable will automatically refresh the list
+            this.loadVeterinarians(); // Refresh the list
           },
           error: (error) => {
             console.error('Error deleting veterinarian:', error);
           }
         });
     }
+  }
+
+  trackByVeterinarianId(index: number, veterinarian: Veterinarian): string {
+    return veterinarian.id || index.toString();
   }
 }

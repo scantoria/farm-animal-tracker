@@ -58,4 +58,8 @@ export class BlacksmithAdminComponent implements OnInit {
         });
     }
   }
+
+  trackByBlacksmithId(index: number, blacksmith: Blacksmith): string {
+    return blacksmith.id || index.toString();
+  }
 }

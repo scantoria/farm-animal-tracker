@@ -1,48 +1,95 @@
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Blacksmith Management</h2>
-    <button class="btn btn-primary" (click)="onAddBlacksmith()">
-      Add New Blacksmith
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" [routerLink]="['/admin/providers']">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Blacksmith Management</h1>
+        <p class="subtitle">Manage farriers and hoof care professionals</p>
+      </div>
+    </div>
+    <button type="button" class="btn-add" (click)="onAddBlacksmith()">
+      <i class="bi bi-plus-circle"></i>
+      <span class="btn-text">Add Blacksmith</span>
     </button>
   </div>
 
-  <div *ngIf="blacksmiths$ | async as blacksmiths; else loading">
-    <div *ngIf="blacksmiths.length > 0; else noRecords">
-      <div class="list-group mt-3">
-        <div class="list-group-item" *ngFor="let bs of blacksmiths">
-          <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1">{{ bs.name }}</h5>
-            <small>ID: {{ bs.id }}</small>
-          </div>
-          <p class="mb-1">
-            **Phone:** {{ bs.phone }} | **Specialty:** {{ bs.specialty || 'N/A' }}
-          </p>
-          <div class="mt-2">
-            <button class="btn btn-sm btn-info" (click)="onEdit(bs.id!)">
-              Edit
-            </button>
-            <button 
-              class="btn btn-sm btn-danger ms-2" 
-              (click)="onDelete(bs.id!)"
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="!(blacksmiths$ | async)">
+    <div class="spinner"></div>
+    <p>Loading blacksmith records...</p>
+  </div>
+
+  <!-- Records List -->
+  <div *ngIf="blacksmiths$ | async as blacksmiths">
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="blacksmiths.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-tools"></i>
+      </div>
+      <h3>No Blacksmiths Found</h3>
+      <p>Get started by adding your first blacksmith record.</p>
+      <button type="button" class="btn-primary" (click)="onAddBlacksmith()">
+        <i class="bi bi-plus-circle"></i>
+        Add Blacksmith
+      </button>
+    </div>
+
+    <!-- Records Grid -->
+    <div class="records-grid" *ngIf="blacksmiths.length > 0">
+      <div class="grid-header">
+        <div class="grid-cell">Name</div>
+        <div class="grid-cell">Phone</div>
+        <div class="grid-cell">Specialty</div>
+        <div class="grid-cell">Actions</div>
+      </div>
+
+      <div class="grid-row" *ngFor="let bs of blacksmiths; trackBy: trackByBlacksmithId">
+        <!-- Name -->
+        <div class="grid-cell" data-label="Name">
+          <span class="cell-content">{{ bs.name }}</span>
+        </div>
+
+        <!-- Phone -->
+        <div class="grid-cell" data-label="Phone">
+          <span class="cell-content">{{ bs.phone }}</span>
+        </div>
+
+        <!-- Specialty -->
+        <div class="grid-cell" data-label="Specialty">
+          <span class="cell-content">{{ bs.specialty || 'N/A' }}</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="grid-cell actions-cell" data-label="Actions">
+          <div class="action-buttons">
+            <button
+              type="button"
+              class="btn-action btn-edit"
+              (click)="onEdit(bs.id!)"
+              title="Edit blacksmith"
             >
-              Delete
+              <i class="bi bi-pencil"></i>
+              <span class="btn-text">Edit</span>
+            </button>
+            <button
+              type="button"
+              class="btn-action btn-delete"
+              (click)="onDelete(bs.id!)"
+              title="Delete blacksmith"
+            >
+              <i class="bi bi-trash"></i>
+              <span class="btn-text">Delete</span>
             </button>
           </div>
         </div>
       </div>
     </div>
-    <ng-template #noRecords>
-      <div class="alert alert-info mt-3">No blacksmith records found. Please add one.</div>
-    </ng-template>
+
   </div>
 
-  <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading blacksmith records...</div>
-  </ng-template>
-
-  <div class="mt-4">
-    <button class="btn btn-secondary" [routerLink]="['/']">
-      &larr; Back to Dashboard
-    </button>
-  </div>
 </div>

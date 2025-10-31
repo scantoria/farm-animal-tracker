@@ -1,0 +1,145 @@
+<div class="page-container">
+  
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <h1>Farm Management</h1>
+      <p class="subtitle">Manage farm locations and facilities</p>
+    </div>
+    <button class="btn btn-primary" [routerLink]="['add']">
+      <i class="bi bi-plus-circle me-1"></i> Add Farm
+    </button>
+  </div>
+
+  <!-- Farms List -->
+  <div *ngIf="farms$ | async as farms; else loading">
+    <div *ngIf="farms.length > 0; else noFarms">
+      
+      <div class="farms-list">
+        
+        <!-- Farm Cards/Rows -->
+        <div class="farm-card" *ngFor="let farm of farms; trackBy: trackByFarmId">
+          
+          <!-- Farm Header -->
+          <div class="farm-header" [routerLink]="[farm.id]">
+            <div class="farm-main-info">
+              <h2 class="farm-name">{{ farm.name }}</h2>
+              <p class="farm-location" *ngIf="farm.address.city || farm.address.state">
+                <i class="bi bi-geo-alt"></i>
+                {{ farm.address.city }}<span *ngIf="farm.address.city && farm.address.state">, </span>{{ farm.address.state }}
+              </p>
+            </div>
+            <div class="farm-stats">
+              <div class="stat-item">
+                <span class="stat-value">{{ farm.currentAnimalCount || 0 }}</span>
+                <span class="stat-label">Animals</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">{{ farm.acreage }}</span>
+                <span class="stat-label">Acres</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Farm Details -->
+          <div class="farm-details">
+            
+            <!-- Address -->
+            <div class="detail-section" *ngIf="farm.address.street || farm.address.zipCode">
+              <span class="detail-label">Address:</span>
+              <span class="detail-value">
+                <span *ngIf="farm.address.street">{{ farm.address.street }}<br></span>
+                <span *ngIf="farm.address.city || farm.address.state || farm.address.zipCode">
+                  {{ farm.address.city }}<span *ngIf="farm.address.city">, </span>
+                  {{ farm.address.state }} {{ farm.address.zipCode }}
+                </span>
+              </span>
+            </div>
+
+            <!-- Facilities -->
+            <div class="detail-section">
+              <span class="detail-label">Facilities:</span>
+              <div class="facilities-list">
+                <span class="facility-badge" *ngIf="farm.facilities.hasBarn">
+                  <i class="bi bi-house-door"></i> Barn
+                </span>
+                <span class="facility-badge" *ngIf="farm.facilities.hayStorageCapacity && farm.facilities.hayStorageCapacity > 0">
+                  <i class="bi bi-box-seam"></i> Hay Storage ({{ farm.facilities.hayStorageCapacity }} bales)
+                </span>
+                <span class="facility-badge" *ngIf="farm.facilities.hasCattleChute">
+                  <i class="bi bi-funnel"></i> Cattle Chute
+                </span>
+                <span class="facility-badge" *ngIf="farm.facilities.hasLoadingRamp">
+                  <i class="bi bi-truck"></i> Loading Ramp
+                </span>
+                <span class="facility-badge" *ngIf="farm.facilities.hasWaterSource">
+                  <i class="bi bi-droplet"></i> Water Source
+                </span>
+                <span class="facility-badge" *ngIf="farm.facilities.hasShelter">
+                  <i class="bi bi-shield"></i> Shelter
+                </span>
+                <span class="no-facilities" *ngIf="!hasFacilities(farm)">
+                  No facilities recorded
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Farm Actions -->
+          <div class="farm-actions">
+            <button 
+              class="btn-action btn-view" 
+              [routerLink]="[farm.id]"
+              title="View Farm Details"
+            >
+              <i class="bi bi-eye"></i>
+              <span class="btn-text">View Details</span>
+            </button>
+            <button 
+              class="btn-action btn-edit" 
+              [routerLink]="['edit', farm.id]"
+              (click)="$event.stopPropagation()"
+              title="Edit Farm"
+            >
+              <i class="bi bi-pencil"></i>
+              <span class="btn-text">Edit</span>
+            </button>
+            <button 
+              class="btn-action btn-delete" 
+              (click)="onDelete(farm.id!); $event.stopPropagation()"
+              title="Delete Farm"
+            >
+              <i class="bi bi-trash"></i>
+              <span class="btn-text">Delete</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- No Farms State -->
+    <ng-template #noFarms>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-map"></i>
+        </div>
+        <h3>No Farms Added</h3>
+        <p>Start by adding your first farm location to track animal movements.</p>
+        <button class="btn btn-primary" [routerLink]="['add']">
+          <i class="bi bi-plus-circle me-1"></i> Add First Farm
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Loading State -->
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading farms...</p>
+    </div>
+  </ng-template>
+
+</div>

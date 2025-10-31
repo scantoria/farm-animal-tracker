@@ -1,71 +1,101 @@
 <div class="page-container">
-  
+
+  <!-- Header Section -->
   <div class="header-bar">
-    <h2>Veterinarian (Provider) Registry</h2>
-    <button class="btn btn-primary" [routerLink]="['add']">
-      <i class="bi bi-plus-circle"></i> Add New Veterinarian
+    <div class="header-content">
+      <button type="button" class="btn-back" [routerLink]="['/admin/providers']">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Veterinarian Management</h1>
+        <p class="subtitle">Manage veterinary professionals and clinics</p>
+      </div>
+    </div>
+    <button type="button" class="btn-add" [routerLink]="['add']">
+      <i class="bi bi-plus-circle"></i>
+      <span class="btn-text">Add Veterinarian</span>
     </button>
   </div>
 
-  <div *ngIf="veterinarians$ | async as records; else loading">
-    <div *ngIf="records.length > 0; else noRecords">
-      
-      <div class="list-group vet-list">
-        
-        <div class="list-header d-none d-lg-grid">
-          <div class="header-col name-col">Name</div>
-          <div class="header-col clinic-col">Clinic</div>
-          <div class="header-col phone-col">Phone</div>
-          <div class="header-col specialty-col">Specialty</div>
-          <div class="header-col action-col"></div> </div>
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="!(veterinarians$ | async)">
+    <div class="spinner"></div>
+    <p>Loading veterinarian records...</p>
+  </div>
 
-        <a 
-          class="list-group-item vet-row" 
-          *ngFor="let record of records" 
-          [routerLink]="['edit', record.id!]"
-        >
-          
-          <div class="record-data name-col">
-            <span class="d-lg-none data-label">Name:</span>
-            {{ record.name }}
-          </div>
-          
-          <div class="record-data clinic-col d-none d-md-block text-truncate">
-            <span class="d-lg-none data-label">Clinic:</span>
-            {{ record.clinic || '—' }}
-          </div>
-          
-          <div class="record-data phone-col d-none d-md-block text-truncate">
-            <span class="d-lg-none data-label">Phone:</span>
-            {{ record.phone || '—' }}
-          </div>
-          
-          <div class="record-data specialty-col d-none d-lg-block text-truncate">
-            <span class="d-lg-none data-label">Specialty:</span>
-            {{ record.specialty || 'General' }}
-          </div>
-          
-          <div class="record-actions action-col">
-            <a 
-              href="javascript:void(0)" 
-              class="btn btn-sm btn-danger delete-btn" 
-              (click)="onDelete(record.id!); $event.stopPropagation()"
+  <!-- Records List -->
+  <div *ngIf="veterinarians$ | async as records">
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="records.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-heart-pulse"></i>
+      </div>
+      <h3>No Veterinarians Found</h3>
+      <p>Get started by adding your first veterinarian record.</p>
+      <button type="button" class="btn-primary" [routerLink]="['add']">
+        <i class="bi bi-plus-circle"></i>
+        Add Veterinarian
+      </button>
+    </div>
+
+    <!-- Records Grid -->
+    <div class="records-grid" *ngIf="records.length > 0">
+      <div class="grid-header">
+        <div class="grid-cell">Name</div>
+        <div class="grid-cell">Clinic</div>
+        <div class="grid-cell">Phone</div>
+        <div class="grid-cell">Specialty</div>
+        <div class="grid-cell">Actions</div>
+      </div>
+
+      <div class="grid-row" *ngFor="let record of records; trackBy: trackByVeterinarianId">
+        <!-- Name -->
+        <div class="grid-cell" data-label="Name">
+          <span class="cell-content">{{ record.name }}</span>
+        </div>
+
+        <!-- Clinic -->
+        <div class="grid-cell" data-label="Clinic">
+          <span class="cell-content">{{ record.clinic || 'N/A' }}</span>
+        </div>
+
+        <!-- Phone -->
+        <div class="grid-cell" data-label="Phone">
+          <span class="cell-content">{{ record.phone || 'N/A' }}</span>
+        </div>
+
+        <!-- Specialty -->
+        <div class="grid-cell" data-label="Specialty">
+          <span class="cell-content">{{ record.specialty || 'General' }}</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="grid-cell actions-cell" data-label="Actions">
+          <div class="action-buttons">
+            <button
+              type="button"
+              class="btn-action btn-edit"
+              [routerLink]="['edit', record.id!]"
+              title="Edit veterinarian"
+            >
+              <i class="bi bi-pencil"></i>
+              <span class="btn-text">Edit</span>
+            </button>
+            <button
+              type="button"
+              class="btn-action btn-delete"
+              (click)="onDelete(record.id!)"
+              title="Delete veterinarian"
             >
               <i class="bi bi-trash"></i>
-            </a>
-            <i class="bi bi-chevron-right chevron-icon"></i>
+              <span class="btn-text">Delete</span>
+            </button>
           </div>
-        </a>
+        </div>
       </div>
-      
     </div>
-    <ng-template #noRecords>
-      <div class="alert alert-info mt-3">No veterinarians found in the registry.</div>
-    </ng-template>
-  </div>
-
-  <ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading veterinarian records...</div>
-  </ng-template>
 
   </div>
+
+</div>

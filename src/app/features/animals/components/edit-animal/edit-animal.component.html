@@ -37,7 +37,7 @@
   <!-- Input for Date of Birth -->
   <div class="form-group">
     <label for="dob">Date of Birth:</label>
-    <input type="date" id="dob" name="dob" [ngModel]="animal.dob | date:'yyyy-MM-dd'" (ngModelChange)="animal.dob = $event" required #dob="ngModel">
+    <input type="date" id="dob" name="dob" [(ngModel)]="dobString" required #dob="ngModel">
     <div class="validation-message" *ngIf="dob.invalid && (dob.dirty || dob.touched)">
       <div *ngIf="dob.errors?.['required']">
         Date of Birth is required.

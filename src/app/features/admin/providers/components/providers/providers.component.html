@@ -1,0 +1,54 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" [routerLink]="['/']">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Providers Management</h1>
+        <p class="subtitle">Manage provider contacts and service information</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Provider Modules Grid -->
+  <div class="modules-grid">
+    <div class="module-card" *ngFor="let module of providerModules"
+         [class.active]="module.status === 'Active'"
+         [class.disabled]="module.status !== 'Active'">
+
+      <div class="module-icon">
+        {{ module.icon }}
+      </div>
+
+      <div class="module-content">
+        <h3 class="module-name">{{ module.name }}</h3>
+        <p class="module-description">{{ module.description }}</p>
+      </div>
+
+      <div class="module-footer">
+        <button
+          type="button"
+          class="btn-module"
+          [class.btn-active]="module.status === 'Active'"
+          [class.btn-disabled]="module.status !== 'Active'"
+          (click)="goToModule(module.route, module.status)"
+          [disabled]="module.status !== 'Active'"
+        >
+          <i class="bi bi-gear"></i>
+          Manage Records
+        </button>
+        <span
+          class="status-badge"
+          [class.badge-active]="module.status === 'Active'"
+          [class.badge-dev]="module.status !== 'Active'"
+        >
+          {{ module.status === 'Active' ? 'Active' : 'In Development' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>

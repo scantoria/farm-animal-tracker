@@ -6,7 +6,8 @@ import { AnimalsService } from '../../../../core/services/animals.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Animal } from '../../../../shared/models/animal.model';
 import { CommonModule } from '@angular/common';
-//import { formatDateForInput } from '../../../../shared/utils/date.utils'; 
+import { Timestamp } from '@angular/fire/firestore';
+//import { formatDateForInput } from '../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-edit-animal',
@@ -18,6 +19,7 @@ import { CommonModule } from '@angular/common';
 })
 export class EditAnimalComponent implements OnInit {
   animal: Animal | undefined;
+  dobString: string = '';
 
   constructor(
     private animalsService: AnimalsService,
@@ -31,8 +33,23 @@ export class EditAnimalComponent implements OnInit {
       this.animalsService.getAnimal(animalId)
         .subscribe(animal => {
           this.animal = animal;
+          // Convert dob to string format for the date input
+          if (animal?.dob) {
+            this.dobString = this.convertToDateString(animal.dob);
+          }
         });
     }
+  }
+
+  // Helper method to convert Timestamp or string to yyyy-MM-dd format
+  convertToDateString(dob: string | Timestamp): string {
+    if (typeof dob === 'string') {
+      return dob;
+    } else if (dob instanceof Timestamp) {
+      const date = dob.toDate();
+      return date.toISOString().split('T')[0];
+    }
+    return '';
   }
 
   onSubmit(form: NgForm): void {
@@ -45,7 +62,7 @@ export class EditAnimalComponent implements OnInit {
       name: form.value.name,
       species: form.value.species,
       breed: form.value.breed,
-      dob: form.value.dob, // No more new Date() conversion
+      dob: this.dobString, // Use the dobString which is in yyyy-MM-dd format
       sex: form.value.sex,
       status: form.value.status,
     };

@@ -1,68 +1,142 @@
-<div class="container">
-  <h2>Edit Veterinarian Record: {{ recordId }}</h2>
+<div class="page-container">
 
-  <form #vetForm="ngForm" (ngSubmit)="onSubmit(vetForm)">
-
-    <label for="name">Name (Practice/Vet):</label>
-    <input 
-      type="text" 
-      id="name" 
-      name="name" 
-      [(ngModel)]="vetData.name" 
-      required 
-      #nameControl="ngModel"
-    >
-    <div *ngIf="nameControl.invalid && (nameControl.dirty || nameControl.touched)">
-      <div *ngIf="nameControl.errors?.['required']" class="text-danger small">Name is required.</div>
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit Veterinarian</h1>
+        <p class="subtitle" *ngIf="vetData.name">{{ vetData.name }}</p>
+      </div>
     </div>
+  </div>
 
-    <label for="clinic">Clinic/Practice Name (Optional):</label>
-    <input 
-      type="text" 
-      id="clinic" 
-      name="clinic" 
-      [(ngModel)]="vetData.clinic"
-    >
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="!vetData.name">
+    <div class="spinner"></div>
+    <p>Loading veterinarian record...</p>
+  </div>
 
-    <label for="specialty">Specialty (Optional):</label>
-    <select 
-        id="specialty" 
-        name="specialty" 
-        [(ngModel)]="vetData.specialty"
-    >
-      <option value="">Select Specialty (Optional)</option>
-      <option *ngFor="let specialty of specialtyOptions" [value]="specialty">
-        {{ specialty }}
-      </option>
-    </select>
-    
-    <label for="phone">Phone (Optional):</label>
-    <input 
-      type="text" 
-      id="phone" 
-      name="phone" 
-      [(ngModel)]="vetData.phone"
-    >
+  <!-- Form Card -->
+  <div class="form-card" *ngIf="vetData.name">
+    <form #vetForm="ngForm" (ngSubmit)="onSubmit(vetForm)">
 
-    <label for="email">Email (Optional):</label>
-    <input 
-      type="email" 
-      id="email" 
-      name="email" 
-      [(ngModel)]="vetData.email"
-    >
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="name" class="form-label">
+          Name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="vetData.name"
+          required
+          #nameControl="ngModel"
+          class="form-control"
+          [class.is-invalid]="nameControl.invalid && nameControl.touched"
+          placeholder="Enter veterinarian or practice name"
+        />
+        <div class="invalid-feedback" *ngIf="nameControl.invalid && nameControl.touched">
+          Name is required.
+        </div>
+      </div>
 
-    <label for="notes">Notes (Optional):</label>
-    <textarea 
-      id="notes" 
-      name="notes" 
-      rows="3" 
-      [(ngModel)]="vetData.notes"
-    ></textarea>
+      <!-- Clinic Field -->
+      <div class="form-group">
+        <label for="clinic" class="form-label">
+          Clinic/Practice Name <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="text"
+          id="clinic"
+          name="clinic"
+          [(ngModel)]="vetData.clinic"
+          class="form-control"
+          placeholder="Enter clinic or practice name"
+        />
+        <small class="form-text">Name of the veterinary clinic or practice</small>
+      </div>
 
-    <div class="mt-4">
-      <button type="submit" class="btn btn-success" [disabled]="vetForm.invalid">Save Changes</button>
-      <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
-    </div>
-  </form>
+      <!-- Specialty Field -->
+      <div class="form-group">
+        <label for="specialty" class="form-label">
+          Specialty <span class="optional">(Optional)</span>
+        </label>
+        <select
+          id="specialty"
+          name="specialty"
+          [(ngModel)]="vetData.specialty"
+          class="form-control"
+        >
+          <option value="">Select specialty...</option>
+          <option *ngFor="let specialty of specialtyOptions" [value]="specialty">
+            {{ specialty }}
+          </option>
+        </select>
+        <small class="form-text">Area of veterinary specialization</small>
+      </div>
+
+      <!-- Phone Field -->
+      <div class="form-group">
+        <label for="phone" class="form-label">
+          Phone <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          [(ngModel)]="vetData.phone"
+          class="form-control"
+          placeholder="Enter phone number"
+        />
+        <small class="form-text">Contact phone number</small>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email" class="form-label">
+          Email <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="vetData.email"
+          class="form-control"
+          placeholder="Enter email address"
+        />
+        <small class="form-text">Email address for correspondence</small>
+      </div>
+
+      <!-- Notes Field -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows="4"
+          [(ngModel)]="vetData.notes"
+          class="form-control"
+          placeholder="Enter any additional notes..."
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="vetForm.invalid">
+          <i class="bi bi-check-circle"></i> Update Veterinarian
+        </button>
+      </div>
+
+    </form>
+  </div>
+
 </div>

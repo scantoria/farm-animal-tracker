@@ -1,0 +1,104 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <h1>Feed Suppliers</h1>
+      <p class="subtitle">Manage feed supplier records</p>
+    </div>
+    <button class="btn btn-primary" [routerLink]="['add']">
+      <i class="bi bi-plus-circle"></i> Add Supplier
+    </button>
+  </div>
+
+  <!-- Suppliers List -->
+  <div *ngIf="suppliers$ | async as suppliers; else loading">
+    <div *ngIf="suppliers.length > 0; else noSuppliers">
+
+      <!-- Suppliers Grid -->
+      <div class="records-grid">
+
+        <!-- Desktop Grid Header -->
+        <div class="grid-header">
+          <div class="grid-cell">Name</div>
+          <div class="grid-cell">Contact</div>
+          <div class="grid-cell">Phone</div>
+          <div class="grid-cell">Products</div>
+          <div class="grid-cell">Actions</div>
+        </div>
+
+        <!-- Supplier Rows -->
+        <div class="grid-row" *ngFor="let supplier of suppliers; trackBy: trackBySupplierId">
+
+          <!-- Name -->
+          <div class="grid-cell" data-label="Name">
+            <span class="cell-content">{{ supplier.name }}</span>
+          </div>
+
+          <!-- Contact -->
+          <div class="grid-cell" data-label="Contact">
+            <span class="cell-content">{{ supplier.contact.contactPerson || 'N/A' }}</span>
+          </div>
+
+          <!-- Phone -->
+          <div class="grid-cell" data-label="Phone">
+            <span class="cell-content">{{ supplier.contact.phone || 'N/A' }}</span>
+          </div>
+
+          <!-- Products -->
+          <div class="grid-cell" data-label="Products">
+            <span class="cell-content">{{ supplier.productsOffered.length || 0 }} products</span>
+          </div>
+
+          <!-- Actions -->
+          <div class="grid-cell actions-cell">
+            <div class="action-buttons">
+              <button
+                type="button"
+                class="btn-action btn-edit"
+                [routerLink]="['edit', supplier.id]"
+                title="Edit supplier"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                type="button"
+                class="btn-action btn-delete"
+                (click)="onDelete(supplier.id!)"
+                title="Delete supplier"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <ng-template #noSuppliers>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-truck"></i>
+        </div>
+        <h3>No Feed Suppliers</h3>
+        <p>No feed supplier records have been added yet.</p>
+        <button class="btn btn-primary" [routerLink]="['add']">
+          <i class="bi bi-plus-circle"></i> Add First Supplier
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Loading State -->
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading feed suppliers...</p>
+    </div>
+  </ng-template>
+
+</div>

@@ -12,26 +12,33 @@ import { Router, RouterModule } from '@angular/router';
 export class ProvidersComponent {
   // Define the types of providers and their corresponding admin routes
   providerModules = [
-    { 
-      name: 'Blacksmiths', 
-      description: 'Manage farriers and hoof care professionals.', 
-      icon: '⚙️', 
-      route: '/admin/blacksmiths', 
-      status: 'Active' 
+    {
+      name: 'Blacksmiths',
+      description: 'Manage farriers and hoof care professionals.',
+      icon: '⚙️',
+      route: '/admin/blacksmiths',
+      status: 'Active'
     },
-    { 
-      name: 'Veterinarians', 
-      description: 'Manage veterinary clinics and doctors.', 
-      icon: '🩺', 
-      route: '/admin/veterinarians', 
-      status: 'Placeholder (Next Step)' 
+    {
+      name: 'Veterinarians',
+      description: 'Manage veterinary clinics and doctors.',
+      icon: '🩺',
+      route: '/admin/veterinarian',
+      status: 'Active'
     },
-    { 
-      name: 'Feed Suppliers', 
-      description: 'Manage feed stores and suppliers.', 
-      icon: '🌾', 
-      route: '/admin/feed-suppliers', 
-      status: 'Placeholder (Later)' 
+    {
+      name: 'Feed Suppliers',
+      description: 'Manage feed stores and suppliers.',
+      icon: '🌾',
+      route: '/admin/feed-suppliers',
+      status: 'Active'
+    },
+    {
+      name: 'Farms',
+      description: 'Manage farm locations and facilities.',
+      icon: '🏡',
+      route: '/farms',
+      status: 'Active'
     },
     // Add other provider types here (e.g., Farm Managers, etc.)
   ];

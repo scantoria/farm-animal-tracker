@@ -1,49 +1,98 @@
-<div class="container" *ngIf="blacksmith; else loading">
-  <h2>Edit Blacksmith: {{ blacksmith.name }}</h2>
-  
-  <form #blacksmithForm="ngForm" (ngSubmit)="onSubmit(blacksmithForm)">
+<div class="page-container">
 
-    <label for="name">Name:</label>
-    <input 
-      type="text" 
-      id="name" 
-      name="name" 
-      [(ngModel)]="blacksmith.name" 
-      required 
-      #name="ngModel"
-    >
-    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger small">
-      Name is required.
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit Blacksmith</h1>
+        <p class="subtitle" *ngIf="blacksmith">{{ blacksmith.name }}</p>
+      </div>
     </div>
+  </div>
 
-    <label for="phone">Phone:</label>
-    <input 
-      type="text" 
-      id="phone" 
-      name="phone" 
-      [(ngModel)]="blacksmith.phone" 
-      required 
-      #phone="ngModel"
-    >
-    <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger small">
-      Phone is required.
-    </div>
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="!blacksmith">
+    <div class="spinner"></div>
+    <p>Loading blacksmith record...</p>
+  </div>
 
-    <label for="specialty">Specialty (Optional):</label>
-    <input 
-      type="text" 
-      id="specialty" 
-      name="specialty" 
-      [(ngModel)]="blacksmith.specialty"
-    >
+  <!-- Form Card -->
+  <div class="form-card" *ngIf="blacksmith">
+    <form #blacksmithForm="ngForm" (ngSubmit)="onSubmit(blacksmithForm)">
 
-    <div class="mt-4">
-      <button type="submit" class="btn btn-primary" [disabled]="blacksmithForm.invalid">Update Blacksmith</button>
-      <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
-    </div>
-  </form>
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="name" class="form-label">
+          Name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="blacksmith.name"
+          required
+          #nameField="ngModel"
+          class="form-control"
+          [class.is-invalid]="nameField.invalid && nameField.touched"
+          placeholder="Enter blacksmith's full name"
+        />
+        <div class="invalid-feedback" *ngIf="nameField.invalid && nameField.touched">
+          Name is required.
+        </div>
+      </div>
+
+      <!-- Phone Field -->
+      <div class="form-group">
+        <label for="phone" class="form-label">
+          Phone <span class="required">*</span>
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          [(ngModel)]="blacksmith.phone"
+          required
+          #phoneField="ngModel"
+          class="form-control"
+          [class.is-invalid]="phoneField.invalid && phoneField.touched"
+          placeholder="Enter phone number"
+        />
+        <div class="invalid-feedback" *ngIf="phoneField.invalid && phoneField.touched">
+          Phone is required.
+        </div>
+        <small class="form-text">Contact number for appointments</small>
+      </div>
+
+      <!-- Specialty Field -->
+      <div class="form-group">
+        <label for="specialty" class="form-label">
+          Specialty <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="text"
+          id="specialty"
+          name="specialty"
+          [(ngModel)]="blacksmith.specialty"
+          class="form-control"
+          placeholder="E.g., Corrective shoeing, Natural hoof care"
+        />
+        <small class="form-text">Area of expertise or specialization</small>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="blacksmithForm.invalid">
+          <i class="bi bi-check-circle"></i> Update Blacksmith
+        </button>
+      </div>
+
+    </form>
+  </div>
+
 </div>
-
-<ng-template #loading>
-    <div class="alert alert-warning mt-3">Loading blacksmith data...</div>
-</ng-template>

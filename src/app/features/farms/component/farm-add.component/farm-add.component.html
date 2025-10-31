@@ -1,0 +1,258 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Add New Farm</h1>
+        <p class="subtitle">Create a new farm location</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+      <!-- Basic Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Basic Information</h2>
+
+        <!-- Farm Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            Farm Name <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="farm.name"
+            required
+            #nameField="ngModel"
+            class="form-control"
+            [class.is-invalid]="nameField.invalid && nameField.touched"
+            placeholder="Enter farm name"
+          />
+          <div class="invalid-feedback" *ngIf="nameField.invalid && nameField.touched">
+            Farm name is required.
+          </div>
+        </div>
+
+        <!-- Acreage -->
+        <div class="form-group">
+          <label for="acreage" class="form-label">
+            Acreage <span class="required">*</span>
+          </label>
+          <input
+            type="number"
+            id="acreage"
+            name="acreage"
+            [(ngModel)]="farm.acreage"
+            required
+            min="0"
+            step="0.1"
+            #acreageField="ngModel"
+            class="form-control"
+            [class.is-invalid]="acreageField.invalid && acreageField.touched"
+            placeholder="Enter total acreage"
+          />
+          <div class="invalid-feedback" *ngIf="acreageField.invalid && acreageField.touched">
+            Acreage is required and must be a positive number.
+          </div>
+          <small class="form-text">Total farm size in acres</small>
+        </div>
+      </div>
+
+      <!-- Address Section -->
+      <div class="form-section">
+        <h2 class="section-title">Address</h2>
+
+        <!-- Street -->
+        <div class="form-group">
+          <label for="street" class="form-label">
+            Street Address <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="text"
+            id="street"
+            name="street"
+            [(ngModel)]="farm.address!.street"
+            class="form-control"
+            placeholder="Enter street address"
+          />
+        </div>
+
+        <!-- City -->
+        <div class="form-group">
+          <label for="city" class="form-label">
+            City <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            [(ngModel)]="farm.address!.city"
+            class="form-control"
+            placeholder="Enter city"
+          />
+        </div>
+
+        <!-- State and Zip Code Row -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="state" class="form-label">
+              State <span class="optional">(Optional)</span>
+            </label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              [(ngModel)]="farm.address!.state"
+              class="form-control"
+              placeholder="State"
+              maxlength="2"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="zipCode" class="form-label">
+              Zip Code <span class="optional">(Optional)</span>
+            </label>
+            <input
+              type="text"
+              id="zipCode"
+              name="zipCode"
+              [(ngModel)]="farm.address!.zipCode"
+              class="form-control"
+              placeholder="Zip code"
+              maxlength="10"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Facilities Section -->
+      <div class="form-section">
+        <h2 class="section-title">Facilities</h2>
+
+        <!-- Barn Checkbox -->
+        <div class="form-group-checkbox">
+          <input
+            type="checkbox"
+            id="hasBarn"
+            name="hasBarn"
+            [(ngModel)]="farm.facilities!.hasBarn"
+            class="form-checkbox"
+          />
+          <label for="hasBarn" class="checkbox-label">
+            <i class="bi bi-house-door"></i> Barn
+          </label>
+        </div>
+
+        <!-- Hay Storage Capacity -->
+        <div class="form-group">
+          <label for="hayStorageCapacity" class="form-label">
+            Hay Storage Capacity <span class="optional">(Optional)</span>
+          </label>
+          <input
+            type="number"
+            id="hayStorageCapacity"
+            name="hayStorageCapacity"
+            [(ngModel)]="farm.facilities!.hayStorageCapacity"
+            min="0"
+            class="form-control"
+            placeholder="Number of round bales"
+          />
+          <small class="form-text">Storage capacity in round bales</small>
+        </div>
+
+        <!-- Cattle Chute Checkbox -->
+        <div class="form-group-checkbox">
+          <input
+            type="checkbox"
+            id="hasCattleChute"
+            name="hasCattleChute"
+            [(ngModel)]="farm.facilities!.hasCattleChute"
+            class="form-checkbox"
+          />
+          <label for="hasCattleChute" class="checkbox-label">
+            <i class="bi bi-funnel"></i> Cattle Chute
+          </label>
+        </div>
+
+        <!-- Loading Ramp Checkbox -->
+        <div class="form-group-checkbox">
+          <input
+            type="checkbox"
+            id="hasLoadingRamp"
+            name="hasLoadingRamp"
+            [(ngModel)]="farm.facilities!.hasLoadingRamp"
+            class="form-checkbox"
+          />
+          <label for="hasLoadingRamp" class="checkbox-label">
+            <i class="bi bi-truck"></i> Loading Ramp
+          </label>
+        </div>
+
+        <!-- Water Source Checkbox -->
+        <div class="form-group-checkbox">
+          <input
+            type="checkbox"
+            id="hasWaterSource"
+            name="hasWaterSource"
+            [(ngModel)]="farm.facilities!.hasWaterSource"
+            class="form-checkbox"
+          />
+          <label for="hasWaterSource" class="checkbox-label">
+            <i class="bi bi-droplet"></i> Water Source
+          </label>
+        </div>
+
+        <!-- Shelter Checkbox -->
+        <div class="form-group-checkbox">
+          <input
+            type="checkbox"
+            id="hasShelter"
+            name="hasShelter"
+            [(ngModel)]="farm.facilities!.hasShelter"
+            class="form-checkbox"
+          />
+          <label for="hasShelter" class="checkbox-label">
+            <i class="bi bi-shield"></i> Shelter
+          </label>
+        </div>
+
+        <!-- Facilities Notes -->
+        <div class="form-group">
+          <label for="facilitiesNotes" class="form-label">
+            Facilities Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea
+            id="facilitiesNotes"
+            name="facilitiesNotes"
+            rows="3"
+            [(ngModel)]="farm.facilities!.notes"
+            class="form-control"
+            placeholder="Enter any additional notes about facilities..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          <i class="bi bi-check-circle"></i> Create Farm
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

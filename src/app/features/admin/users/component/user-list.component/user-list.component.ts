@@ -36,10 +36,10 @@ export class UserListComponent implements OnInit {
    */
   onDelete(id: string, event: Event): void {
     // Crucial: Stop the event from bubbling up to the parent <a> tag (the clickable row)
-    event?.stopPropagation(); 
+    event?.stopPropagation();
 
     this.confirmService.confirm(
-      'Delete User', 
+      'Delete User',
       'Are you sure you want to delete this user? This action cannot be undone.'
     ).subscribe(confirmed => {
       if (confirmed) {
@@ -48,7 +48,7 @@ export class UserListComponent implements OnInit {
           .then(() => {
             console.log(`User with ID ${id} deleted successfully.`);
             // Re-fetch or re-assign the observable to refresh the list
-            this.users$ = this.userService.getAllUsers(); 
+            this.users$ = this.userService.getAllUsers();
           })
           .catch((err) => {
             console.error('Error deleting user:', err);
@@ -56,5 +56,9 @@ export class UserListComponent implements OnInit {
           });
       }
     });
+  }
+
+  trackByUserId(index: number, user: User): string {
+    return user.id || index.toString();
   }
 }

@@ -6,6 +6,7 @@ import { AnimalsService } from '../../../..//core/services/animals.service';
 import { Router } from '@angular/router';
 import { Animal } from '../../../../shared/models/animal.model';
 import { CommonModule } from '@angular/common';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-add-animal',
@@ -16,18 +17,26 @@ import { CommonModule } from '@angular/common';
 })
 export class AddAnimalComponent {
 
-  constructor(private animalsService: AnimalsService, private router: Router) { }
+  constructor(
+    private animalsService: AnimalsService,
+    private router: Router,
+    private auth: Auth
+  ) { }
 
   onSubmit(form: NgForm) {
     if (form.invalid) {
       return;
     }
 
+    const tenantId = this.auth.currentUser?.uid || 'default-tenant';
+
     const newAnimal: Animal = {
+      tenantId: tenantId,
       name: form.value.name,
       species: form.value.species,
       breed: form.value.breed,
-      dob: form.value.dob, 
+      identifier: form.value.identifier || '',  // Add identifier field
+      dob: form.value.dob,
       sex: form.value.sex,
       status: form.value.status,
     };
