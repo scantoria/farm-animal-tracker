@@ -53,16 +53,17 @@ export class FarmService {
     const q = query(
       farmsRef,
       where('tenantId', '==', tenantId),
-      where('isActive', '==', true),
-      orderBy('name')
+      where('isActive', '==', true)
     );
 
     return from(getDocs(q)).pipe(
       map(snapshot => {
-        return snapshot.docs.map(doc => ({
+        const farms = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         } as Farm));
+        // Sort by name in memory
+        return farms.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
       }),
       switchMap(farms => {
         // Get animal count for each farm

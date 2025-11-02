@@ -4,6 +4,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { VeterinarianVisit } from '../../../../shared/models/veterinarian-visit.model';
 import { VeterinarianVisitService } from '../../../../core/services/veterinarian-visit.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-veterinarian-visit-list',
@@ -14,19 +16,35 @@ import { VeterinarianVisitService } from '../../../../core/services/veterinarian
 })
 export class VeterinarianVisitComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
   visitRecords$!: Observable<VeterinarianVisit[]>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private veterinarianVisitService: VeterinarianVisitService
+    private veterinarianVisitService: VeterinarianVisitService,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
+      this.loadAnimalInfo();
       this.loadRecords();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadRecords() {

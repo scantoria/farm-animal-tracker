@@ -5,7 +5,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HormoneTreatment } from '../../../../shared/models/hormone-treatment.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
 import { take } from 'rxjs/operators';
-import { Firestore, doc, DocumentReference } from '@angular/fire/firestore'; 
+import { Firestore, doc, DocumentReference } from '@angular/fire/firestore';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model'; 
 
 @Component({
   selector: 'app-edit-hormone-treatment',
@@ -18,6 +20,7 @@ export class EditHormoneTreatmentComponent implements OnInit {
   animalId!: string;
   eventId!: string;
   treatmentId!: string;
+  animalName: string = '';
   hormoneTreatment: HormoneTreatment | undefined;
 
   hormoneTypes: string[] = ['GnRH', 'Prostaglandin (PGF2α)', 'Progestin (CIDR/MGA)', 'Other'];
@@ -27,13 +30,15 @@ export class EditHormoneTreatmentComponent implements OnInit {
     private breedingService: BreedingService,
     private route: ActivatedRoute,
     private router: Router,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
     this.treatmentId = this.route.snapshot.paramMap.get('treatmentId')!;
+    this.loadAnimalInfo();
 
     if (this.animalId && this.eventId && this.treatmentId) {
       // 1. Fetch the existing record
@@ -43,6 +48,19 @@ export class EditHormoneTreatmentComponent implements OnInit {
           this.hormoneTreatment = treatment;
         });
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

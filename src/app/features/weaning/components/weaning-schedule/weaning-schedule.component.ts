@@ -4,6 +4,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { WeaningSchedule } from '../../../../shared/models/weaning-schedule.model';
 import { WeaningService } from '../../../../core/services/weaning.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-weaning-schedule-list',
@@ -14,19 +16,35 @@ import { WeaningService } from '../../../../core/services/weaning.service';
 })
 export class WeaningScheduleComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
   weaningRecords$!: Observable<WeaningSchedule[]>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private weaningService: WeaningService
+    private weaningService: WeaningService,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
+      this.loadAnimalInfo();
       this.loadRecords();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadRecords() {

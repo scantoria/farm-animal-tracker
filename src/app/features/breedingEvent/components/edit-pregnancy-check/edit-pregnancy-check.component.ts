@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PregnancyCheck } from '../../../../shared/models/pregnancy-check.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-edit-pregnancy-check',
@@ -18,6 +20,7 @@ export class EditPregnancyCheckComponent implements OnInit {
   eventId!: string;
   checkId!: string;
   pregnancyCheck: PregnancyCheck | undefined;
+  animalName: string = '';
 
   checkResults: string[] = ['Pregnant', 'Open', 'Recheck Required'];
   checkMethods: string[] = ['Ultrasound', 'Blood Test', 'Palpation'];
@@ -25,7 +28,8 @@ export class EditPregnancyCheckComponent implements OnInit {
   constructor(
     private breedingService: BreedingService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
@@ -34,18 +38,32 @@ export class EditPregnancyCheckComponent implements OnInit {
     this.checkId = this.route.snapshot.paramMap.get('checkId')!;
 
     if (this.animalId && this.eventId && this.checkId) {
+      this.loadAnimalInfo();
       this.breedingService.getPregnancyCheck(this.animalId, this.eventId, this.checkId).subscribe(check => {
         if (check) {
           this.pregnancyCheck = check;
-          // The date (e.g., check.checkDate) is assumed to be a string (YYYY-MM-DD) 
+          // The date (e.g., check.checkDate) is assumed to be a string (YYYY-MM-DD)
           // and is bound directly to the input type="date" field in the HTML.
         } else {
           // Handle case where check is not found (optional)
           console.error('Pregnancy check not found.');
           this.router.navigate(['/animals', this.animalId, 'breeding', this.eventId, 'checks']);
         }
-      }); 
+      });
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

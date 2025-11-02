@@ -1,0 +1,271 @@
+// add-animal.component.scss - Mobile-First Form Design
+@use 'sass:color';
+
+// Variables
+$primary-color: #198754;
+$primary-hover: #157347;
+$secondary-color: #6c757d;
+$secondary-hover: #5c636a;
+$border-color: #e5e7eb;
+$border-focus: #86b7fe;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$bg-light: #f8f9fa;
+$bg-white: #ffffff;
+$error-color: #dc3545;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$border-radius: 8px;
+
+// Breakpoints
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+
+// Page Container
+.page-container {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: $bg-light;
+
+  @media (min-width: $breakpoint-md) {
+    padding: 1.5rem;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    padding: 2rem;
+  }
+}
+
+// Form Header
+.form-header {
+  margin-bottom: 1.5rem;
+
+  @media (min-width: $breakpoint-md) {
+    margin-bottom: 2rem;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: $bg-white;
+      border: 1px solid $border-color;
+      border-radius: $border-radius;
+      color: $text-secondary;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+
+      &:hover {
+        background-color: $bg-light;
+        border-color: $primary-color;
+        color: $primary-color;
+      }
+
+      i {
+        font-size: 1.125rem;
+      }
+    }
+
+    .header-text {
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0 0 0.25rem 0;
+
+        @media (min-width: $breakpoint-md) {
+          font-size: 1.875rem;
+        }
+      }
+
+      .subtitle {
+        font-size: 0.875rem;
+        color: $text-secondary;
+        margin: 0;
+        font-weight: 500;
+
+        @media (min-width: $breakpoint-md) {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// Form Card
+.form-card {
+  background-color: $bg-white;
+  border-radius: $border-radius;
+  padding: 1.25rem;
+  box-shadow: $shadow-sm;
+
+  @media (min-width: $breakpoint-md) {
+    padding: 1.5rem;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    padding: 2rem;
+  }
+}
+
+// Form Grid - Two Columns on Desktop
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+// Form Group
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+
+    @media (min-width: $breakpoint-md) {
+      font-size: 0.9375rem;
+    }
+
+    .required {
+      color: $error-color;
+      margin-left: 0.125rem;
+    }
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: $text-primary;
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    transition: all 0.2s ease;
+    appearance: none;
+
+    @media (min-width: $breakpoint-md) {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $border-focus;
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+      opacity: 1;
+    }
+
+    &.is-invalid {
+      border-color: $error-color;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+      }
+    }
+  }
+
+  select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+  }
+
+  .invalid-feedback {
+    font-size: 0.8125rem;
+    color: $error-color;
+    margin-top: -0.25rem;
+  }
+}
+
+// Form Actions
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $border-color;
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border-radius: $border-radius;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    @media (min-width: $breakpoint-md) {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.875rem;
+    }
+
+    i {
+      font-size: 1rem;
+    }
+
+    &.btn-primary {
+      background-color: $primary-color;
+      color: $bg-white;
+
+      &:hover:not(:disabled) {
+        background-color: $primary-hover;
+        box-shadow: $shadow-md;
+      }
+
+      &:disabled {
+        background-color: #d1d5db;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+
+    &.btn-secondary {
+      background-color: $secondary-color;
+      color: $bg-white;
+
+      &:hover {
+        background-color: $secondary-hover;
+        box-shadow: $shadow-md;
+      }
+    }
+  }
+}

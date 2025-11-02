@@ -6,6 +6,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HormoneTreatment } from '../../../../shared/models/hormone-treatment.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-hormone-treatment-list',
@@ -17,23 +19,39 @@ import { BreedingService } from '../../../../core/services/breeding.service';
 export class HormoneTreatmentListComponent implements OnInit {
   animalId!: string;
   eventId!: string;
-  
+  animalName: string = '';
+
   // Observable to hold the list of treatments
   hormoneTreatments$!: Observable<HormoneTreatment[]>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private breedingService: BreedingService
+    private breedingService: BreedingService,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
+    this.loadAnimalInfo();
 
     if (this.animalId && this.eventId) {
       this.loadTreatments();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadTreatments() {

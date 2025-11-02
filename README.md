@@ -1,66 +1,259 @@
-# FarmAnimalTracker
+# Farm Animal Tracker (FAT App)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.1.
+**Comprehensive farm animal management system for tracking livestock health, breeding, farm locations, and service providers.**
 
-## Development server
+---
 
-To start a local development server, run:
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Project Status](#project-status)
+- [License](#license)
+
+---
+
+## Overview
+
+The Farm Animal Tracker (FAT App) is a web-based application designed to help farmers and ranchers manage their livestock operations efficiently. The system provides comprehensive tracking for:
+
+- Individual animal records and identification
+- Health records and veterinary visits
+- Breeding events and pregnancy tracking
+- Birthing and weaning schedules
+- Farm location management
+- Service provider management (veterinarians, farriers, feed suppliers)
+- Medication and treatment tracking
+
+### Key Benefits
+
+- **Centralized Data Management** - All animal and farm data in one place
+- **Multi-Tenant Support** - Supports multiple independent farm operations
+- **Comprehensive Record Keeping** - Track every aspect of animal care
+- **Provider Management** - Manage relationships with veterinarians, farriers, and suppliers
+- **Mobile-First Design** - Responsive UI works on all devices
+- **Real-Time Updates** - Firebase backend provides instant synchronization
+
+---
+
+## Features
+
+### Core Animal Management
+- ✅ **Animal Records** - Complete CRUD for animal profiles
+- ✅ **Health Records** - Track vaccinations, treatments, and medical history
+- ✅ **Breeding Management** - Breeding events with nested pregnancy checks and hormone treatments
+- ✅ **Birthing Records** - Track births, offspring details, and calving ease
+- ✅ **Weaning Schedules** - Manage weaning dates and methods
+- ✅ **Blacksmith Visits** - Track hoof care and shoeing services
+- ✅ **Veterinarian Visits** - Record vet appointments and treatments
+- ✅ **Medication Tracking** - Log all medication administrations
+
+### Farm & Location Management
+- ✅ **Farm Locations** - Manage multiple farm properties
+- ✅ **Farm Facilities** - Track barns, chutes, water sources, and other infrastructure
+- ✅ **Animal Movement** - Track animal transfers between farms (Service layer complete, UI planned for Phase 2)
+
+### Provider Management
+- ✅ **Veterinarian Directory** - Manage vet contacts and specialties
+- ✅ **Blacksmith Directory** - Farrier contact management
+- ✅ **Feed Supplier Management** - Track feed suppliers and delivery information
+- ✅ **Provider Dashboard** - Unified view of all service providers
+
+### Administration
+- ✅ **User Authentication** - Firebase Auth with email/password
+- ✅ **User Profiles** - User account management
+- ✅ **Role-Based Access** - Admin, User, and Viewer roles
+- ✅ **Multi-Tenant Architecture** - Isolate data by tenant ID
+
+---
+
+## Technology Stack
+
+### Frontend
+- **Framework**: Angular 20.2
+- **Architecture**: Standalone Components (no NgModules)
+- **Styling**: SCSS with mobile-first responsive design
+- **Forms**: Template-driven and Reactive Forms
+- **Icons**: Bootstrap Icons
+- **State Management**: RxJS Observables
+
+### Backend
+- **Database**: Cloud Firestore (NoSQL)
+- **Authentication**: Firebase Authentication
+- **Hosting**: Firebase Hosting
+- **Storage**: Firebase Storage (planned)
+- **Functions**: Cloud Functions (planned for advanced features)
+
+### Development Tools
+- **Language**: TypeScript 5.9
+- **Build Tool**: Angular CLI 20.2
+- **Version Control**: Git
+- **Package Manager**: npm
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 20+ and npm
+- Angular CLI: `npm install -g @angular/cli`
+- Firebase CLI: `npm install -g firebase-tools`
+
+### Installation
 
 ```bash
-ng serve
+# Clone the repository
+git clone <repository-url>
+cd farm-animal-tracker
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`
 
-## Code scaffolding
+### Firebase Configuration
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Create a Firebase project at https://console.firebase.google.com
+2. Enable Authentication (Email/Password)
+3. Create a Firestore database
+4. Update `src/environments/environment.ts` with your Firebase config
+
+### Build for Production
 
 ```bash
-ng generate component component-name
+# Build the application
+npm run build
+
+# Deploy to Firebase Hosting
+firebase deploy --only hosting
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
+## Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture and design patterns
+- **[DATA-MODELS.md](./docs/DATA-MODELS.md)** - Complete database schema and models
+- **[COMPONENTS.md](./docs/COMPONENTS.md)** - UI component structure and hierarchy
+- **[API.md](./docs/API.md)** - Service layer and API documentation
+- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Deployment guide and configuration
+- **[ROADMAP.md](./docs/ROADMAP.md)** - Phase 2 features and future enhancements
+
+---
+
+## Project Status
+
+**Current Version**: MVP (Phase 1)
+**Status**: ✅ Deployed to Production
+**Live URL**: https://farmanimaltracker.web.app
+**Custom Domain**: https://fat.stjo.farm (pending DNS propagation)
+
+### MVP Features Completed
+
+- ✅ Animal management (CRUD)
+- ✅ Health records tracking
+- ✅ Breeding event management
+- ✅ Pregnancy checks (nested under breeding)
+- ✅ Hormone treatment tracking (nested under breeding)
+- ✅ Birthing schedules
+- ✅ Weaning schedules
+- ✅ Blacksmith visit tracking
+- ✅ Veterinarian visit tracking
+- ✅ Medication record tracking
+- ✅ Farm location management
+- ✅ Feed supplier management
+- ✅ Provider dashboard
+- ✅ User authentication
+- ✅ Multi-tenant support
+- ✅ Mobile-responsive UI
+- ✅ Firebase deployment
+
+### Phase 2 Roadmap
+
+See [ROADMAP.md](./docs/ROADMAP.md) for detailed Phase 2 planning including:
+- Feed order management UI
+- Farm movement tracking UI
+- Advanced reporting and analytics
+- Export capabilities
+- Mobile app
+- And more...
+
+---
+
+## Project Structure
+
+```
+farm-animal-tracker/
+├── src/
+│   ├── app/
+│   │   ├── auth/                  # Authentication components
+│   │   ├── core/
+│   │   │   ├── services/          # All data services
+│   │   │   └── guards/            # Route guards
+│   │   ├── features/
+│   │   │   ├── animals/           # Animal CRUD
+│   │   │   ├── healthRecords/     # Health tracking
+│   │   │   ├── breedingEvent/     # Breeding management
+│   │   │   ├── birthing/          # Birthing records
+│   │   │   ├── weaning/           # Weaning schedules
+│   │   │   ├── blacksmith/        # Blacksmith visits
+│   │   │   ├── veterinarian-visit/# Vet visits
+│   │   │   ├── medication-record/ # Medication tracking
+│   │   │   ├── farms/             # Farm management
+│   │   │   └── admin/             # Admin modules
+│   │   ├── shared/
+│   │   │   └── models/            # TypeScript interfaces
+│   │   ├── home/                  # Home component
+│   │   └── user-profile/          # User profile
+│   ├── environments/              # Environment configs
+│   └── assets/                    # Static assets
+├── docs/                          # Documentation
+├── firebase.json                  # Firebase configuration
+├── .firebaserc                    # Firebase project
+└── package.json                   # Dependencies
 ```
 
-## Building
+---
 
-To build the project run:
+## Contributing
 
-```bash
-ng build
-```
+This is a proprietary project. For questions or support, contact the development team.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Support
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+For technical support or questions:
+- **Email**: stephen.cantoria@thisbyte.com
+- **Project Lead**: Stephen Cantoria
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
+## License
 
-For end-to-end (e2e) testing, run:
+Proprietary - All rights reserved
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Acknowledgments
 
-## Additional Resources
+Built with:
+- Angular Framework by Google
+- Firebase Platform by Google
+- Bootstrap Icons
+- RxJS Library
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
 
-
-  <div class="mt-4">
-    <button class="btn btn-secondary" [routerLink]="['/edit-animal', animalId]">
-      &larr; Back to Animal Record
-    </button>
-  </div>
+**Last Updated**: November 2024
+**Version**: 1.0.0 (MVP)

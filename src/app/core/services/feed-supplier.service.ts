@@ -46,16 +46,17 @@ export class FeedSupplierService {
     const q = query(
       suppliersRef,
       where('tenantId', '==', tenantId),
-      where('isActive', '==', true),
-      orderBy('name')
+      where('isActive', '==', true)
     );
 
     return from(getDocs(q)).pipe(
       map(snapshot => {
-        return snapshot.docs.map(doc => ({
+        const suppliers = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         } as FeedSupplier));
+        // Sort by name in memory
+        return suppliers.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
       })
     );
   }

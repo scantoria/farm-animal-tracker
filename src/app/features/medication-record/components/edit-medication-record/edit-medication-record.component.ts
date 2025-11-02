@@ -6,10 +6,12 @@ import { Firestore, doc, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 // Update paths to your actual files
-import { MedicationRecord } from '../../../../shared/models/medication-record.model'; 
+import { MedicationRecord } from '../../../../shared/models/medication-record.model';
 import { Veterinarian } from '../../../../shared/models/veterinarian.model';
 import { MedicationService } from '../../../../core/services/medication.service';
 import { VeterinarianDataService } from '../../../../core/services/veterinarian-data.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-edit-medication-record',
@@ -21,10 +23,11 @@ import { VeterinarianDataService } from '../../../../core/services/veterinarian-
 export class EditMedicationRecordComponent implements OnInit {
   animalId!: string;
   recordId!: string;
-  recordData: Partial<MedicationRecord> = {}; 
-  veterinarians$!: Observable<Veterinarian[]>; 
+  animalName: string = '';
+  recordData: Partial<MedicationRecord> = {};
+  veterinarians$!: Observable<Veterinarian[]>;
   treatmentTypes: string[] = [
-    'Vaccination', 'Deworming', 'Injury Treatment', 
+    'Vaccination', 'Deworming', 'Injury Treatment',
     'Routine Checkup', 'Dental', 'Other'
   ];
 
@@ -33,20 +36,35 @@ export class EditMedicationRecordComponent implements OnInit {
     private vetDataService: VeterinarianDataService,
     private route: ActivatedRoute,
     private router: Router,
-    private firestore: Firestore 
+    private firestore: Firestore,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.recordId = this.route.snapshot.paramMap.get('recordId')!;
+    this.loadAnimalInfo();
     this.loadVeterinarians();
-      
+
     if (this.animalId && this.recordId) {
       this.medicationService.getRecord(this.animalId, this.recordId)
         .subscribe(record => {
           this.recordData = record;
         });
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
   
   loadVeterinarians() {

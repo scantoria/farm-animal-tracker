@@ -8,7 +8,7 @@
       </button>
       <div class="header-text">
         <h1>Pregnancy Checks</h1>
-        <p class="animal-id">Animal ID: {{ animalId }} | Event ID: {{ eventId }}</p>
+        <p class="animal-id">Animal name or Tag: <b>{{ animalName }}</b> | Event ID: {{ eventId }}</p>
       </div>
     </div>
     <button class="btn btn-primary" (click)="onAddCheck()">
@@ -38,7 +38,7 @@
           <!-- Check Date Column -->
           <div class="record-data date-col">
             <span class="d-lg-none data-label">Check Date:</span>
-            <span class="date-value">{{ check.checkDate }}</span>
+            <span class="date-value">{{ (check.checkDate?.toDate ? check.checkDate.toDate() : check.checkDate) | date:'MMM d, yyyy' }}</span>
           </div>
 
           <!-- Result Column -->
@@ -59,7 +59,7 @@
           <div class="record-data next-col">
             <span class="d-lg-none data-label">Next Check:</span>
             <span class="next-value" [class.no-value]="!check.nextCheckDate">
-              {{ check.nextCheckDate || 'Not Scheduled' }}
+              {{ check.nextCheckDate ? ((check.nextCheckDate?.toDate ? check.nextCheckDate.toDate() : check.nextCheckDate) | date:'MMM d, yyyy') : 'Not Scheduled' }}
             </span>
           </div>
 

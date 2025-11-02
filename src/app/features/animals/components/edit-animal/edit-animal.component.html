@@ -3,7 +3,7 @@
 
   <!-- Input for Name -->
   <div class="form-group">
-    <label for="name">Name:</label>
+    <label for="name">Animal name or Tag:</label>
     <input type="text" id="name" name="name" [(ngModel)]="animal.name" required #name="ngModel">
     <div class="validation-message" *ngIf="name.invalid && (name.dirty || name.touched)">
       <div *ngIf="name.errors?.['required']">
@@ -90,20 +90,6 @@
       <span>Breeding Events</span>
       <i class="bi bi-chevron-right"></i>
     </a>
-
-    <!--// //-->
-    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-      [routerLink]="['/animals', animal.id, 'breeding']">
-      <span>Hormone Management</span>
-      <i class="bi bi-chevron-right"></i>
-    </a>
-    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-      [routerLink]="['/animals', animal.id, 'breeding']">
-      <span>Pregnancy Checks</span>
-      <i class="bi bi-chevron-right"></i>
-    </a>
-    
-
     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
       [routerLink]="['/animals', animal.id, 'birthing']">
       <span>Birthing Schedules</span>
@@ -119,8 +105,14 @@
       <span>Blacksmith Visits</span>
       <i class="bi bi-chevron-right"></i>
     </a>
-    <a 
-      class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" 
+    <a
+      class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [routerLink]="['/animals', animal.id, 'veterinarian-visit']">
+      <span>Veterinarian Visits</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+    <a
+      class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
       [routerLink]="['/animals', animal.id, 'medication-record']">
       <span>Medication/Treatments</span>
       <i class="bi bi-chevron-right"></i>

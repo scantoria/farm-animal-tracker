@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Firestore, doc, DocumentReference } from '@angular/fire/firestore'; 
+import { Firestore, doc, DocumentReference } from '@angular/fire/firestore';
 import { WeaningSchedule } from '../../../../shared/models/weaning-schedule.model';
 import { WeaningService } from '../../../../core/services/weaning.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-add-weaning-schedule',
@@ -15,6 +17,7 @@ import { WeaningService } from '../../../../core/services/weaning.service';
 })
 export class AddWeaningScheduleComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
   newRecord: Partial<WeaningSchedule> = {};
 
   // Data for form dropdowns
@@ -24,15 +27,30 @@ export class AddWeaningScheduleComponent implements OnInit {
     private weaningService: WeaningService,
     private route: ActivatedRoute,
     private router: Router,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     // Get the ID of the animal being weaned (the offspring)
     this.animalId = this.route.snapshot.paramMap.get('id')!;
-    
+    this.loadAnimalInfo();
+
     // Set a default date to today for convenience
     this.newRecord.weanDate = new Date().toISOString().substring(0, 10);
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

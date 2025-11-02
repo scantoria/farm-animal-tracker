@@ -2,7 +2,7 @@
   
   <div class="header-bar">
     <h1>Farm Animal Registry</h1>
-    <button class="btn btn-primary" [routerLink]="['/animals/add']">
+    <button class="btn btn-primary" [routerLink]="['/add-animal']">
       <i class="bi bi-plus-circle me-1"></i> Add New Animal
     </button>
   </div>
@@ -27,7 +27,7 @@
           [routerLink]="['/edit-animal', animal.id!]"  >
           
           <div class="animal-data animal-name-col">
-            <span class="d-lg-none data-label">Name/Tag#:</span>
+            <span class="d-lg-none data-label">Animal name or Tag:</span>
             <div class="name-id-wrapper"> <h3 class="animal-name">{{ animal.name }}</h3>
               <!--// <span class="animal-id">{{ animal.id }}</span> //-->
             </div>

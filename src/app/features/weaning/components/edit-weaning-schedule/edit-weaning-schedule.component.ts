@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WeaningSchedule } from '../../../../shared/models/weaning-schedule.model';
 import { WeaningService } from '../../../../core/services/weaning.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-edit-weaning-schedule',
@@ -15,6 +17,7 @@ import { WeaningService } from '../../../../core/services/weaning.service';
 export class EditWeaningScheduleComponent implements OnInit {
   animalId!: string;
   recordId!: string;
+  animalName: string = '';
   weaningRecord: WeaningSchedule | undefined;
 
   methodOptions: string[] = ['Abrupt', 'Fence-line', 'Two-stage', 'Creep Weaning'];
@@ -22,12 +25,14 @@ export class EditWeaningScheduleComponent implements OnInit {
   constructor(
     private weaningService: WeaningService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.recordId = this.route.snapshot.paramMap.get('recordId')!;
+    this.loadAnimalInfo();
 
     if (this.animalId && this.recordId) {
       this.weaningService.getWeaningRecord(this.animalId, this.recordId)
@@ -35,6 +40,19 @@ export class EditWeaningScheduleComponent implements OnInit {
           this.weaningRecord = record;
         });
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

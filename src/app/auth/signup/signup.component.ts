@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NgForm, FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { Router } from '@angular/router'; // Add this line
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
-  standalone: true, 
-  imports: [FormsModule] 
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class SignupComponent {
   constructor(private authService: AuthService, private router: Router) {} // Update this line

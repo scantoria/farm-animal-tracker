@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreedingEvent } from '../../../../shared/models/breeding.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-edit-breeding',
@@ -17,11 +19,13 @@ export class EditBreedingComponent implements OnInit {
   animalId!: string;
   eventId!: string;
   breedingEvent: BreedingEvent | undefined;
+  animalName: string = '';
 
   constructor(
     private breedingService: BreedingService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
@@ -29,10 +33,24 @@ export class EditBreedingComponent implements OnInit {
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
 
     if (this.animalId && this.eventId) {
+      this.loadAnimalInfo();
       this.breedingService.getBreedingEvent(this.animalId, this.eventId).subscribe(event => {
         this.breedingEvent = event;
       });
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

@@ -4,6 +4,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BirthingSchedule } from '../../../../shared/models/birthing-schedule.model';
 import { BirthingService } from '../../../../core/services/birthing.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-birthing-schedule-list',
@@ -14,20 +16,36 @@ import { BirthingService } from '../../../../core/services/birthing.service';
 })
 export class BirthingScheduleComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
   birthingRecords$!: Observable<BirthingSchedule[]>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private birthingService: BirthingService
+    private birthingService: BirthingService,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     // Get the mother animal's ID from the route
     this.animalId = this.route.snapshot.paramMap.get('id')!;
+    this.loadAnimalInfo();
     if (this.animalId) {
       this.loadRecords();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadRecords() {

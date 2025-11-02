@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PregnancyCheck } from '../../../../shared/models/pregnancy-check.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
 import { DocumentReference } from '@angular/fire/firestore';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-add-pregnancy-check',
@@ -17,7 +19,8 @@ import { DocumentReference } from '@angular/fire/firestore';
 export class AddPregnancyCheckComponent implements OnInit {
   animalId!: string;
   eventId!: string;
-  
+  animalName: string = '';
+
   // Hardcoding options for clarity and simplicity in the form
   checkResults: string[] = ['Pregnant', 'Open', 'Recheck Required'];
   checkMethods: string[] = ['Ultrasound', 'Blood Test', 'Palpation'];
@@ -25,12 +28,27 @@ export class AddPregnancyCheckComponent implements OnInit {
   constructor(
     private breedingService: BreedingService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
+    this.loadAnimalInfo();
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

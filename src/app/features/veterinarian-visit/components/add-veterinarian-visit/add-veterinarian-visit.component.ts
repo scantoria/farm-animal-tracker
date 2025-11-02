@@ -8,6 +8,8 @@ import { VeterinarianVisit } from '../../../../shared/models/veterinarian-visit.
 import { Veterinarian } from '../../../../shared/models/veterinarian.model';
 import { VeterinarianVisitService } from '../../../../core/services/veterinarian-visit.service';
 import { VeterinarianDataService } from '../../../../core/services/veterinarian-data.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-add-veterinarian-visit',
@@ -18,6 +20,7 @@ import { VeterinarianDataService } from '../../../../core/services/veterinarian-
 })
 export class AddVeterinarianVisitComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
   newRecord: Partial<VeterinarianVisit> = {};
 
   veterinarians$!: Observable<Veterinarian[]>;
@@ -36,13 +39,28 @@ export class AddVeterinarianVisitComponent implements OnInit {
     private router: Router,
     private firestore: Firestore,
     private veterinarianVisitService: VeterinarianVisitService,
-    private veterinarianDataService: VeterinarianDataService
+    private veterinarianDataService: VeterinarianDataService,
+    private animalsService: AnimalsService
   ) {}
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
+    this.loadAnimalInfo();
     // Load the list of veterinarians for the dropdown
     this.veterinarians$ = this.veterinarianDataService.getAllVeterinarians();
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

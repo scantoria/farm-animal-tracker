@@ -8,6 +8,8 @@ import { BlacksmithDataService } from '../../../../core/services/blacksmith-data
 import { Blacksmith } from '../../../../shared/models/blacksmith.model';
 import { BlacksmithService } from '../../../../core/services/blacksmith.service';
 import { Observable } from 'rxjs';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-add-blacksmith-visit',
@@ -18,6 +20,7 @@ import { Observable } from 'rxjs';
 })
 export class AddBlacksmithVisitComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
   blacksmiths$!: Observable<Blacksmith[]>;
   visitData: Partial<BlacksmithVisit> = {}; 
   
@@ -36,15 +39,30 @@ export class AddBlacksmithVisitComponent implements OnInit {
     private blacksmithDataService: BlacksmithDataService,
     private route: ActivatedRoute,
     private router: Router,
-    private firestore: Firestore 
+    private firestore: Firestore,
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
+    this.loadAnimalInfo();
     this.loadBlacksmiths();
-    
+
     // Set default visit date to today for convenience
     this.visitData.visitDate = new Date().toISOString().substring(0, 10);
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadBlacksmiths() {

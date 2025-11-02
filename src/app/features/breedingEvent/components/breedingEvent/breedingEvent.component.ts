@@ -5,6 +5,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BreedingEvent } from '../../../../shared/models/breeding.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-breeding',
@@ -16,18 +18,34 @@ import { BreedingService } from '../../../../core/services/breeding.service';
 export class BreedingEventComponent implements OnInit {
   breedingEvents$!: Observable<BreedingEvent[]>;
   animalId!: string;
+  animalName: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private breedingService: BreedingService
+    private breedingService: BreedingService,
+    private animalsService: AnimalsService
   ) {}
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
+      this.loadAnimalInfo();
       this.loadEvents();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadEvents() {

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HealthModel } from '../../../../shared/models/health.model'; // Corrected path
 import { HealthService } from '../../../../core/services/health.service'; // Corrected path
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-add-health',
@@ -14,18 +16,34 @@ import { HealthService } from '../../../../core/services/health.service'; // Cor
 })
 export class AddHealthComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
 
   constructor(
     private healthService: HealthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private animalsService: AnimalsService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.animalId = id;
+      this.loadAnimalInfo();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

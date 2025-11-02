@@ -5,6 +5,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PregnancyCheck } from '../../../../shared/models/pregnancy-check.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-pregnancy-check',
@@ -17,25 +19,41 @@ export class PregnancyCheckComponent implements OnInit {
   pregnancyChecks$!: Observable<PregnancyCheck[]>;
   animalId!: string;
   eventId!: string;
+  animalName: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private breedingService: BreedingService
+    private breedingService: BreedingService,
+    private animalsService: AnimalsService
   ) {}
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
-    
+
     //if (this.animalId && this.eventId) {
     //  this.pregnancyChecks$ = this.breedingService.getPregnancyChecksByBreedingEventId(this.animalId, this.eventId);
     //}
 
     if (this.animalId && this.eventId) {
       // Fetch the checks for the specific Breeding Event
+      this.loadAnimalInfo();
       this.loadPregnancyChecks();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadPregnancyChecks() {

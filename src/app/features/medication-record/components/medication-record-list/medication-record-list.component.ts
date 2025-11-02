@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 
 // Update paths to your actual files
 import { MedicationRecord } from '../../../../shared/models/medication-record.model';
-import { MedicationService } from '../../../../core/services/medication.service'; 
+import { MedicationService } from '../../../../core/services/medication.service';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model'; 
 
 @Component({
   selector: 'app-medication-record-list',
@@ -17,21 +19,37 @@ import { MedicationService } from '../../../../core/services/medication.service'
 })
 export class MedicationRecordListComponent implements OnInit {
   animalId!: string;
+  animalName: string = '';
   // Observable to hold the list of records
   medicationRecords$!: Observable<MedicationRecord[]>; 
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private medicationService: MedicationService // Inject the service
+    private medicationService: MedicationService, // Inject the service
+    private animalsService: AnimalsService
   ) { }
 
   ngOnInit(): void {
     // 1. Get the animal ID from the current route
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
+      this.loadAnimalInfo();
       this.loadRecords();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadRecords() {

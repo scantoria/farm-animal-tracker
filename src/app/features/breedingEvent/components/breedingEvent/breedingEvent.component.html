@@ -8,7 +8,7 @@
       </button>
       <div class="header-text">
         <h1>Breeding Events</h1>
-        <p class="animal-id">Animal ID: {{ animalId }}</p>
+        <p class="animal-id">Animal name or Tag: <b>{{ animalName }}</b></p>
       </div>
     </div>
     <button class="btn btn-primary" (click)="onAddBreedingEvent()">
@@ -42,7 +42,7 @@
           <!-- Date Column -->
           <div class="record-data date-col">
             <span class="d-lg-none data-label">Date:</span>
-            <span class="date-value">{{ event.date }}</span>
+            <span class="date-value">{{ (event.date?.toDate ? event.date.toDate() : event.date) | date:'MMM d, yyyy' }}</span>
           </div>
 
           <!-- Notes Column -->

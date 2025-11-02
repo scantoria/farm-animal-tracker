@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HealthService } from '../../../../core/services/health.service';
 import { HealthModel } from '../../../../shared/models/health.model';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -15,18 +17,34 @@ import { Observable } from 'rxjs';
 export class HealthComponent implements OnInit {
   healthModel$!: Observable<HealthModel[]>;
   animalId!: string;
+  animalName: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private healthService: HealthService
+    private healthService: HealthService,
+    private animalsService: AnimalsService
   ) {}
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
+      this.loadAnimalInfo();
       this.loadRecords();
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   loadRecords() {

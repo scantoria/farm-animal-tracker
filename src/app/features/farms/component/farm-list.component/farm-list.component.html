@@ -21,7 +21,7 @@
         <div class="farm-card" *ngFor="let farm of farms; trackBy: trackByFarmId">
           
           <!-- Farm Header -->
-          <div class="farm-header" [routerLink]="[farm.id]">
+          <div class="farm-header" [routerLink]="['edit', farm.id]">
             <div class="farm-main-info">
               <h2 class="farm-name">{{ farm.name }}</h2>
               <p class="farm-location" *ngIf="farm.address.city || farm.address.state">
@@ -88,9 +88,9 @@
 
           <!-- Farm Actions -->
           <div class="farm-actions">
-            <button 
-              class="btn-action btn-view" 
-              [routerLink]="[farm.id]"
+            <button
+              class="btn-action btn-view"
+              [routerLink]="['edit', farm.id]"
               title="View Farm Details"
             >
               <i class="bi bi-eye"></i>

@@ -9,6 +9,8 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { HealthService } from '../../../../core/services/health.service';
 import { HealthModel } from '../../../../shared/models/health.model';
+import { AnimalsService } from '../../../../core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 import { take } from 'rxjs/operators';
 
 
@@ -23,12 +25,14 @@ export class EditHealthComponent implements OnInit {
   editHealthRecordForm!: FormGroup;
   recordId!: string;
   animalId!: string;
+  animalName: string = '';
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private healthService: HealthService
+    private healthService: HealthService,
+    private animalsService: AnimalsService
   ) {
     this.editHealthRecordForm = this.fb.group({
       date: ['', Validators.required],
@@ -51,6 +55,7 @@ export class EditHealthComponent implements OnInit {
     });
 
     if (this.animalId && this.recordId) {
+      this.loadAnimalInfo();
       this.healthService
         .getHealthRecord(this.animalId, this.recordId)
         .pipe(take(1))
@@ -60,6 +65,19 @@ export class EditHealthComponent implements OnInit {
           }
         });
     }
+  }
+
+  loadAnimalInfo() {
+    this.animalsService.getAnimal(this.animalId).subscribe({
+      next: (animal: Animal | undefined) => {
+        if (animal) {
+          this.animalName = animal.name;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading animal info:', error);
+      }
+    });
   }
 
   onSubmit() {

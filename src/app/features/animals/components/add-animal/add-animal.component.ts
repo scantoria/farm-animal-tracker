@@ -1,17 +1,17 @@
 // src/app/add-animal/add-animal.component.ts
 
 import { Component } from '@angular/core';
-import { NgForm, FormsModule } from '@angular/forms';
-import { AnimalsService } from '../../../..//core/services/animals.service';
-import { Router } from '@angular/router';
-import { Animal } from '../../../../shared/models/animal.model';
 import { CommonModule } from '@angular/common';
+import { NgForm, FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
+import { AnimalsService } from '../../../..//core/services/animals.service';
+import { Animal } from '../../../../shared/models/animal.model';
 
 @Component({
   selector: 'app-add-animal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './add-animal.component.html',
   styleUrl: './add-animal.component.scss'
 })
