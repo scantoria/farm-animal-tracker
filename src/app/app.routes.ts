@@ -69,6 +69,8 @@ import { EditVeterinarianVisitComponent } from './features/veterinarian-visit/co
 import { FarmListComponent } from './features/farms/component/farm-list.component/farm-list.component';
 import { FarmAddComponent } from './features/farms/component/farm-add.component/farm-add.component';
 import { FarmEditComponent } from './features/farms/component/farm-edit.component/farm-edit.component';
+import { FarmDetailComponent } from './features/farms/component/farm-detail/farm-detail.component';
+import { BulkAssignAnimalsComponent } from './features/farms/component/bulk-assign-animals/bulk-assign-animals.component';
 
 // Feed Supplier Admin
 import { FeedSupplierComponent } from './features/admin/feedSupplier/component/feed-supplier.component/feed-supplier.component';
@@ -146,6 +148,9 @@ export const routes: Routes = [
     { path: 'farms', component: FarmListComponent, canActivate: [AuthGuard] },
     { path: 'farms/add', component: FarmAddComponent, canActivate: [AuthGuard] },
     { path: 'farms/edit/:id', component: FarmEditComponent, canActivate: [AuthGuard] },
+    { path: 'farms/:id', component: FarmDetailComponent, canActivate: [AuthGuard] },
+    { path: 'farms/:id/assign-animals', component: BulkAssignAnimalsComponent, canActivate: [AuthGuard] },
+    { path: 'farms/:id/bulk-transfer', component: BulkAssignAnimalsComponent, canActivate: [AuthGuard] },
 
     // Feed Supplier Admin
     { path: 'admin/feed-suppliers', component: FeedSupplierComponent, canActivate: [AuthGuard] },

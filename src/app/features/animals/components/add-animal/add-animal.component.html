@@ -161,6 +161,29 @@
 
       </div>
 
+      <!-- Current Farm Location Section -->
+      <div class="form-section-header">
+        <h3>Current Farm Location</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Farm Assignment Field -->
+        <div class="form-group">
+          <label for="currentFarmId" class="form-label">
+            Assign to Farm (Optional)
+          </label>
+          <select
+            id="currentFarmId"
+            name="currentFarmId"
+            ngModel
+            class="form-control"
+          >
+            <option value="">None</option>
+            <option *ngFor="let farm of farms" [value]="farm.id">{{ farm.name }}</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Form Actions -->
       <div class="form-actions">
         <button type="button" class="btn btn-secondary" routerLink="/">

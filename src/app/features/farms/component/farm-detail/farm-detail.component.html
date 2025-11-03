@@ -1,0 +1,214 @@
+<div class="page-container" *ngIf="farm$ | async as farm; else loading">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" routerLink="/farms">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>{{ farm.name }}</h1>
+        <p class="subtitle" *ngIf="farm.address.city || farm.address.state">
+          <i class="bi bi-geo-alt"></i>
+          {{ farm.address.city }}<span *ngIf="farm.address.city && farm.address.state">, </span>{{ farm.address.state }}
+        </p>
+      </div>
+    </div>
+    <button class="btn btn-primary" [routerLink]="['/farms/edit', farmId]">
+      <i class="bi bi-pencil me-1"></i> Edit Farm
+    </button>
+  </div>
+
+  <!-- Farm Information Card -->
+  <div class="info-card">
+    <h2>Farm Information</h2>
+
+    <div class="info-grid">
+      <!-- Address -->
+      <div class="info-item" *ngIf="farm.address.street || farm.address.zipCode">
+        <span class="info-label">Address:</span>
+        <span class="info-value">
+          <span *ngIf="farm.address.street">{{ farm.address.street }}<br></span>
+          <span *ngIf="farm.address.city || farm.address.state || farm.address.zipCode">
+            {{ farm.address.city }}<span *ngIf="farm.address.city">, </span>
+            {{ farm.address.state }} {{ farm.address.zipCode }}
+          </span>
+        </span>
+      </div>
+
+      <!-- Acreage -->
+      <div class="info-item">
+        <span class="info-label">Acreage:</span>
+        <span class="info-value">{{ farm.acreage }} acres</span>
+      </div>
+
+      <!-- Facilities -->
+      <div class="info-item full-width">
+        <span class="info-label">Facilities:</span>
+        <div class="facilities-list">
+          <span class="facility-badge" *ngIf="farm.facilities.hasBarn">
+            <i class="bi bi-house-door"></i> Barn
+          </span>
+          <span class="facility-badge" *ngIf="farm.facilities.hayStorageCapacity && farm.facilities.hayStorageCapacity > 0">
+            <i class="bi bi-box-seam"></i> Hay Storage ({{ farm.facilities.hayStorageCapacity }} bales)
+          </span>
+          <span class="facility-badge" *ngIf="farm.facilities.hasCattleChute">
+            <i class="bi bi-funnel"></i> Cattle Chute
+          </span>
+          <span class="facility-badge" *ngIf="farm.facilities.hasLoadingRamp">
+            <i class="bi bi-truck"></i> Loading Ramp
+          </span>
+          <span class="facility-badge" *ngIf="farm.facilities.hasWaterSource">
+            <i class="bi bi-droplet"></i> Water Source
+          </span>
+          <span class="facility-badge" *ngIf="farm.facilities.hasShelter">
+            <i class="bi bi-shield"></i> Shelter
+          </span>
+          <span class="no-facilities" *ngIf="!hasFacilities(farm)">
+            No facilities recorded
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animals on This Farm Section -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Animals Currently on This Farm <span class="count-badge" *ngIf="animals$ | async as animals">({{ animals.length }})</span></h2>
+      <div class="section-actions">
+        <button class="btn btn-secondary btn-sm" (click)="navigateToAssignAnimals()">
+          <i class="bi bi-plus-circle me-1"></i> Assign Animals
+        </button>
+        <button class="btn btn-secondary btn-sm" (click)="navigateToBulkTransfer()">
+          <i class="bi bi-arrow-left-right me-1"></i> Bulk Transfer
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="animals$ | async as animals; else loadingAnimals">
+      <div *ngIf="animals.length > 0; else noAnimals">
+
+        <!-- Mobile View: Cards -->
+        <div class="animals-cards mobile-only">
+          <div class="animal-card" *ngFor="let animal of animals; trackBy: trackByAnimalId" (click)="navigateToAnimal(animal.id!)">
+            <div class="animal-info">
+              <h3>{{ animal.name }}</h3>
+              <p class="animal-details">
+                <span class="detail-item"><i class="bi bi-tag"></i> {{ animal.identifier || 'No tag' }}</span>
+                <span class="detail-item"><i class="bi bi-gender-ambiguous"></i> {{ animal.species }}</span>
+              </p>
+              <p class="animal-breed">{{ animal.breed }}</p>
+            </div>
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </div>
+
+        <!-- Desktop View: Table -->
+        <div class="table-responsive desktop-only">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Tag/ID</th>
+                <th>Species</th>
+                <th>Breed</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let animal of animals; trackBy: trackByAnimalId">
+                <td>{{ animal.name }}</td>
+                <td>{{ animal.identifier || '-' }}</td>
+                <td>{{ animal.species }}</td>
+                <td>{{ animal.breed }}</td>
+                <td>
+                  <button class="btn-icon" (click)="navigateToAnimal(animal.id!)" title="View Animal">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- No Animals State -->
+      <ng-template #noAnimals>
+        <div class="empty-state-small">
+          <i class="bi bi-inbox empty-icon"></i>
+          <p>No animals assigned to this farm</p>
+          <button class="btn btn-primary btn-sm" (click)="navigateToAssignAnimals()">
+            <i class="bi bi-plus-circle me-1"></i> Assign Animals
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Movement History Section -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Recent Movement History</h2>
+    </div>
+
+    <div *ngIf="movements$ | async as movements; else loadingMovements">
+      <div *ngIf="movements.length > 0; else noMovements">
+
+        <div class="timeline">
+          <div class="timeline-item" *ngFor="let movement of movements; trackBy: trackByMovementId">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="movement-header">
+                <span class="movement-date">{{ movement.movementDate }}</span>
+                <span class="movement-reason" *ngIf="movement.reason">{{ movement.reason }}</span>
+              </div>
+              <div class="movement-details">
+                <strong>{{ movement.animalName || 'Animal' }}</strong>
+                <span class="movement-direction">
+                  <span *ngIf="movement.fromFarmId">from {{ movement.fromFarmName || 'Unknown Farm' }}</span>
+                  <i class="bi bi-arrow-right mx-1"></i>
+                  <span>to {{ movement.toFarmName || farm.name }}</span>
+                </span>
+              </div>
+              <p class="movement-notes" *ngIf="movement.notes">{{ movement.notes }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- No Movements State -->
+      <ng-template #noMovements>
+        <div class="empty-state-small">
+          <i class="bi bi-clock-history empty-icon"></i>
+          <p>No movement history for this farm</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+</div>
+
+<!-- Loading States -->
+<ng-template #loading>
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading farm details...</p>
+  </div>
+</ng-template>
+
+<ng-template #loadingAnimals>
+  <div class="loading-state-small">
+    <div class="spinner-small"></div>
+    <p>Loading animals...</p>
+  </div>
+</ng-template>
+
+<ng-template #loadingMovements>
+  <div class="loading-state-small">
+    <div class="spinner-small"></div>
+    <p>Loading movement history...</p>
+  </div>
+</ng-template>

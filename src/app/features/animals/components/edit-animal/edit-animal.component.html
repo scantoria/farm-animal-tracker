@@ -1,6 +1,11 @@
 <form *ngIf="animal" #form="ngForm" (ngSubmit)="onSubmit(form)" class="responsive-form">
   <h2>Edit Animal</h2>
 
+  <!-- Success Message -->
+  <div *ngIf="showSuccessMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
   <!-- Input for Name -->
   <div class="form-group">
     <label for="name">Animal name or Tag:</label>
@@ -71,11 +76,44 @@
     </div>
   </div>
 
+  <!-- Current Farm Assignment -->
+  <div class="form-group">
+    <label for="currentFarmId">Current Farm Location:</label>
+    <select id="currentFarmId" name="currentFarmId" [(ngModel)]="animal.currentFarmId" class="form-control">
+      <option [value]="undefined">None</option>
+      <option *ngFor="let farm of farms" [value]="farm.id">{{ farm.name }}</option>
+    </select>
+  </div>
+
   <!-- Action buttons section -->
   <div class="form-actions">
     <button type="submit" [disabled]="form.invalid" class="btn btn-primary">Update Animal</button>
   </div>
+</form>
 
+<!-- Current Location Card -->
+<div class="location-card">
+  <div class="location-header">
+    <div class="location-icon">🏠</div>
+    <h3>Current Location</h3>
+  </div>
+  <div class="location-content">
+    <div class="location-info">
+      <div class="location-name">
+        <span *ngIf="currentFarm">{{ currentFarm.name }}</span>
+        <span *ngIf="!currentFarm" class="not-assigned">Not Assigned</span>
+      </div>
+      <div class="location-date" *ngIf="currentFarm && movementHistory.length > 0">
+        Assigned since: {{ getMovementDateAssigned() }}
+      </div>
+    </div>
+    <button type="button" class="btn btn-secondary btn-sm" (click)="openTransferDialog()">
+      <i class="bi bi-arrow-left-right me-1"></i> Transfer to Different Farm
+    </button>
+  </div>
+</div>
+
+<form *ngIf="animal" #form="ngForm">
   <hr />
 
   <!-- Navigation buttons section -->
@@ -119,3 +157,92 @@
     </a>
   </div>
 </form>
+
+<!-- Movement History Section -->
+<div class="movement-history-section" *ngIf="movementHistory.length > 0">
+  <h3>Movement History</h3>
+  <div class="timeline">
+    <div class="timeline-item" *ngFor="let movement of movementHistory">
+      <div class="timeline-marker"></div>
+      <div class="timeline-content">
+        <div class="movement-header">
+          <span class="movement-date">{{ movement.movementDate }}</span>
+          <span class="movement-reason" *ngIf="movement.reason">{{ movement.reason }}</span>
+        </div>
+        <div class="movement-details">
+          <span *ngIf="movement.fromFarmId">from {{ movement.fromFarmName || 'Unknown Farm' }}</span>
+          <i class="bi bi-arrow-right mx-1"></i>
+          <span>to {{ movement.toFarmName || 'Unknown Farm' }}</span>
+        </div>
+        <p class="movement-notes" *ngIf="movement.notes">{{ movement.notes }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Transfer Dialog -->
+<div class="modal-overlay" *ngIf="showTransferDialog" (click)="closeTransferDialog()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Transfer Animal to Different Farm</h3>
+      <button type="button" class="btn-close" (click)="closeTransferDialog()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="transferDestinationFarmId" class="form-label">
+          Destination Farm <span class="required">*</span>
+        </label>
+        <select
+          id="transferDestinationFarmId"
+          [(ngModel)]="transferDestinationFarmId"
+          class="form-control"
+          name="transferDestinationFarmId"
+        >
+          <option value="">Select destination farm...</option>
+          <option *ngFor="let farm of farms" [value]="farm.id">{{ farm.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="transferReason" class="form-label">Reason (Optional)</label>
+        <input
+          type="text"
+          id="transferReason"
+          [(ngModel)]="transferReason"
+          class="form-control"
+          name="transferReason"
+          placeholder="e.g., Winter Housing, Breeding"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="transferNotes" class="form-label">Notes (Optional)</label>
+        <textarea
+          id="transferNotes"
+          [(ngModel)]="transferNotes"
+          rows="3"
+          class="form-control"
+          name="transferNotes"
+          placeholder="Add any additional notes..."
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeTransferDialog()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!transferDestinationFarmId"
+        (click)="confirmTransfer()"
+      >
+        <i class="bi bi-check-circle me-1"></i> Confirm Transfer
+      </button>
+    </div>
+  </div>
+</div>
