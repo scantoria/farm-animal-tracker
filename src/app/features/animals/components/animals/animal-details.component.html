@@ -19,6 +19,7 @@
           <div class="header-col status-col">Status</div>
           <div class="header-col repro-col">Reproductive</div>
           <div class="header-col dob-col">DOB</div>
+          <div class="header-col due-date-col">Est. Due Date</div>
           <div class="header-col action-col"></div>
         </div>
 
@@ -62,7 +63,15 @@
             <span class="d-lg-none data-label">DOB:</span>
             {{ animal.dob || 'N/A' }}
           </div>
-          
+
+          <div class="animal-data animal-due-date-col">
+            <span class="d-lg-none data-label" *ngIf="animal.reproductiveStatus === 'pregnant'">Est. Due Date:</span>
+            <span class="due-date-text" *ngIf="animal.reproductiveStatus === 'pregnant'">
+              {{ getEstimatedDueDate(animal) }}
+            </span>
+            <span *ngIf="animal.reproductiveStatus !== 'pregnant'">-</span>
+          </div>
+
           <div class="animal-data animal-chevron-col">
             <i class="bi bi-chevron-right chevron-icon"></i>
           </div>

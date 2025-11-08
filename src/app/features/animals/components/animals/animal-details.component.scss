@@ -117,7 +117,7 @@ $breakpoint-lg: 1024px;
 
   @media (min-width: $breakpoint-lg) {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 1.25fr 0.5fr;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 1.25fr 1.25fr 0.5fr;
     gap: 1rem;
     padding: 1rem 1.5rem;
     background-color: #f9fafb;
@@ -164,7 +164,7 @@ $breakpoint-lg: 1024px;
   // Desktop: Table Row Style
   @media (min-width: $breakpoint-lg) {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 1.25fr 0.5fr;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 1.25fr 1.25fr 0.5fr;
     gap: 1rem;
     align-items: center;
     padding: 1rem 1.5rem;
@@ -340,9 +340,24 @@ $breakpoint-lg: 1024px;
   }
 }
 
+// Due Date Column
+.animal-due-date-col {
+  order: 6;
+  font-size: 0.875rem;
+
+  @media (min-width: $breakpoint-lg) {
+    order: unset;
+  }
+
+  .due-date-text {
+    color: #dc2626; // Red to match pregnant status color
+    font-weight: 600;
+  }
+}
+
 // Chevron Column
 .animal-chevron-col {
-  order: 6;
+  order: 7;
   display: flex;
   justify-content: flex-end;
   align-items: center;
