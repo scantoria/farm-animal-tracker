@@ -25,6 +25,17 @@ export class AnimalsComponent implements OnInit {
     private auth: Auth
   ) { }
 
+  getReproductiveStatusDisplay(animal: Animal): string {
+    if (!animal.reproductiveStatus || animal.reproductiveStatus === 'unknown') {
+      return '-';
+    }
+
+    const status = animal.reproductiveStatus;
+
+    // Capitalize first letter
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+
   trackByAnimalId(index: number, animal: any): string {
     return animal.id;
   }

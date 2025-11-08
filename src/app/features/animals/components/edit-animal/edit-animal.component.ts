@@ -10,6 +10,7 @@ import { Farm } from '../../../../shared/models/farm.model';
 import { FarmMovement } from '../../../../shared/models/farm-movement.model';
 import { CommonModule } from '@angular/common';
 import { Timestamp } from '@angular/fire/firestore';
+import { getReproductiveStatusOptions } from '../../../../shared/utils/gestation-period.util';
 //import { formatDateForInput } from '../../../../shared/utils/date.utils';
 
 @Component({
@@ -33,6 +34,7 @@ export class EditAnimalComponent implements OnInit {
   transferDestinationFarmId: string = '';
   transferReason: string = '';
   transferNotes: string = '';
+  reproductiveStatusOptions: Array<{value: string, label: string}> = [];
 
   constructor(
     private animalsService: AnimalsService,
@@ -64,6 +66,11 @@ export class EditAnimalComponent implements OnInit {
             this.dobString = this.convertToDateString(animal.dob);
           }
 
+          // Update reproductive status options based on animal's sex
+          if (animal?.sex) {
+            this.reproductiveStatusOptions = getReproductiveStatusOptions(animal.sex);
+          }
+
           // Load current farm details
           if (animal?.currentFarmId) {
             this.farmService.getFarmById(animal.currentFarmId).subscribe({
@@ -86,6 +93,15 @@ export class EditAnimalComponent implements OnInit {
             }
           });
         });
+    }
+  }
+
+  onSexChange(event: any): void {
+    const sex = event.target.value as 'male' | 'female';
+    this.reproductiveStatusOptions = getReproductiveStatusOptions(sex);
+    // Reset reproductive status when sex changes
+    if (this.animal) {
+      this.animal.reproductiveStatus = 'unknown';
     }
   }
 
@@ -113,6 +129,7 @@ export class EditAnimalComponent implements OnInit {
       dob: this.dobString, // Use the dobString which is in yyyy-MM-dd format
       sex: form.value.sex,
       status: form.value.status,
+      reproductiveStatus: form.value.reproductiveStatus || 'unknown',
       currentFarmId: form.value.currentFarmId || undefined,
     };
 

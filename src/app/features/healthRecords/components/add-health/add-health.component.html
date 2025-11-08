@@ -42,17 +42,21 @@
         <label for="eventType" class="form-label">
           Event Type <span class="required">*</span>
         </label>
-        <input
-          type="text"
+        <select
           id="eventType"
           name="eventType"
           #eventTypeField="ngModel"
           ngModel
           required
           class="form-control"
-          placeholder="e.g., Vaccination, Treatment, Checkup"
+          (change)="onEventTypeChange($event)"
           [class.is-invalid]="eventTypeField.invalid && eventTypeField.touched"
-        />
+        >
+          <option value="">Select event type...</option>
+          <option *ngFor="let type of healthEventTypes" [value]="type">
+            {{ type.replace('_', ' ') | titlecase }}
+          </option>
+        </select>
         <div class="invalid-feedback" *ngIf="eventTypeField.invalid && eventTypeField.touched">
           Event type is required.
         </div>
@@ -108,6 +112,167 @@
           placeholder="e.g., 2 ml IM"
         />
         <small class="form-text">Include amount and administration method if applicable</small>
+      </div>
+
+      <!-- Castration-Specific Fields -->
+      <div *ngIf="isCastration()" class="conditional-section">
+        <h3 class="section-title">Castration Details</h3>
+
+        <!-- Castration Method -->
+        <div class="form-group">
+          <label for="castrationMethod" class="form-label">
+            Method <span class="required">*</span>
+          </label>
+          <select
+            id="castrationMethod"
+            name="castrationMethod"
+            ngModel
+            [required]="isCastration()"
+            class="form-control"
+          >
+            <option value="">Select method...</option>
+            <option *ngFor="let method of castrationMethods" [value]="method">
+              {{ method | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Age at Castration -->
+        <div class="form-group">
+          <label for="ageAtCastration" class="form-label">
+            Age at Castration (months) <span class="required">*</span>
+          </label>
+          <input
+            type="number"
+            id="ageAtCastration"
+            name="ageAtCastration"
+            ngModel
+            [required]="isCastration()"
+            class="form-control"
+            placeholder="Age in months"
+            min="0"
+          />
+        </div>
+
+        <!-- Essential Timing -->
+        <div class="form-group">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              id="essentialTiming"
+              name="essentialTiming"
+              ngModel
+              class="form-check-input"
+            />
+            <label for="essentialTiming" class="form-check-label">
+              Essential Timing
+            </label>
+          </div>
+          <small class="form-text">Check if timing was critical for this procedure</small>
+        </div>
+
+        <!-- Complications -->
+        <div class="form-group">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              id="castrationComplications"
+              name="castrationComplications"
+              ngModel
+              class="form-check-input"
+            />
+            <label for="castrationComplications" class="form-check-label">
+              Complications Occurred
+            </label>
+          </div>
+        </div>
+
+        <!-- Recovery Notes -->
+        <div class="form-group">
+          <label for="castrationRecoveryNotes" class="form-label">
+            Recovery Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea
+            id="castrationRecoveryNotes"
+            name="castrationRecoveryNotes"
+            ngModel
+            rows="3"
+            class="form-control"
+            placeholder="Notes about recovery process..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Dehorning-Specific Fields -->
+      <div *ngIf="isDehorning()" class="conditional-section">
+        <h3 class="section-title">Dehorning Details</h3>
+
+        <!-- Dehorning Method -->
+        <div class="form-group">
+          <label for="dehorningMethod" class="form-label">
+            Method <span class="required">*</span>
+          </label>
+          <select
+            id="dehorningMethod"
+            name="dehorningMethod"
+            ngModel
+            [required]="isDehorning()"
+            class="form-control"
+          >
+            <option value="">Select method...</option>
+            <option *ngFor="let method of dehorningMethods" [value]="method">
+              {{ method.replace('_', ' ') | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Age at Dehorning -->
+        <div class="form-group">
+          <label for="ageAtDehorning" class="form-label">
+            Age at Dehorning (months) <span class="required">*</span>
+          </label>
+          <input
+            type="number"
+            id="ageAtDehorning"
+            name="ageAtDehorning"
+            ngModel
+            [required]="isDehorning()"
+            class="form-control"
+            placeholder="Age in months"
+            min="0"
+          />
+        </div>
+
+        <!-- Complications -->
+        <div class="form-group">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              id="dehorningComplications"
+              name="dehorningComplications"
+              ngModel
+              class="form-check-input"
+            />
+            <label for="dehorningComplications" class="form-check-label">
+              Complications Occurred
+            </label>
+          </div>
+        </div>
+
+        <!-- Recovery Notes -->
+        <div class="form-group">
+          <label for="dehorningRecoveryNotes" class="form-label">
+            Recovery Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea
+            id="dehorningRecoveryNotes"
+            name="dehorningRecoveryNotes"
+            ngModel
+            rows="3"
+            class="form-control"
+            placeholder="Notes about recovery process..."
+          ></textarea>
+        </div>
       </div>
 
       <!-- Form Actions -->

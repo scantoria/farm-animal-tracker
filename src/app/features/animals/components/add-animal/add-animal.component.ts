@@ -9,6 +9,7 @@ import { AnimalsService } from '../../../..//core/services/animals.service';
 import { FarmService } from '../../../../core/services/farm.service';
 import { Animal } from '../../../../shared/models/animal.model';
 import { Farm } from '../../../../shared/models/farm.model';
+import { getReproductiveStatusOptions } from '../../../../shared/utils/gestation-period.util';
 
 @Component({
   selector: 'app-add-animal',
@@ -19,6 +20,8 @@ import { Farm } from '../../../../shared/models/farm.model';
 })
 export class AddAnimalComponent implements OnInit {
   farms: Farm[] = [];
+  selectedSex: 'male' | 'female' = 'female';
+  reproductiveStatusOptions: Array<{value: string, label: string}> = [];
 
   constructor(
     private animalsService: AnimalsService,
@@ -36,6 +39,16 @@ export class AddAnimalComponent implements OnInit {
         console.error('Error loading farms:', error);
       }
     });
+    this.updateReproductiveStatusOptions();
+  }
+
+  onSexChange(event: any): void {
+    this.selectedSex = event.target.value as 'male' | 'female';
+    this.updateReproductiveStatusOptions();
+  }
+
+  updateReproductiveStatusOptions(): void {
+    this.reproductiveStatusOptions = getReproductiveStatusOptions(this.selectedSex);
   }
 
   onSubmit(form: NgForm) {
@@ -54,6 +67,7 @@ export class AddAnimalComponent implements OnInit {
       dob: form.value.dob,
       sex: form.value.sex,
       status: form.value.status,
+      reproductiveStatus: form.value.reproductiveStatus || 'unknown',
       currentFarmId: form.value.currentFarmId || undefined,
     };
 

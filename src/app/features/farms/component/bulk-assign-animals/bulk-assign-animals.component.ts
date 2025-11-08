@@ -165,11 +165,6 @@ export class BulkAssignAnimalsComponent implements OnInit {
     return Array.from(species).sort();
   }
 
-  get uniqueStatuses(): string[] {
-    const statuses = new Set(this.animalSelections.map(s => s.animal.status));
-    return Array.from(statuses).sort();
-  }
-
   showConfirmDialog(): void {
     if (this.selectedCount === 0 || !this.destinationFarmId) {
       return;

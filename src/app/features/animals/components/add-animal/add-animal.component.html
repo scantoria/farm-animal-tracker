@@ -124,10 +124,11 @@
             #sex="ngModel"
             class="form-control"
             [class.is-invalid]="sex.invalid && sex.touched"
+            (change)="onSexChange($event)"
           >
             <option value="" disabled selected>Select sex...</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
           </select>
           <div class="invalid-feedback" *ngIf="sex.invalid && sex.touched">
             <div *ngIf="sex.errors?.['required']">
@@ -136,22 +137,43 @@
           </div>
         </div>
 
+        <!-- Reproductive Status Field -->
+        <div class="form-group">
+          <label for="reproductiveStatus" class="form-label">
+            Reproductive Status
+          </label>
+          <select
+            id="reproductiveStatus"
+            name="reproductiveStatus"
+            ngModel="unknown"
+            class="form-control"
+          >
+            <option value="unknown">Unknown</option>
+            <option *ngFor="let option of reproductiveStatusOptions" [value]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+
         <!-- Status Field -->
         <div class="form-group">
           <label for="status" class="form-label">
             Status <span class="required">*</span>
           </label>
-          <input
-            type="text"
+          <select
             id="status"
             name="status"
             ngModel
             required
             #status="ngModel"
             class="form-control"
-            placeholder="e.g., Active, Sold, Deceased"
             [class.is-invalid]="status.invalid && status.touched"
-          />
+          >
+            <option value="" disabled selected>Select status...</option>
+            <option value="active">Active</option>
+            <option value="sold">Sold</option>
+            <option value="deceased">Deceased</option>
+          </select>
           <div class="invalid-feedback" *ngIf="status.invalid && status.touched">
             <div *ngIf="status.errors?.['required']">
               Status is required.

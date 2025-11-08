@@ -12,7 +12,10 @@ export interface Animal {
   dob: string | Timestamp;
   sex: 'male' | 'female';
   status: 'active' | 'sold' | 'deceased';
-  
+
+  // REPRODUCTIVE STATUS
+  reproductiveStatus?: 'open' | 'pregnant' | 'intact' | 'castrated' | 'unknown';
+
   // FARM LOCATION - NEW FIELDS
   currentFarmId?: string;           // Reference to farm ID
   currentFarmRef?: DocumentReference;  // Firebase document reference

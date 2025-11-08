@@ -45,14 +45,17 @@
         <label for="eventType" class="form-label">
           Event Type <span class="required">*</span>
         </label>
-        <input
-          type="text"
+        <select
           id="eventType"
           formControlName="eventType"
           class="form-control"
-          placeholder="e.g., Vaccination, Treatment, Checkup"
           [class.is-invalid]="editHealthRecordForm.get('eventType')?.invalid && editHealthRecordForm.get('eventType')?.touched"
-        />
+        >
+          <option value="">Select event type...</option>
+          <option *ngFor="let type of healthEventTypes" [value]="type">
+            {{ type.replace('_', ' ') | titlecase }}
+          </option>
+        </select>
         <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('eventType')?.invalid && editHealthRecordForm.get('eventType')?.touched">
           Event type is required.
         </div>
@@ -103,6 +106,170 @@
           placeholder="e.g., 2 ml IM"
         />
         <small class="form-text">Include amount and administration method if applicable</small>
+      </div>
+
+      <!-- Castration-Specific Fields -->
+      <div *ngIf="isCastration()" class="conditional-section">
+        <h3 class="section-title">Castration Details</h3>
+
+        <!-- Castration Method -->
+        <div class="form-group">
+          <label for="castrationMethod" class="form-label">
+            Method <span class="required">*</span>
+          </label>
+          <select
+            id="castrationMethod"
+            formControlName="castrationMethod"
+            class="form-control"
+            [class.is-invalid]="editHealthRecordForm.get('castrationMethod')?.invalid && editHealthRecordForm.get('castrationMethod')?.touched"
+          >
+            <option value="">Select method...</option>
+            <option *ngFor="let method of castrationMethods" [value]="method">
+              {{ method | titlecase }}
+            </option>
+          </select>
+          <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('castrationMethod')?.invalid && editHealthRecordForm.get('castrationMethod')?.touched">
+            Method is required.
+          </div>
+        </div>
+
+        <!-- Age at Castration -->
+        <div class="form-group">
+          <label for="ageAtCastration" class="form-label">
+            Age at Castration (months) <span class="required">*</span>
+          </label>
+          <input
+            type="number"
+            id="ageAtCastration"
+            formControlName="ageAtCastration"
+            class="form-control"
+            placeholder="Age in months"
+            min="0"
+            [class.is-invalid]="editHealthRecordForm.get('ageAtCastration')?.invalid && editHealthRecordForm.get('ageAtCastration')?.touched"
+          />
+          <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('ageAtCastration')?.invalid && editHealthRecordForm.get('ageAtCastration')?.touched">
+            Age is required.
+          </div>
+        </div>
+
+        <!-- Essential Timing -->
+        <div class="form-group">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              id="essentialTiming"
+              formControlName="essentialTiming"
+              class="form-check-input"
+            />
+            <label for="essentialTiming" class="form-check-label">
+              Essential Timing
+            </label>
+          </div>
+          <small class="form-text">Check if timing was critical for this procedure</small>
+        </div>
+
+        <!-- Complications -->
+        <div class="form-group">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              id="castrationComplications"
+              formControlName="castrationComplications"
+              class="form-check-input"
+            />
+            <label for="castrationComplications" class="form-check-label">
+              Complications Occurred
+            </label>
+          </div>
+        </div>
+
+        <!-- Recovery Notes -->
+        <div class="form-group">
+          <label for="castrationRecoveryNotes" class="form-label">
+            Recovery Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea
+            id="castrationRecoveryNotes"
+            formControlName="castrationRecoveryNotes"
+            rows="3"
+            class="form-control"
+            placeholder="Notes about recovery process..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Dehorning-Specific Fields -->
+      <div *ngIf="isDehorning()" class="conditional-section">
+        <h3 class="section-title">Dehorning Details</h3>
+
+        <!-- Dehorning Method -->
+        <div class="form-group">
+          <label for="dehorningMethod" class="form-label">
+            Method <span class="required">*</span>
+          </label>
+          <select
+            id="dehorningMethod"
+            formControlName="dehorningMethod"
+            class="form-control"
+            [class.is-invalid]="editHealthRecordForm.get('dehorningMethod')?.invalid && editHealthRecordForm.get('dehorningMethod')?.touched"
+          >
+            <option value="">Select method...</option>
+            <option *ngFor="let method of dehorningMethods" [value]="method">
+              {{ method.replace('_', ' ') | titlecase }}
+            </option>
+          </select>
+          <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('dehorningMethod')?.invalid && editHealthRecordForm.get('dehorningMethod')?.touched">
+            Method is required.
+          </div>
+        </div>
+
+        <!-- Age at Dehorning -->
+        <div class="form-group">
+          <label for="ageAtDehorning" class="form-label">
+            Age at Dehorning (months) <span class="required">*</span>
+          </label>
+          <input
+            type="number"
+            id="ageAtDehorning"
+            formControlName="ageAtDehorning"
+            class="form-control"
+            placeholder="Age in months"
+            min="0"
+            [class.is-invalid]="editHealthRecordForm.get('ageAtDehorning')?.invalid && editHealthRecordForm.get('ageAtDehorning')?.touched"
+          />
+          <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('ageAtDehorning')?.invalid && editHealthRecordForm.get('ageAtDehorning')?.touched">
+            Age is required.
+          </div>
+        </div>
+
+        <!-- Complications -->
+        <div class="form-group">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              id="dehorningComplications"
+              formControlName="dehorningComplications"
+              class="form-check-input"
+            />
+            <label for="dehorningComplications" class="form-check-label">
+              Complications Occurred
+            </label>
+          </div>
+        </div>
+
+        <!-- Recovery Notes -->
+        <div class="form-group">
+          <label for="dehorningRecoveryNotes" class="form-label">
+            Recovery Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea
+            id="dehorningRecoveryNotes"
+            formControlName="dehorningRecoveryNotes"
+            rows="3"
+            class="form-control"
+            placeholder="Notes about recovery process..."
+          ></textarea>
+        </div>
       </div>
 
       <!-- Form Actions -->

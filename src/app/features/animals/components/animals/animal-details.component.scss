@@ -117,7 +117,7 @@ $breakpoint-lg: 1024px;
 
   @media (min-width: $breakpoint-lg) {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 0.5fr;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 1.25fr 0.5fr;
     gap: 1rem;
     padding: 1rem 1.5rem;
     background-color: #f9fafb;
@@ -164,7 +164,7 @@ $breakpoint-lg: 1024px;
   // Desktop: Table Row Style
   @media (min-width: $breakpoint-lg) {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 0.5fr;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.25fr 1.25fr 0.5fr;
     gap: 1rem;
     align-items: center;
     padding: 1rem 1.5rem;
@@ -182,6 +182,28 @@ $breakpoint-lg: 1024px;
     &:last-child {
       border-bottom: none;
     }
+  }
+}
+
+// Reproductive Status Styles
+.repro-status {
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &.repro-pregnant {
+    color: #dc2626; // Red for pregnant (attention needed)
+  }
+
+  &.repro-open {
+    color: #10b981; // Green for open (ready to breed)
+  }
+
+  &.repro-intact {
+    color: #3b82f6; // Blue for intact
+  }
+
+  &.repro-castrated {
+    color: #6b7280; // Gray for castrated
   }
 }
 

@@ -53,10 +53,10 @@
   <!-- Select for Sex -->
   <div class="form-group">
     <label for="sex">Sex:</label>
-    <select id="sex" name="sex" [(ngModel)]="animal.sex" required #sex="ngModel">
+    <select id="sex" name="sex" [(ngModel)]="animal.sex" required #sex="ngModel" (change)="onSexChange($event)">
       <option value="" disabled>Select Sex</option>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
+      <option value="female">Female</option>
+      <option value="male">Male</option>
     </select>
     <div class="validation-message" *ngIf="sex.invalid && (sex.dirty || sex.touched)">
       <div *ngIf="sex.errors?.['required']">
@@ -65,10 +65,26 @@
     </div>
   </div>
 
+  <!-- Reproductive Status -->
+  <div class="form-group">
+    <label for="reproductiveStatus">Reproductive Status:</label>
+    <select id="reproductiveStatus" name="reproductiveStatus" [(ngModel)]="animal.reproductiveStatus" class="form-control">
+      <option value="unknown">Unknown</option>
+      <option *ngFor="let option of reproductiveStatusOptions" [value]="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+
   <!-- Input for Status -->
   <div class="form-group">
     <label for="status">Status:</label>
-    <input type="text" id="status" name="status" [(ngModel)]="animal.status" required #status="ngModel">
+    <select id="status" name="status" [(ngModel)]="animal.status" required #status="ngModel" class="form-control">
+      <option value="" disabled>Select status...</option>
+      <option value="active">Active</option>
+      <option value="sold">Sold</option>
+      <option value="deceased">Deceased</option>
+    </select>
     <div class="validation-message" *ngIf="status.invalid && (status.dirty || status.touched)">
       <div *ngIf="status.errors?.['required']">
         Status is required.

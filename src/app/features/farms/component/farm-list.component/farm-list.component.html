@@ -21,7 +21,7 @@
         <div class="farm-card" *ngFor="let farm of farms; trackBy: trackByFarmId">
           
           <!-- Farm Header -->
-          <div class="farm-header" [routerLink]="['edit', farm.id]">
+          <div class="farm-header" [routerLink]="[farm.id]">
             <div class="farm-main-info">
               <h2 class="farm-name">{{ farm.name }}</h2>
               <p class="farm-location" *ngIf="farm.address.city || farm.address.state">
@@ -90,14 +90,14 @@
           <div class="farm-actions">
             <button
               class="btn-action btn-view"
-              [routerLink]="['edit', farm.id]"
+              [routerLink]="[farm.id]"
               title="View Farm Details"
             >
               <i class="bi bi-eye"></i>
               <span class="btn-text">View Details</span>
             </button>
-            <button 
-              class="btn-action btn-edit" 
+            <button
+              class="btn-action btn-edit"
               [routerLink]="['edit', farm.id]"
               (click)="$event.stopPropagation()"
               title="Edit Farm"
@@ -105,8 +105,8 @@
               <i class="bi bi-pencil"></i>
               <span class="btn-text">Edit</span>
             </button>
-            <button 
-              class="btn-action btn-delete" 
+            <button
+              class="btn-action btn-delete"
               (click)="onDelete(farm.id!); $event.stopPropagation()"
               title="Delete Farm"
             >

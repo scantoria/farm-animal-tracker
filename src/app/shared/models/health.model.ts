@@ -8,3 +8,14 @@ export interface HealthModel {
   administeredBy: string;
   dosage?: string;
 }
+
+export const HEALTH_EVENT_TYPES = [
+  'hoof_trimming',
+  'vaccination',
+  'castration',
+  'dehorning',
+  'general_checkup',
+  'injury',
+  'illness',
+  'other'
+];

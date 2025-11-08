@@ -82,7 +82,9 @@
               class="form-control"
             >
               <option value="">All Statuses</option>
-              <option *ngFor="let status of uniqueStatuses" [value]="status">{{ status }}</option>
+              <option value="active">Active</option>
+              <option value="sold">Sold</option>
+              <option value="deceased">Deceased</option>
             </select>
           </div>
         </div>

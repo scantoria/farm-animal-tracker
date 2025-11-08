@@ -17,7 +17,8 @@
           <div class="header-col species-col">Species</div>
           <div class="header-col breed-col">Breed</div>
           <div class="header-col status-col">Status</div>
-          <div class="header-col dob-col">Date of Birth</div>
+          <div class="header-col repro-col">Reproductive</div>
+          <div class="header-col dob-col">DOB</div>
           <div class="header-col action-col"></div>
         </div>
 
@@ -49,7 +50,14 @@
               {{ animal.status || 'Active' }}
             </span>
           </div>
-          
+
+          <div class="animal-data animal-repro-col">
+            <span class="d-lg-none data-label">Reproductive:</span>
+            <span class="repro-status repro-{{ animal.reproductiveStatus }}">
+              {{ getReproductiveStatusDisplay(animal) }}
+            </span>
+          </div>
+
           <div class="animal-data animal-dob-col">
             <span class="d-lg-none data-label">DOB:</span>
             {{ animal.dob || 'N/A' }}

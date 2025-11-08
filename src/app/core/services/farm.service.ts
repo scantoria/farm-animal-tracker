@@ -154,8 +154,8 @@ export class FarmService {
     const q = query(
       animalsRef,
       where('tenantId', '==', tenantId),
-      where('currentFarmId', '==', farmId),
-      where('status', '==', 'active')
+      where('currentFarmId', '==', farmId)
+      // Note: Returning ALL animals on farm regardless of status
     );
 
     return from(getDocs(q)).pipe(
@@ -298,8 +298,9 @@ export class FarmService {
       const q = query(
         animalsRef,
         where('tenantId', '==', tenantId),
-        where('currentFarmId', '==', farm.id),
-        where('status', '==', 'active')
+        where('currentFarmId', '==', farm.id)
+        // Note: Counting ALL animals on farm regardless of status
+        // This includes active, sold, and deceased animals
       );
 
       return from(getDocs(q)).pipe(
