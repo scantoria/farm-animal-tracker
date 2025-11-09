@@ -225,6 +225,31 @@ farm-animal-tracker/
 
 ---
 
+## 🔐 User Management (Updated)
+
+**Authentication is now invitation-only.**
+
+### Creating New Users
+
+Only authorized administrators (stephen.cantoria@stjo.farm and jolene.cantoria@stjo.farm) can create new user accounts.
+
+**To invite a new user:**
+1. Login as an authorized admin
+2. Navigate to: `/admin/invite-user` (hidden page)
+3. Enter new user's email and temporary password
+4. Share credentials securely with new user
+
+For detailed instructions, see [INVITE_USER_INSTRUCTIONS.md](./INVITE_USER_INSTRUCTIONS.md)
+
+### Public Signup Removed
+
+- ❌ Public signup route removed
+- ❌ "Sign Up" button removed from navigation
+- ✅ Admin-only invitation system active
+- ✅ Hidden invite page: `/admin/invite-user`
+
+---
+
 ## Contributing
 
 This is a proprietary project. For questions or support, contact the development team.

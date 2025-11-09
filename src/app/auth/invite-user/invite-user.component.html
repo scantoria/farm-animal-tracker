@@ -1,0 +1,63 @@
+<div class="invite-container">
+  <div class="invite-card">
+    <h1>🔐 Invite New User</h1>
+    <p class="subtitle">Admin-only access - Create new user accounts</p>
+
+    <div class="alert alert-success" *ngIf="successMessage">
+      ✅ {{ successMessage }}
+    </div>
+
+    <div class="alert alert-error" *ngIf="errorMessage">
+      ❌ {{ errorMessage }}
+    </div>
+
+    <form #inviteForm="ngForm" (ngSubmit)="onSubmit(inviteForm)" class="invite-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          ngModel
+          required
+          email
+          placeholder="user@example.com"
+          class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Temporary Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          ngModel
+          required
+          minlength="6"
+          placeholder="Minimum 6 characters"
+          class="form-control">
+        <small class="form-text">User should change this password after first login</small>
+      </div>
+
+      <div class="button-group">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!inviteForm.valid">
+          Create User Account
+        </button>
+        <a [routerLink]="['/']" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+
+    <div class="info-section">
+      <h3>ℹ️ Important Notes:</h3>
+      <ul>
+        <li>Only Stephen and Jolene can access this page</li>
+        <li>New users will need to verify their email (if enabled in Firebase)</li>
+        <li>Share the temporary password securely with the new user</li>
+        <li>Advise users to change their password after first login</li>
+      </ul>
+    </div>
+  </div>
+</div>
