@@ -4,14 +4,20 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { AnimalsService } from '../../../../core/services/animals.service';
 import { FarmService } from '../../../../core/services/farm.service';
+import { DocumentService, UploadProgress } from '../../../../core/services/document.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Animal } from '../../../../shared/models/animal.model';
 import { Farm } from '../../../../shared/models/farm.model';
 import { FarmMovement } from '../../../../shared/models/farm-movement.model';
+import {
+  AnimalDocument,
+  DocumentType,
+  DOCUMENT_TYPE_LABELS,
+  ALLOWED_FILE_TYPES
+} from '../../../../shared/models/document.model';
 import { CommonModule } from '@angular/common';
 import { Timestamp } from '@angular/fire/firestore';
 import { getReproductiveStatusOptions } from '../../../../shared/utils/gestation-period.util';
-//import { formatDateForInput } from '../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-edit-animal',
@@ -36,9 +42,31 @@ export class EditAnimalComponent implements OnInit {
   transferNotes: string = '';
   reproductiveStatusOptions: Array<{value: string, label: string}> = [];
 
+  // Document upload properties
+  documents: AnimalDocument[] = [];
+  isUploading: boolean = false;
+  uploadProgress: number = 0;
+  uploadError: string = '';
+  selectedDocumentType: DocumentType = 'other';
+  documentDescription: string = '';
+  documentTypeOptions = DOCUMENT_TYPE_LABELS;
+  acceptedFileTypes = ALLOWED_FILE_TYPES.join(',');
+
+  // Image upload properties
+  isUploadingImage: boolean = false;
+  imageUploadProgress: number = 0;
+  imageUploadError: string = '';
+
+  // Bloodline/Parent selection
+  potentialSires: Animal[] = [];
+  potentialDams: Animal[] = [];
+  sire: Animal | undefined;
+  dam: Animal | undefined;
+
   constructor(
     private animalsService: AnimalsService,
     private farmService: FarmService,
+    private documentService: DocumentService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -52,6 +80,17 @@ export class EditAnimalComponent implements OnInit {
       error: (error) => {
         console.error('Error loading farms:', error);
       }
+    });
+
+    // Load potential parents for bloodline selection
+    this.animalsService.getPotentialSires().subscribe({
+      next: (sires) => this.potentialSires = sires,
+      error: (error) => console.error('Error loading sires:', error)
+    });
+
+    this.animalsService.getPotentialDams().subscribe({
+      next: (dams) => this.potentialDams = dams,
+      error: (error) => console.error('Error loading dams:', error)
     });
 
     // Load animal
@@ -83,6 +122,20 @@ export class EditAnimalComponent implements OnInit {
             });
           }
 
+          // Load parent details for bloodline display
+          if (animal?.sireId) {
+            this.animalsService.getAnimal(animal.sireId).subscribe({
+              next: (sire) => this.sire = sire,
+              error: (error) => console.error('Error loading sire:', error)
+            });
+          }
+          if (animal?.damId) {
+            this.animalsService.getAnimal(animal.damId).subscribe({
+              next: (dam) => this.dam = dam,
+              error: (error) => console.error('Error loading dam:', error)
+            });
+          }
+
           // Load movement history
           this.farmService.getAnimalMovementHistory(animalId).subscribe({
             next: (movements) => {
@@ -92,8 +145,21 @@ export class EditAnimalComponent implements OnInit {
               console.error('Error loading movement history:', error);
             }
           });
+
+          // Load documents
+          this.loadDocuments(animalId);
         });
     }
+
+    // Subscribe to upload progress
+    this.documentService.getUploadProgress().subscribe({
+      next: (progress) => {
+        this.uploadProgress = progress.progress;
+        if (progress.state === 'success' || progress.state === 'error') {
+          this.isUploading = false;
+        }
+      }
+    });
   }
 
   onSexChange(event: any): void {
@@ -131,6 +197,8 @@ export class EditAnimalComponent implements OnInit {
       status: form.value.status,
       reproductiveStatus: form.value.reproductiveStatus || 'unknown',
       currentFarmId: form.value.currentFarmId || undefined,
+      sireId: form.value.sireId || undefined,
+      damId: form.value.damId || undefined,
     };
 
     // Check if farm changed
@@ -241,7 +309,243 @@ export class EditAnimalComponent implements OnInit {
     return 'Unknown';
   }
 
-  //onBackToBreedingEvents() {
-  //  this.router.navigate(['/animals', this.animal?.id, 'breeding']);
-  //}
+  // Document Management Methods
+  loadDocuments(animalId: string): void {
+    this.documentService.getDocumentsByAnimalId(animalId).subscribe({
+      next: (documents) => {
+        this.documents = documents;
+      },
+      error: (error) => {
+        console.error('Error loading documents:', error);
+      }
+    });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+    this.uploadFile(file);
+
+    // Reset the input so the same file can be selected again
+    input.value = '';
+  }
+
+  uploadFile(file: File): void {
+    if (!this.animal?.id || !this.animal?.tenantId) {
+      this.uploadError = 'Animal information not loaded. Please try again.';
+      return;
+    }
+
+    // Validate file
+    const validation = this.documentService.validateFile(file);
+    if (!validation.valid) {
+      this.uploadError = validation.error || 'Invalid file';
+      return;
+    }
+
+    this.isUploading = true;
+    this.uploadError = '';
+    this.uploadProgress = 0;
+
+    this.documentService.uploadDocument(
+      file,
+      this.animal.id,
+      this.animal.tenantId,
+      this.selectedDocumentType,
+      this.documentDescription
+    ).subscribe({
+      next: (document) => {
+        this.documents = [...this.documents, document];
+        this.isUploading = false;
+        this.uploadProgress = 0;
+        this.documentDescription = '';
+        this.selectedDocumentType = 'other';
+        this.successMessage = 'Document uploaded successfully!';
+        this.showSuccessMessage = true;
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('Error uploading document:', error);
+        this.uploadError = error.message || 'Error uploading document. Please try again.';
+        this.isUploading = false;
+        this.uploadProgress = 0;
+      }
+    });
+  }
+
+  deleteDocument(document: AnimalDocument): void {
+    if (!confirm(`Are you sure you want to delete "${document.originalName}"?`)) {
+      return;
+    }
+
+    this.documentService.deleteDocument(document).subscribe({
+      next: () => {
+        this.documents = this.documents.filter(d => d.id !== document.id);
+        this.successMessage = 'Document deleted successfully!';
+        this.showSuccessMessage = true;
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('Error deleting document:', error);
+        alert('Error deleting document. Please try again.');
+      }
+    });
+  }
+
+  getFileIcon(fileType: string): string {
+    return this.documentService.getFileIcon(fileType);
+  }
+
+  formatFileSize(bytes: number): string {
+    return this.documentService.formatFileSize(bytes);
+  }
+
+  getDocumentTypeLabel(type: DocumentType | undefined): string {
+    if (!type) return 'Other';
+    return DOCUMENT_TYPE_LABELS[type] || 'Other';
+  }
+
+  getDocumentTypeKeys(): DocumentType[] {
+    return Object.keys(DOCUMENT_TYPE_LABELS) as DocumentType[];
+  }
+
+  // Image Upload Methods
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+    this.uploadImage(file);
+    input.value = '';
+  }
+
+  uploadImage(file: File): void {
+    if (!this.animal?.id || !this.animal?.tenantId) {
+      this.imageUploadError = 'Animal information not loaded. Please try again.';
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      this.imageUploadError = 'Please select an image file (JPG, PNG, GIF, etc.)';
+      return;
+    }
+
+    this.isUploadingImage = true;
+    this.imageUploadError = '';
+    this.imageUploadProgress = 0;
+
+    // Delete old image if exists
+    const oldImagePath = this.animal.imageStoragePath;
+
+    this.documentService.uploadAnimalImage(
+      file,
+      this.animal.id,
+      this.animal.tenantId
+    ).subscribe({
+      next: (result) => {
+        // Update animal with new image URL
+        if (this.animal) {
+          this.animal.imageUrl = result.downloadUrl;
+          this.animal.imageStoragePath = result.storagePath;
+
+          // Save to database
+          this.animalsService.updateAnimal(this.animal).subscribe({
+            next: () => {
+              this.isUploadingImage = false;
+              this.imageUploadProgress = 0;
+              this.successMessage = 'Image uploaded successfully!';
+              this.showSuccessMessage = true;
+
+              // Delete old image if it existed
+              if (oldImagePath) {
+                this.documentService.deleteAnimalImage(oldImagePath).subscribe();
+              }
+
+              setTimeout(() => {
+                this.showSuccessMessage = false;
+              }, 3000);
+            },
+            error: (error) => {
+              console.error('Error saving image URL:', error);
+              this.imageUploadError = 'Error saving image. Please try again.';
+              this.isUploadingImage = false;
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error uploading image:', error);
+        this.imageUploadError = error.message || 'Error uploading image. Please try again.';
+        this.isUploadingImage = false;
+        this.imageUploadProgress = 0;
+      }
+    });
+  }
+
+  removeImage(): void {
+    if (!this.animal?.imageStoragePath || !confirm('Are you sure you want to remove this image?')) {
+      return;
+    }
+
+    const storagePath = this.animal.imageStoragePath;
+
+    this.documentService.deleteAnimalImage(storagePath).subscribe({
+      next: () => {
+        if (this.animal) {
+          this.animal.imageUrl = undefined;
+          this.animal.imageStoragePath = undefined;
+
+          this.animalsService.updateAnimal(this.animal).subscribe({
+            next: () => {
+              this.successMessage = 'Image removed successfully!';
+              this.showSuccessMessage = true;
+              setTimeout(() => {
+                this.showSuccessMessage = false;
+              }, 3000);
+            },
+            error: (error) => {
+              console.error('Error updating animal:', error);
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting image:', error);
+        alert('Error removing image. Please try again.');
+      }
+    });
+  }
+
+  onDeleteAnimal(): void {
+    if (!this.animal?.id) {
+      return;
+    }
+
+    const confirmMessage = `Are you sure you want to delete "${this.animal.name}"?\n\nThis will permanently delete the animal and all associated records (health, breeding, etc.). This action cannot be undone.`;
+
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    this.animalsService.deleteAnimal(this.animal).subscribe({
+      next: () => {
+        alert('Animal deleted successfully.');
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Error deleting animal:', error);
+        alert('Error deleting animal. Please try again.');
+      }
+    });
+  }
 }

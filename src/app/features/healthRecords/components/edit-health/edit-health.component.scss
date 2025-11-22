@@ -391,7 +391,7 @@ textarea.form-control {
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: darken($bg-hover, 2%);
+    background-color: color.adjust($bg-hover, $lightness: -2%);
   }
 
   .form-check-input {

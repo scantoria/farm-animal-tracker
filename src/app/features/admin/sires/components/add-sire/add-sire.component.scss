@@ -1,0 +1,262 @@
+// add-sire.component.scss
+
+// Variables
+$primary-color: #2563eb;
+$primary-hover: #1d4ed8;
+$border-color: #e5e7eb;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$bg-hover: #f9fafb;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$border-radius: 8px;
+$danger-color: #ef4444;
+
+// Breakpoints
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+
+// Page Container
+.page-container {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+
+  @media (min-width: $breakpoint-md) {
+    padding: 1.5rem;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    padding: 2rem;
+  }
+}
+
+// Header
+.form-header {
+  margin-bottom: 1.5rem;
+
+  @media (min-width: $breakpoint-md) {
+    margin-bottom: 2rem;
+  }
+}
+
+.header-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  background: white;
+  color: $text-secondary;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: $bg-hover;
+    color: $text-primary;
+  }
+
+  i {
+    font-size: 1.25rem;
+  }
+}
+
+.header-text {
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 0.25rem 0;
+
+    @media (min-width: $breakpoint-md) {
+      font-size: 1.875rem;
+    }
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+    color: $text-secondary;
+    margin: 0;
+  }
+}
+
+// Form Card
+.form-card {
+  background: white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+
+  @media (min-width: $breakpoint-md) {
+    padding: 2rem;
+  }
+}
+
+// Form Sections
+.form-section-header {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $border-color;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  .section-description {
+    font-size: 0.8125rem;
+    color: $text-secondary;
+    margin: 0.25rem 0 0 0;
+  }
+}
+
+// Form Grid
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+// Form Groups
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  &.full-width {
+    @media (min-width: $breakpoint-md) {
+      grid-column: span 2;
+    }
+  }
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $text-primary;
+  margin-bottom: 0.375rem;
+
+  .required {
+    color: $danger-color;
+  }
+}
+
+.form-control {
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  background-color: white;
+  color: $text-primary;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+  }
+
+  &.is-invalid {
+    border-color: $danger-color;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($danger-color, 0.1);
+    }
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+select.form-control {
+  cursor: pointer;
+}
+
+.invalid-feedback {
+  font-size: 0.8125rem;
+  color: $danger-color;
+  margin-top: 0.25rem;
+}
+
+// Form Actions
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $border-color;
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  color: white;
+  box-shadow: $shadow-sm;
+
+  &:hover:not(:disabled) {
+    background-color: $primary-hover;
+    box-shadow: $shadow-md;
+  }
+}
+
+.btn-secondary {
+  background-color: white;
+  color: $text-secondary;
+  border: 1px solid $border-color;
+
+  &:hover:not(:disabled) {
+    background-color: $bg-hover;
+    color: $text-primary;
+  }
+}

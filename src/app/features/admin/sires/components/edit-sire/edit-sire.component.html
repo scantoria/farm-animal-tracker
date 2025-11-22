@@ -1,0 +1,260 @@
+<div class="page-container">
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading sire...</p>
+  </div>
+
+  <div *ngIf="!isLoading && sire">
+    <!-- Header Section -->
+    <div class="form-header">
+      <div class="header-content">
+        <button type="button" class="btn-back" routerLink="/admin/sires">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <div class="header-text">
+          <h1>Edit Sire</h1>
+          <p class="subtitle">Update information for {{ sire.name }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+        <!-- Basic Information Section -->
+        <div class="form-section-header">
+          <h3>Basic Information</h3>
+        </div>
+
+        <div class="form-grid">
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="name" class="form-label">
+              Sire Name / ID <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              [(ngModel)]="sire.name"
+              required
+              #name="ngModel"
+              class="form-control"
+              placeholder="Enter sire name or ID"
+              [class.is-invalid]="name.invalid && name.touched"
+            />
+            <div class="invalid-feedback" *ngIf="name.invalid && name.touched">
+              <div *ngIf="name.errors?.['required']">Name is required.</div>
+            </div>
+          </div>
+
+          <!-- Registration Number Field -->
+          <div class="form-group">
+            <label for="registrationNumber" class="form-label">
+              Registration Number
+            </label>
+            <input
+              type="text"
+              id="registrationNumber"
+              name="registrationNumber"
+              [(ngModel)]="sire.registrationNumber"
+              class="form-control"
+              placeholder="Official registration number (optional)"
+            />
+          </div>
+
+          <!-- Species Field -->
+          <div class="form-group">
+            <label for="species" class="form-label">
+              Species <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="species"
+              name="species"
+              [(ngModel)]="sire.species"
+              required
+              #species="ngModel"
+              class="form-control"
+              placeholder="e.g., Cattle, Goat, Sheep"
+              [class.is-invalid]="species.invalid && species.touched"
+            />
+            <div class="invalid-feedback" *ngIf="species.invalid && species.touched">
+              <div *ngIf="species.errors?.['required']">Species is required.</div>
+            </div>
+          </div>
+
+          <!-- Breed Field -->
+          <div class="form-group">
+            <label for="breed" class="form-label">
+              Breed <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="breed"
+              name="breed"
+              [(ngModel)]="sire.breed"
+              required
+              #breed="ngModel"
+              class="form-control"
+              placeholder="Enter breed"
+              [class.is-invalid]="breed.invalid && breed.touched"
+            />
+            <div class="invalid-feedback" *ngIf="breed.invalid && breed.touched">
+              <div *ngIf="breed.errors?.['required']">Breed is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Source Information Section -->
+        <div class="form-section-header">
+          <h3>Source Information</h3>
+        </div>
+
+        <div class="form-grid">
+          <!-- Source Field -->
+          <div class="form-group">
+            <label for="source" class="form-label">
+              Source Type <span class="required">*</span>
+            </label>
+            <select
+              id="source"
+              name="source"
+              [(ngModel)]="sire.source"
+              required
+              #source="ngModel"
+              class="form-control"
+              [class.is-invalid]="source.invalid && source.touched"
+            >
+              <option value="" disabled>Select source type...</option>
+              <option value="ai">AI (Artificial Insemination)</option>
+              <option value="leased">Leased Bull</option>
+              <option value="owned">Owned</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="source.invalid && source.touched">
+              <div *ngIf="source.errors?.['required']">Source type is required.</div>
+            </div>
+          </div>
+
+          <!-- Provider Field -->
+          <div class="form-group">
+            <label for="provider" class="form-label">
+              Provider / Owner
+            </label>
+            <input
+              type="text"
+              id="provider"
+              name="provider"
+              [(ngModel)]="sire.provider"
+              class="form-control"
+              placeholder="AI company or bull owner name"
+            />
+          </div>
+
+          <!-- Status Field -->
+          <div class="form-group">
+            <label for="status" class="form-label">
+              Status
+            </label>
+            <select
+              id="status"
+              name="status"
+              [(ngModel)]="sire.status"
+              class="form-control"
+            >
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="retired">Retired</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Bloodline Information Section -->
+        <div class="form-section-header">
+          <h3>Bloodline Information (Optional)</h3>
+          <p class="section-description">Enter known parentage to help prevent inbreeding</p>
+        </div>
+
+        <div class="form-grid">
+          <!-- Sire's Sire (Father) Field -->
+          <div class="form-group">
+            <label for="sireName" class="form-label">
+              Sire's Father (Grandsire)
+            </label>
+            <input
+              type="text"
+              id="sireName"
+              name="sireName"
+              [(ngModel)]="sire.sireName"
+              class="form-control"
+              placeholder="Name of sire's father"
+            />
+          </div>
+
+          <!-- Sire's Dam (Mother) Field -->
+          <div class="form-group">
+            <label for="damName" class="form-label">
+              Sire's Mother (Granddam)
+            </label>
+            <input
+              type="text"
+              id="damName"
+              name="damName"
+              [(ngModel)]="sire.damName"
+              class="form-control"
+              placeholder="Name of sire's mother"
+            />
+          </div>
+
+          <!-- Bloodline Field -->
+          <div class="form-group full-width">
+            <label for="bloodline" class="form-label">
+              Known Bloodline / Lineage
+            </label>
+            <input
+              type="text"
+              id="bloodline"
+              name="bloodline"
+              [(ngModel)]="sire.bloodline"
+              class="form-control"
+              placeholder="e.g., Angus Heritage Line, Black Simmental..."
+            />
+          </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="form-section-header">
+          <h3>Additional Notes</h3>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="notes" class="form-label">Notes</label>
+          <textarea
+            id="notes"
+            name="notes"
+            [(ngModel)]="sire.notes"
+            class="form-control"
+            rows="3"
+            placeholder="Any additional information about this sire..."
+          ></textarea>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" routerLink="/admin/sires">
+            <i class="bi bi-x-circle me-1"></i> Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSubmitting">
+            <i class="bi bi-check-circle me-1"></i>
+            {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>

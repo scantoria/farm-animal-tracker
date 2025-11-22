@@ -1,10 +1,10 @@
 // src/app/animals.service.ts
 
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, collectionData } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Animal } from '../../shared/models/animal.model';
+import { Firestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, collectionData, query, where } from '@angular/fire/firestore';
+import { from, Observable, forkJoin, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Animal, AnimalLineage } from '../../shared/models/animal.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +57,64 @@ export class AnimalsService {
     }
     const animalDocRef = doc(this.firestore, `animals/${animal.id}`);
     return from(deleteDoc(animalDocRef));
+  }
+
+  // Get animals by sex (for selecting potential sires/dams)
+  getAnimalsBySex(sex: 'male' | 'female'): Observable<Animal[]> {
+    const animalsCollection = collection(this.firestore, 'animals');
+    const q = query(animalsCollection, where('sex', '==', sex));
+    return collectionData(q, { idField: 'id' }) as Observable<Animal[]>;
+  }
+
+  // Get potential sires (male animals)
+  getPotentialSires(): Observable<Animal[]> {
+    return this.getAnimalsBySex('male');
+  }
+
+  // Get potential dams (female animals)
+  getPotentialDams(): Observable<Animal[]> {
+    return this.getAnimalsBySex('female');
+  }
+
+  // Get animal lineage with parents and grandparents
+  getAnimalLineage(animalId: string): Observable<AnimalLineage | undefined> {
+    return this.getAnimal(animalId).pipe(
+      switchMap(animal => {
+        if (!animal) {
+          return of(undefined);
+        }
+
+        // Fetch parents
+        const sire$ = animal.sireId ? this.getAnimal(animal.sireId) : of(undefined);
+        const dam$ = animal.damId ? this.getAnimal(animal.damId) : of(undefined);
+
+        return forkJoin([sire$, dam$]).pipe(
+          switchMap(([sire, dam]) => {
+            // Fetch grandparents
+            const paternalGrandsire$ = sire?.sireId ? this.getAnimal(sire.sireId) : of(undefined);
+            const paternalGranddam$ = sire?.damId ? this.getAnimal(sire.damId) : of(undefined);
+            const maternalGrandsire$ = dam?.sireId ? this.getAnimal(dam.sireId) : of(undefined);
+            const maternalGranddam$ = dam?.damId ? this.getAnimal(dam.damId) : of(undefined);
+
+            return forkJoin([
+              paternalGrandsire$,
+              paternalGranddam$,
+              maternalGrandsire$,
+              maternalGranddam$
+            ]).pipe(
+              map(([paternalGrandsire, paternalGranddam, maternalGrandsire, maternalGranddam]) => ({
+                animal,
+                sire,
+                dam,
+                paternalGrandsire,
+                paternalGranddam,
+                maternalGrandsire,
+                maternalGranddam
+              }))
+            );
+          })
+        );
+      })
+    );
   }
 }

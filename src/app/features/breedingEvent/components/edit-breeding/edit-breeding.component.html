@@ -64,6 +64,27 @@
         </div>
       </div>
 
+      <!-- Sire/Bull Selection Field -->
+      <div class="form-group">
+        <label for="sireId" class="form-label">
+          Sire / Bull Used
+        </label>
+        <select
+          id="sireId"
+          name="sireId"
+          [(ngModel)]="breedingEvent.sireId"
+          class="form-control"
+        >
+          <option value="">Not specified / Unknown</option>
+          <option *ngFor="let sire of sires" [value]="sire.id">
+            {{ sire.name }} ({{ sire.breed }}) [{{ getSourceLabel(sire.source) }}]{{ getSireBloodline(sire) }}
+          </option>
+        </select>
+        <small class="form-text text-muted">
+          Select the bull/sire used for this breeding event to track bloodlines.
+        </small>
+      </div>
+
       <!-- Notes Field -->
       <div class="form-group">
         <label for="notes" class="form-label">

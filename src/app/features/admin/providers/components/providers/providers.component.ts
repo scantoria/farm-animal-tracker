@@ -40,6 +40,13 @@ export class ProvidersComponent {
       route: '/farms',
       status: 'Active'
     },
+    {
+      name: 'Bulls / Sires / Bucks',
+      description: 'Manage breeding males and track bloodlines.',
+      icon: '🐂',
+      route: '/admin/sires',
+      status: 'Active'
+    },
     // Add other provider types here (e.g., Farm Managers, etc.)
   ];
 

@@ -23,6 +23,10 @@ export class AddAnimalComponent implements OnInit {
   selectedSex: 'male' | 'female' = 'female';
   reproductiveStatusOptions: Array<{value: string, label: string}> = [];
 
+  // Bloodline/Parent selection
+  potentialSires: Animal[] = [];
+  potentialDams: Animal[] = [];
+
   constructor(
     private animalsService: AnimalsService,
     private farmService: FarmService,
@@ -39,6 +43,18 @@ export class AddAnimalComponent implements OnInit {
         console.error('Error loading farms:', error);
       }
     });
+
+    // Load potential parents
+    this.animalsService.getPotentialSires().subscribe({
+      next: (sires) => this.potentialSires = sires,
+      error: (error) => console.error('Error loading sires:', error)
+    });
+
+    this.animalsService.getPotentialDams().subscribe({
+      next: (dams) => this.potentialDams = dams,
+      error: (error) => console.error('Error loading dams:', error)
+    });
+
     this.updateReproductiveStatusOptions();
   }
 
@@ -69,6 +85,8 @@ export class AddAnimalComponent implements OnInit {
       status: form.value.status,
       reproductiveStatus: form.value.reproductiveStatus || 'unknown',
       currentFarmId: form.value.currentFarmId || undefined,
+      sireId: form.value.sireId || undefined,
+      damId: form.value.damId || undefined,
     };
 
     this.animalsService.addAnimal(newAnimal)

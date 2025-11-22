@@ -7,5 +7,6 @@ export interface BreedingEvent {
   date: string | Timestamp | any; // The date of the breeding event (can be string or Firestore Timestamp)
   eventType: string; // e.g., 'Heat Detected', 'Breeding'
   associatedAnimalRef?: DocumentReference; // A reference to the sire or dam
+  sireId?: string; // ID of the bull/sire used for breeding
   notes: string;
 }

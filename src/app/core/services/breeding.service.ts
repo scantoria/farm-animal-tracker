@@ -9,6 +9,9 @@ import {
   updateDoc,
   deleteDoc,
   collectionData,
+  collectionGroup,
+  query,
+  where,
   DocumentReference
 } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
@@ -160,5 +163,13 @@ deleteHormoneTreatment(animalId: string, eventId: string, treatmentId: string) {
   const treatmentDocRef = doc(this.firestore, `animals/${animalId}/breedingEvents/${eventId}/hormoneTreatments/${treatmentId}`);
   return from(deleteDoc(treatmentDocRef));
 }
-  // Note: Add methods for get, update, and delete HormoneTreatment as needed.
+
+  // Get breeding events by sire ID using collection group query
+  getBreedingEventsBySireId(sireId: string): Observable<BreedingEvent[]> {
+    const breedingEventsGroup = collectionGroup(this.firestore, 'breedingEvents');
+    const q = query(breedingEventsGroup, where('sireId', '==', sireId));
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((records) => records as BreedingEvent[])
+    );
+  }
 }

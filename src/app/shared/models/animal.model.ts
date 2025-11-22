@@ -13,6 +13,10 @@ export interface Animal {
   sex: 'male' | 'female';
   status: 'active' | 'sold' | 'deceased';
 
+  // PROFILE IMAGE
+  imageUrl?: string;
+  imageStoragePath?: string;
+
   // REPRODUCTIVE STATUS
   reproductiveStatus?: 'open' | 'pregnant' | 'intact' | 'castrated' | 'unknown';
 
@@ -33,6 +37,23 @@ export interface Animal {
   
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
+}
+
+// Lineage interface for displaying bloodline information
+export interface AnimalLineage {
+  animal: Animal;
+  sire?: Animal;
+  dam?: Animal;
+  paternalGrandsire?: Animal;
+  paternalGranddam?: Animal;
+  maternalGrandsire?: Animal;
+  maternalGranddam?: Animal;
+}
+
+// Simplified parent info for display
+export interface ParentInfo {
+  id: string;
+  name: string;
 }
 
 // Type guards

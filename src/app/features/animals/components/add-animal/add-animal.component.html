@@ -145,9 +145,10 @@
           <select
             id="reproductiveStatus"
             name="reproductiveStatus"
-            ngModel="unknown"
+            ngModel
             class="form-control"
           >
+            <option value="" disabled selected>Select reproductive status...</option>
             <option value="unknown">Unknown</option>
             <option *ngFor="let option of reproductiveStatusOptions" [value]="option.value">
               {{ option.label }}
@@ -181,6 +182,49 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- Bloodline Section -->
+      <div class="form-section-header">
+        <h3>Bloodline / Parentage</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Sire (Father) Field -->
+        <div class="form-group">
+          <label for="sireId" class="form-label">
+            Sire (Father)
+          </label>
+          <select
+            id="sireId"
+            name="sireId"
+            ngModel
+            class="form-control"
+          >
+            <option value="">Unknown / Not in system</option>
+            <option *ngFor="let sire of potentialSires" [value]="sire.id">
+              {{ sire.name }} ({{ sire.breed }})
+            </option>
+          </select>
+        </div>
+
+        <!-- Dam (Mother) Field -->
+        <div class="form-group">
+          <label for="damId" class="form-label">
+            Dam (Mother)
+          </label>
+          <select
+            id="damId"
+            name="damId"
+            ngModel
+            class="form-control"
+          >
+            <option value="">Unknown / Not in system</option>
+            <option *ngFor="let dam of potentialDams" [value]="dam.id">
+              {{ dam.name }} ({{ dam.breed }})
+            </option>
+          </select>
+        </div>
       </div>
 
       <!-- Current Farm Location Section -->

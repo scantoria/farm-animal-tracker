@@ -79,6 +79,11 @@ import { FeedSupplierComponent } from './features/admin/feedSupplier/component/f
 import { AddFeedSupplierComponent } from './features/admin/feedSupplier/component/add-feed-supplier.component/add-feed-supplier.component';
 import { EditFeedSupplierComponent } from './features/admin/feedSupplier/component/edit-feed-supplier.component/edit-feed-supplier.component';
 
+// Sires Management
+import { SiresManagementComponent } from './features/admin/sires/components/sires-management/sires-management.component';
+import { AddSireComponent } from './features/admin/sires/components/add-sire/add-sire.component';
+import { EditSireComponent } from './features/admin/sires/components/edit-sire/edit-sire.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -162,6 +167,11 @@ export const routes: Routes = [
     { path: 'admin/feed-suppliers', component: FeedSupplierComponent, canActivate: [AuthGuard] },
     { path: 'admin/feed-suppliers/add', component: AddFeedSupplierComponent, canActivate: [AuthGuard] },
     { path: 'admin/feed-suppliers/edit/:id', component: EditFeedSupplierComponent, canActivate: [AuthGuard] },
+
+    // Sires Management Admin
+    { path: 'admin/sires', component: SiresManagementComponent, canActivate: [AuthGuard] },
+    { path: 'admin/sires/add', component: AddSireComponent, canActivate: [AuthGuard] },
+    { path: 'admin/sires/edit/:sireId', component: EditSireComponent, canActivate: [AuthGuard] },
 
     /*{
         path: ':id/edit',

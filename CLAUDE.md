@@ -115,7 +115,7 @@ Services in `core/services/` handle:
 
 Key services:
 - `auth.service.ts` - Authentication (signIn, signUp, signOut, currentUser$)
-- `animals.service.ts` - Animal CRUD
+- `animals.service.ts` - Animal CRUD, bloodline/lineage tracking
 - `health.service.ts` - Health records
 - `breeding.service.ts` - Breeding events, pregnancy checks, hormone treatments
 - `birthing.service.ts` - Birthing schedules
@@ -125,6 +125,9 @@ Key services:
 - `veterinarian-data.service.ts` - Veterinarian management
 - `user-data.service.ts` - User data management
 - `confirm.service.ts` - Confirmation dialogs
+- `sire.service.ts` - External sires management (AI, leased bulls)
+- `document.service.ts` - Document/file upload management
+- `farm.service.ts` - Farm locations and animal transfers
 
 ### Styling
 
@@ -150,3 +153,28 @@ The project has `skipTests: true` configured for all Angular schematics (compone
 3. **Observable Pattern**: Services return Observables; components subscribe in templates with async pipe
 4. **Route Parameters**: Access via `ActivatedRoute` - common params are `id` (animalId), `recordId`, `eventId`, `checkId`, `treatmentId`
 5. **Navigation**: Use `Router` service or `[routerLink]` directive with array syntax
+
+## Git Workflow
+
+**Always create a feature branch before making code changes.**
+
+Before starting any feature or bug fix:
+1. Create a new branch: `git checkout -b feature/descriptive-name` or `git checkout -b fix/descriptive-name`
+2. Make changes on the feature branch
+3. Commit with descriptive messages
+4. User will review and merge to main when ready
+
+Branch naming conventions:
+- `feature/` - New features (e.g., `feature/sires-management`)
+- `fix/` - Bug fixes (e.g., `fix/form-validation`)
+- `refactor/` - Code refactoring
+- `docs/` - Documentation updates
+
+## Deployment
+
+Deploy to Firebase Hosting:
+```bash
+ng build && firebase deploy
+```
+
+Hosting URL: https://farmanimaltracker.web.app

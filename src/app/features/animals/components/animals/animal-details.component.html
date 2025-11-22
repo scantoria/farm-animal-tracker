@@ -1,5 +1,5 @@
 <div class="page-container">
-  
+
   <div class="header-bar">
     <h1>Farm Animal Registry</h1>
     <button class="btn btn-primary" [routerLink]="['/add-animal']">
@@ -7,12 +7,113 @@
     </button>
   </div>
 
+  <!-- Sorting and Grouping Controls -->
+  <div class="controls-bar">
+    <div class="control-group">
+      <label for="sortBy" class="control-label">Sort by:</label>
+      <select id="sortBy" [(ngModel)]="sortBy" (ngModelChange)="onSortChange()" class="form-select form-select-sm">
+        <option value="name">Name</option>
+        <option value="species">Species</option>
+        <option value="dob">Date of Birth</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label class="control-label group-toggle">
+        <input type="checkbox" [(ngModel)]="groupBySpecies" (ngModelChange)="onGroupToggle()" class="form-check-input">
+        <span>Group by Species</span>
+      </label>
+    </div>
+  </div>
+
   <div *ngIf="animals$ | async as animals; else loading">
     <div *ngIf="animals.length > 0; else noAnimals">
-      
-      <div class="animal-list list-group">
-        
+
+      <!-- Grouped View -->
+      <div *ngIf="groupBySpecies" class="grouped-view">
+        <div *ngFor="let group of groupedAnimals; trackBy: trackBySpecies" class="species-group">
+          <div class="species-header">
+            <h2 class="species-title">{{ group.species }}</h2>
+            <span class="species-count">{{ group.animals.length }} animal{{ group.animals.length !== 1 ? 's' : '' }}</span>
+          </div>
+
+          <div class="animal-list list-group">
+            <div class="list-header d-none d-lg-grid">
+              <div class="header-col name-col">Name / Tag #</div>
+              <div class="header-col species-col">Species</div>
+              <div class="header-col breed-col">Breed</div>
+              <div class="header-col status-col">Status</div>
+              <div class="header-col repro-col">Reproductive</div>
+              <div class="header-col dob-col">DOB</div>
+              <div class="header-col due-date-col">Est. Due Date</div>
+              <div class="header-col action-col"></div>
+            </div>
+
+            <a
+              class="list-group-item animal-row"
+              *ngFor="let animal of group.animals; trackBy: trackByAnimalId"
+              [routerLink]="['/edit-animal', animal.id!]">
+
+              <div class="animal-data animal-name-col">
+                <span class="d-lg-none data-label">Animal name or Tag:</span>
+                <div class="name-id-wrapper">
+                  <h3 class="animal-name">{{ animal.name }}</h3>
+                  <span class="animal-parents" *ngIf="animal.sireId || animal.damId">
+                    {{ getParentNames(animal) }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="animal-data animal-species-col">
+                <span class="d-lg-none data-label">Species:</span>
+                {{ animal.species }}
+              </div>
+
+              <div class="animal-data animal-breed-col">
+                <span class="d-lg-none data-label">Breed:</span>
+                {{ animal.breed }}
+              </div>
+
+              <div class="animal-data animal-status-col">
+                <span class="d-lg-none data-label">Status:</span>
+                <span class="status-badge status-{{ animal.status | lowercase }}">
+                  {{ animal.status || 'Active' }}
+                </span>
+              </div>
+
+              <div class="animal-data animal-repro-col">
+                <span class="d-lg-none data-label">Reproductive:</span>
+                <span class="repro-status repro-{{ animal.reproductiveStatus }}">
+                  {{ getReproductiveStatusDisplay(animal) }}
+                </span>
+              </div>
+
+              <div class="animal-data animal-dob-col">
+                <span class="d-lg-none data-label">DOB:</span>
+                {{ animal.dob || 'N/A' }}
+              </div>
+
+              <div class="animal-data animal-due-date-col">
+                <span class="d-lg-none data-label" *ngIf="animal.reproductiveStatus === 'pregnant'">Est. Due Date:</span>
+                <span class="due-date-text" *ngIf="animal.reproductiveStatus === 'pregnant'">
+                  {{ getEstimatedDueDate(animal) }}
+                </span>
+                <span *ngIf="animal.reproductiveStatus !== 'pregnant'">-</span>
+              </div>
+
+              <div class="animal-data animal-chevron-col">
+                <i class="bi bi-chevron-right chevron-icon"></i>
+              </div>
+
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flat List View (default) -->
+      <div *ngIf="!groupBySpecies" class="animal-list list-group">
+
         <div class="list-header d-none d-lg-grid">
+          <div class="header-col image-col"></div>
           <div class="header-col name-col">Name / Tag #</div>
           <div class="header-col species-col">Species</div>
           <div class="header-col breed-col">Breed</div>
@@ -23,15 +124,27 @@
           <div class="header-col action-col"></div>
         </div>
 
-        <a 
-        class="list-group-item animal-row" 
-        *ngFor="let animal of animals; trackBy: trackByAnimalId" 
+        <a
+        class="list-group-item animal-row"
+        *ngFor="let animal of animals; trackBy: trackByAnimalId"
           [routerLink]="['/edit-animal', animal.id!]"  >
-          
+
+          <div class="animal-data animal-image-col">
+            <div class="animal-thumbnail" *ngIf="animal.imageUrl">
+              <img [src]="animal.imageUrl" [alt]="animal.name" />
+            </div>
+            <div class="animal-thumbnail placeholder" *ngIf="!animal.imageUrl">
+              <i class="bi bi-image"></i>
+            </div>
+          </div>
+
           <div class="animal-data animal-name-col">
             <span class="d-lg-none data-label">Animal name or Tag:</span>
-            <div class="name-id-wrapper"> <h3 class="animal-name">{{ animal.name }}</h3>
-              <!--// <span class="animal-id">{{ animal.id }}</span> //-->
+            <div class="name-id-wrapper">
+              <h3 class="animal-name">{{ animal.name }}</h3>
+              <span class="animal-parents" *ngIf="animal.sireId || animal.damId">
+                {{ getParentNames(animal) }}
+              </span>
             </div>
           </div>
           

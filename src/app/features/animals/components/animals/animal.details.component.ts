@@ -6,17 +6,23 @@ import { BreedingService } from '../../../../core/services/breeding.service';
 import { Animal } from '../../../../shared/models/animal.model';
 import { BreedingEvent } from '../../../../shared/models/breeding.model';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { calculateDueDate, formatDueDate } from '../../../../shared/utils/gestation-period.util';
-import { Timestamp } from '@angular/fire/firestore'; 
+import { Timestamp } from '@angular/fire/firestore';
+import { FormsModule } from '@angular/forms';
+
+interface GroupedAnimals {
+  species: string;
+  animals: Animal[];
+}
 
 @Component({
   selector: 'app-animals',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   providers: [AnimalsService],
   templateUrl: './animal-details.component.html',
   styleUrl: './animal-details.component.scss'
@@ -25,6 +31,14 @@ export class AnimalsComponent implements OnInit {
 
   animals$!: Observable<Animal[]>;
   pregnantAnimalDueDates: Map<string, string> = new Map();
+
+  // Sorting and grouping properties
+  sortBy: 'name' | 'species' | 'dob' = 'name';
+  groupBySpecies: boolean = false;
+  groupedAnimals: GroupedAnimals[] = [];
+
+  // Bloodline lookup map (animal ID -> animal name)
+  animalNameMap: Map<string, string> = new Map();
 
   constructor(
     private animalsService: AnimalsService,
@@ -57,15 +71,52 @@ export class AnimalsComponent implements OnInit {
     });
 
     this.animals$ = this.animalsService.getAll().pipe(
+      map(animals => this.sortAnimals(animals)),
       tap(animals => {
+        // Build animal name lookup map for bloodline display
+        this.animalNameMap.clear();
+        animals.forEach(animal => {
+          if (animal.id) {
+            this.animalNameMap.set(animal.id, animal.name);
+          }
+        });
+
         // For each pregnant animal, fetch their latest breeding event
         animals.forEach(animal => {
           if (animal.reproductiveStatus === 'pregnant' && animal.id) {
             this.loadEstimatedDueDate(animal);
           }
         });
+
+        // Update grouped animals if grouping is enabled
+        if (this.groupBySpecies) {
+          this.updateGroupedAnimals(animals);
+        }
       })
     );
+  }
+
+  // Get parent names for bloodline display
+  getParentNames(animal: Animal): string {
+    const sireName = animal.sireId ? this.animalNameMap.get(animal.sireId) : null;
+    const damName = animal.damId ? this.animalNameMap.get(animal.damId) : null;
+
+    if (sireName && damName) {
+      return `${sireName} × ${damName}`;
+    } else if (sireName) {
+      return `Sire: ${sireName}`;
+    } else if (damName) {
+      return `Dam: ${damName}`;
+    }
+    return '-';
+  }
+
+  getSireName(animal: Animal): string {
+    return animal.sireId ? (this.animalNameMap.get(animal.sireId) || 'Unknown') : '-';
+  }
+
+  getDamName(animal: Animal): string {
+    return animal.damId ? (this.animalNameMap.get(animal.damId) || 'Unknown') : '-';
   }
 
   private loadEstimatedDueDate(animal: Animal): void {
@@ -120,12 +171,97 @@ export class AnimalsComponent implements OnInit {
           next: () => {
             console.log('Animal deleted successfully.');
             // Re-fetch the list to update the view
-            this.animals$ = this.animalsService.getAll();
+            this.animals$ = this.animalsService.getAll().pipe(
+              map(animals => this.sortAnimals(animals)),
+              tap(animals => {
+                if (this.groupBySpecies) {
+                  this.updateGroupedAnimals(animals);
+                }
+              })
+            );
           },
           error: (error) => {
             console.error('Error deleting animal:', error);
           }
         });
     }
+  }
+
+  // Sorting logic
+  sortAnimals(animals: Animal[]): Animal[] {
+    const sortedAnimals = [...animals];
+
+    switch (this.sortBy) {
+      case 'species':
+        return sortedAnimals.sort((a, b) => {
+          const speciesA = (a.species || '').toLowerCase();
+          const speciesB = (b.species || '').toLowerCase();
+          if (speciesA === speciesB) {
+            return (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase());
+          }
+          return speciesA.localeCompare(speciesB);
+        });
+
+      case 'dob':
+        return sortedAnimals.sort((a, b) => {
+          const dateA = a.dob ? this.convertToDate(a.dob).getTime() : 0;
+          const dateB = b.dob ? this.convertToDate(b.dob).getTime() : 0;
+          return dateB - dateA; // Newest first
+        });
+
+      case 'name':
+      default:
+        return sortedAnimals.sort((a, b) =>
+          (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase())
+        );
+    }
+  }
+
+  // Grouping logic
+  updateGroupedAnimals(animals: Animal[]): void {
+    const groups = new Map<string, Animal[]>();
+
+    animals.forEach(animal => {
+      const species = animal.species || 'Unknown';
+      if (!groups.has(species)) {
+        groups.set(species, []);
+      }
+      groups.get(species)!.push(animal);
+    });
+
+    this.groupedAnimals = Array.from(groups.entries())
+      .map(([species, animals]) => ({ species, animals }))
+      .sort((a, b) => a.species.localeCompare(b.species));
+  }
+
+  // Event handlers
+  onSortChange(): void {
+    this.animals$ = this.animalsService.getAll().pipe(
+      map(animals => this.sortAnimals(animals)),
+      tap(animals => {
+        // For each pregnant animal, fetch their latest breeding event
+        animals.forEach(animal => {
+          if (animal.reproductiveStatus === 'pregnant' && animal.id) {
+            this.loadEstimatedDueDate(animal);
+          }
+        });
+
+        if (this.groupBySpecies) {
+          this.updateGroupedAnimals(animals);
+        }
+      })
+    );
+  }
+
+  onGroupToggle(): void {
+    this.animals$.subscribe(animals => {
+      if (this.groupBySpecies) {
+        this.updateGroupedAnimals(animals);
+      }
+    });
+  }
+
+  trackBySpecies(index: number, group: GroupedAnimals): string {
+    return group.species;
   }
 }

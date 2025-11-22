@@ -6,6 +6,45 @@
     {{ successMessage }}
   </div>
 
+  <!-- Animal Image Section -->
+  <div class="image-upload-section">
+    <label class="section-label">Animal Photo</label>
+    <div class="image-container">
+      <div class="image-preview" *ngIf="animal.imageUrl">
+        <img [src]="animal.imageUrl" [alt]="animal.name" />
+        <button type="button" class="btn-remove-image" (click)="removeImage()" title="Remove image">
+          <i class="bi bi-x-circle-fill"></i>
+        </button>
+      </div>
+      <div class="image-upload-placeholder" *ngIf="!animal.imageUrl && !isUploadingImage">
+        <input
+          type="file"
+          id="imageInput"
+          (change)="onImageSelected($event)"
+          accept="image/*"
+          hidden
+        />
+        <label for="imageInput" class="upload-image-label">
+          <i class="bi bi-camera"></i>
+          <span>Add Photo</span>
+        </label>
+      </div>
+      <div class="image-uploading" *ngIf="isUploadingImage">
+        <div class="spinner-small"></div>
+        <span>Uploading...</span>
+      </div>
+    </div>
+    <div class="change-image-btn" *ngIf="animal.imageUrl && !isUploadingImage">
+      <input type="file" id="changeImageInput" (change)="onImageSelected($event)" accept="image/*" hidden />
+      <label for="changeImageInput" class="btn btn-sm btn-secondary">
+        <i class="bi bi-pencil me-1"></i> Change Photo
+      </label>
+    </div>
+    <div class="upload-error" *ngIf="imageUploadError">
+      <i class="bi bi-exclamation-triangle me-1"></i>{{ imageUploadError }}
+    </div>
+  </div>
+
   <!-- Input for Name -->
   <div class="form-group">
     <label for="name">Animal name or Tag:</label>
@@ -69,6 +108,7 @@
   <div class="form-group">
     <label for="reproductiveStatus">Reproductive Status:</label>
     <select id="reproductiveStatus" name="reproductiveStatus" [(ngModel)]="animal.reproductiveStatus" class="form-control">
+      <option value="" disabled>Select reproductive status...</option>
       <option value="unknown">Unknown</option>
       <option *ngFor="let option of reproductiveStatusOptions" [value]="option.value">
         {{ option.label }}
@@ -92,6 +132,39 @@
     </div>
   </div>
 
+  <!-- Bloodline / Parentage Section -->
+  <div class="form-section">
+    <h3 class="section-title">Bloodline / Parentage</h3>
+
+    <!-- Sire (Father) Field -->
+    <div class="form-group">
+      <label for="sireId">Sire (Father):</label>
+      <select id="sireId" name="sireId" [(ngModel)]="animal.sireId" class="form-control">
+        <option [value]="undefined">Unknown / Not in system</option>
+        <option *ngFor="let sireOption of potentialSires" [value]="sireOption.id">
+          {{ sireOption.name }} ({{ sireOption.breed }})
+        </option>
+      </select>
+      <div class="parent-info" *ngIf="sire">
+        <small class="text-muted">Current: {{ sire.name }} - {{ sire.breed }}</small>
+      </div>
+    </div>
+
+    <!-- Dam (Mother) Field -->
+    <div class="form-group">
+      <label for="damId">Dam (Mother):</label>
+      <select id="damId" name="damId" [(ngModel)]="animal.damId" class="form-control">
+        <option [value]="undefined">Unknown / Not in system</option>
+        <option *ngFor="let damOption of potentialDams" [value]="damOption.id">
+          {{ damOption.name }} ({{ damOption.breed }})
+        </option>
+      </select>
+      <div class="parent-info" *ngIf="dam">
+        <small class="text-muted">Current: {{ dam.name }} - {{ dam.breed }}</small>
+      </div>
+    </div>
+  </div>
+
   <!-- Current Farm Assignment -->
   <div class="form-group">
     <label for="currentFarmId">Current Farm Location:</label>
@@ -103,6 +176,9 @@
 
   <!-- Action buttons section -->
   <div class="form-actions">
+    <button type="button" class="btn btn-danger" (click)="onDeleteAnimal()">
+      <i class="bi bi-trash me-1"></i> Delete Animal
+    </button>
     <button type="submit" [disabled]="form.invalid" class="btn btn-primary">Update Animal</button>
   </div>
 </form>
@@ -173,6 +249,106 @@
     </a>
   </div>
 </form>
+
+<!-- Documents Section -->
+<div class="documents-section" *ngIf="animal">
+  <div class="section-header">
+    <h3><i class="bi bi-folder2-open me-2"></i>Documents</h3>
+    <span class="document-count">{{ documents.length }} file{{ documents.length !== 1 ? 's' : '' }}</span>
+  </div>
+
+  <!-- Upload Form -->
+  <div class="upload-form">
+    <div class="upload-row">
+      <div class="form-group">
+        <label for="documentType" class="form-label">Document Type</label>
+        <select
+          id="documentType"
+          [(ngModel)]="selectedDocumentType"
+          class="form-control"
+          name="documentType"
+        >
+          <option value="" disabled>Select document type...</option>
+          <option *ngFor="let type of getDocumentTypeKeys()" [value]="type">
+            {{ documentTypeOptions[type] }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group description-field">
+        <label for="documentDescription" class="form-label">Description (Optional)</label>
+        <input
+          type="text"
+          id="documentDescription"
+          [(ngModel)]="documentDescription"
+          class="form-control"
+          name="documentDescription"
+          placeholder="Brief description of the document"
+        />
+      </div>
+    </div>
+
+    <div class="upload-area" [class.uploading]="isUploading">
+      <input
+        type="file"
+        id="fileInput"
+        (change)="onFileSelected($event)"
+        [accept]="acceptedFileTypes"
+        [disabled]="isUploading"
+        hidden
+      />
+      <label for="fileInput" class="upload-label" *ngIf="!isUploading">
+        <i class="bi bi-cloud-upload"></i>
+        <span class="upload-text">Click to upload or drag and drop</span>
+        <span class="upload-hint">PDF, Images, Word, Excel (Max 10MB)</span>
+      </label>
+      <div class="upload-progress" *ngIf="isUploading">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+        </div>
+        <span class="progress-text">Uploading... {{ uploadProgress | number:'1.0-0' }}%</span>
+      </div>
+    </div>
+
+    <div class="upload-error" *ngIf="uploadError">
+      <i class="bi bi-exclamation-triangle me-1"></i>
+      {{ uploadError }}
+    </div>
+  </div>
+
+  <!-- Document List -->
+  <div class="document-list" *ngIf="documents.length > 0">
+    <div class="document-item" *ngFor="let doc of documents">
+      <div class="document-icon">
+        <i class="bi" [ngClass]="getFileIcon(doc.fileType)"></i>
+      </div>
+      <div class="document-info">
+        <a [href]="doc.downloadUrl" target="_blank" class="document-name">
+          {{ doc.originalName }}
+        </a>
+        <div class="document-meta">
+          <span class="document-type-badge">{{ getDocumentTypeLabel(doc.documentType) }}</span>
+          <span class="document-size">{{ formatFileSize(doc.fileSize) }}</span>
+        </div>
+        <p class="document-description" *ngIf="doc.description">{{ doc.description }}</p>
+      </div>
+      <div class="document-actions">
+        <a [href]="doc.downloadUrl" target="_blank" class="btn btn-sm btn-outline-primary" title="Download">
+          <i class="bi bi-download"></i>
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteDocument(doc)" title="Delete">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="no-documents" *ngIf="documents.length === 0">
+    <i class="bi bi-file-earmark-x"></i>
+    <p>No documents uploaded yet</p>
+    <span>Upload registration papers, health certificates, or other supporting documents</span>
+  </div>
+</div>
 
 <!-- Movement History Section -->
 <div class="movement-history-section" *ngIf="movementHistory.length > 0">

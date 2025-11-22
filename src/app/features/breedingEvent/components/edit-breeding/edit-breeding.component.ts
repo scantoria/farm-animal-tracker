@@ -6,7 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BreedingEvent } from '../../../../shared/models/breeding.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
 import { AnimalsService } from '../../../../core/services/animals.service';
+import { SireService } from '../../../../core/services/sire.service';
 import { Animal } from '../../../../shared/models/animal.model';
+import { Sire } from '../../../../shared/models/sire.model';
 
 @Component({
   selector: 'app-edit-breeding',
@@ -20,12 +22,14 @@ export class EditBreedingComponent implements OnInit {
   eventId!: string;
   breedingEvent: BreedingEvent | undefined;
   animalName: string = '';
+  sires: Sire[] = [];
 
   constructor(
     private breedingService: BreedingService,
     private route: ActivatedRoute,
     private router: Router,
-    private animalsService: AnimalsService
+    private animalsService: AnimalsService,
+    private sireService: SireService
   ) { }
 
   ngOnInit(): void {
@@ -34,9 +38,40 @@ export class EditBreedingComponent implements OnInit {
 
     if (this.animalId && this.eventId) {
       this.loadAnimalInfo();
+      this.loadSires();
       this.breedingService.getBreedingEvent(this.animalId, this.eventId).subscribe(event => {
         this.breedingEvent = event;
       });
+    }
+  }
+
+  loadSires(): void {
+    this.sireService.getAll().subscribe({
+      next: (sires) => {
+        this.sires = sires;
+      },
+      error: (error) => console.error('Error loading sires:', error)
+    });
+  }
+
+  getSireBloodline(sire: Sire): string {
+    if (sire.sireName || sire.damName) {
+      const parents = [];
+      if (sire.sireName) parents.push(`Sire: ${sire.sireName}`);
+      if (sire.damName) parents.push(`Dam: ${sire.damName}`);
+      return ` — ${parents.join(', ')}`;
+    } else if (sire.bloodline) {
+      return ` — ${sire.bloodline}`;
+    }
+    return '';
+  }
+
+  getSourceLabel(source: string): string {
+    switch (source) {
+      case 'ai': return 'AI';
+      case 'leased': return 'Leased';
+      case 'owned': return 'Owned';
+      default: return source;
     }
   }
 
@@ -59,8 +94,10 @@ export class EditBreedingComponent implements OnInit {
     }
 
     const updatedEvent: Partial<BreedingEvent> = {
-      ...form.value,
-      date: new Date(form.value.date)
+      date: form.value.date,
+      eventType: form.value.eventType,
+      notes: form.value.notes,
+      sireId: form.value.sireId || undefined,
     };
 
     this.breedingService.updateBreedingEvent(this.animalId, this.eventId, updatedEvent)

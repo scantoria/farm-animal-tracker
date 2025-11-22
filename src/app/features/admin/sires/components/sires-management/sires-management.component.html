@@ -1,0 +1,167 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" routerLink="/admin/providers">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Bulls / Sires / Bucks Management</h1>
+        <p class="subtitle">Manage external breeding males (AI sires & leased bulls)</p>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="onAddSire()">
+      <i class="bi bi-plus-circle me-1"></i> Add New Sire
+    </button>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label for="search" class="filter-label">Search:</label>
+      <input
+        type="text"
+        id="search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Search by name, breed, or provider..."
+        class="form-control form-control-sm"
+      />
+    </div>
+    <div class="filter-group">
+      <label for="speciesFilter" class="filter-label">Species:</label>
+      <select
+        id="speciesFilter"
+        [(ngModel)]="speciesFilter"
+        (ngModelChange)="onSpeciesFilterChange()"
+        class="form-select form-select-sm"
+      >
+        <option value="">All Species</option>
+        <option *ngFor="let species of availableSpecies" [value]="species">{{ species }}</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="sourceFilter" class="filter-label">Source:</label>
+      <select
+        id="sourceFilter"
+        [(ngModel)]="sourceFilter"
+        (ngModelChange)="onSourceFilterChange()"
+        class="form-select form-select-sm"
+      >
+        <option value="">All Sources</option>
+        <option value="ai">AI (Artificial Insemination)</option>
+        <option value="leased">Leased</option>
+        <option value="owned">Owned</option>
+      </select>
+    </div>
+    <div class="results-count">
+      {{ filteredSires.length }} sire{{ filteredSires.length !== 1 ? 's' : '' }} found
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading sires...</p>
+  </div>
+
+  <!-- Sires List -->
+  <div *ngIf="!isLoading">
+    <div *ngIf="filteredSires.length > 0; else noSires" class="sires-list">
+
+      <!-- Desktop Table Header -->
+      <div class="list-header d-none d-lg-grid">
+        <div class="header-col">Name / Reg #</div>
+        <div class="header-col">Species / Breed</div>
+        <div class="header-col">Bloodline</div>
+        <div class="header-col">Source</div>
+        <div class="header-col">Breeding Count</div>
+        <div class="header-col">Actions</div>
+      </div>
+
+      <!-- Sire Rows -->
+      <div class="sire-row" *ngFor="let sire of filteredSires; trackBy: trackBySireId">
+
+        <!-- Name Column -->
+        <div class="sire-data name-col">
+          <span class="d-lg-none data-label">Name:</span>
+          <div class="sire-name-wrapper">
+            <h3 class="sire-name">{{ sire.name }}</h3>
+            <span class="registration-number" *ngIf="sire.registrationNumber">
+              #{{ sire.registrationNumber }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Species/Breed Column -->
+        <div class="sire-data species-col">
+          <span class="d-lg-none data-label">Species / Breed:</span>
+          <div class="species-breed">
+            <span class="species">{{ sire.species }}</span>
+            <span class="breed">{{ sire.breed }}</span>
+          </div>
+        </div>
+
+        <!-- Bloodline Column -->
+        <div class="sire-data bloodline-col">
+          <span class="d-lg-none data-label">Bloodline:</span>
+          <div class="bloodline-info">
+            <span *ngIf="sire.sireName || sire.damName || sire.bloodline">{{ getBloodlineDisplay(sire) }}</span>
+            <span *ngIf="!sire.sireName && !sire.damName && !sire.bloodline" class="unknown-bloodline">Unknown</span>
+          </div>
+        </div>
+
+        <!-- Source Column -->
+        <div class="sire-data source-col">
+          <span class="d-lg-none data-label">Source:</span>
+          <div class="source-info">
+            <span class="source-badge source-{{ sire.source }}">
+              {{ getSourceLabel(sire.source) }}
+            </span>
+            <span class="provider" *ngIf="sire.provider">{{ sire.provider }}</span>
+          </div>
+        </div>
+
+        <!-- Breeding Count Column -->
+        <div class="sire-data count-col">
+          <span class="d-lg-none data-label">Breeding Events:</span>
+          <div class="breeding-count">
+            <span class="count-badge" [class.has-events]="sire.breedingCount > 0">
+              {{ sire.breedingCount }}
+            </span>
+            <span class="count-label">event{{ sire.breedingCount !== 1 ? 's' : '' }}</span>
+          </div>
+        </div>
+
+        <!-- Actions Column -->
+        <div class="sire-data actions-col">
+          <button class="btn-action btn-edit" (click)="onEditSire(sire.id!)" title="Edit Sire">
+            <i class="bi bi-pencil"></i>
+            <span class="btn-text">Edit</span>
+          </button>
+          <button class="btn-action btn-delete" (click)="onDeleteSire(sire)" title="Delete Sire">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- No Sires State -->
+    <ng-template #noSires>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-gender-male"></i>
+        </div>
+        <h3>No Sires Found</h3>
+        <p *ngIf="searchTerm || speciesFilter || sourceFilter">No sires match your current filters. Try adjusting your search criteria.</p>
+        <p *ngIf="!searchTerm && !speciesFilter && !sourceFilter">Add your first sire to start tracking breeding males for AI or leased bulls.</p>
+        <button class="btn btn-primary" (click)="onAddSire()">
+          <i class="bi bi-plus-circle me-1"></i> Add First Sire
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

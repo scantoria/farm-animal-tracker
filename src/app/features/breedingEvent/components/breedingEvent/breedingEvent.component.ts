@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
 import { BreedingEvent } from '../../../../shared/models/breeding.model';
 import { BreedingService } from '../../../../core/services/breeding.service';
 import { AnimalsService } from '../../../../core/services/animals.service';
+import { SireService } from '../../../../core/services/sire.service';
 import { Animal } from '../../../../shared/models/animal.model';
+import { Sire } from '../../../../shared/models/sire.model';
 
 @Component({
   selector: 'app-breeding',
@@ -19,20 +21,72 @@ export class BreedingEventComponent implements OnInit {
   breedingEvents$!: Observable<BreedingEvent[]>;
   animalId!: string;
   animalName: string = '';
+  sireMap: Map<string, Sire> = new Map();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private breedingService: BreedingService,
-    private animalsService: AnimalsService
+    private animalsService: AnimalsService,
+    private sireService: SireService
   ) {}
 
   ngOnInit(): void {
     this.animalId = this.route.snapshot.paramMap.get('id')!;
     if (this.animalId) {
       this.loadAnimalInfo();
+      this.loadSires();
       this.loadEvents();
     }
+  }
+
+  loadSires(): void {
+    this.sireService.getAll().subscribe({
+      next: (sires) => {
+        sires.forEach(sire => {
+          if (sire.id) {
+            this.sireMap.set(sire.id, sire);
+          }
+        });
+      },
+      error: (error) => console.error('Error loading sires:', error)
+    });
+  }
+
+  getSireName(event: BreedingEvent): string {
+    if (!event.sireId) return '';
+    const sire = this.sireMap.get(event.sireId);
+    return sire ? sire.name : 'Unknown';
+  }
+
+  getSireInfo(event: BreedingEvent): string {
+    if (!event.sireId) return '';
+    const sire = this.sireMap.get(event.sireId);
+    if (!sire) return '';
+    return `${sire.breed} (${this.getSourceLabel(sire.source)})`;
+  }
+
+  getSourceLabel(source: string): string {
+    switch (source) {
+      case 'ai': return 'AI';
+      case 'leased': return 'Leased';
+      case 'owned': return 'Owned';
+      default: return source;
+    }
+  }
+
+  getSireBloodline(event: BreedingEvent): string {
+    if (!event.sireId) return '';
+    const sire = this.sireMap.get(event.sireId);
+    if (!sire) return '';
+
+    const parts = [];
+    if (sire.sireName) parts.push(`Grandsire: ${sire.sireName}`);
+    if (sire.damName) parts.push(`Granddam: ${sire.damName}`);
+    if (parts.length === 0 && sire.bloodline) {
+      return sire.bloodline;
+    }
+    return parts.length > 0 ? parts.join(', ') : '';
   }
 
   loadAnimalInfo() {

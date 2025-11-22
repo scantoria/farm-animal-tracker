@@ -161,7 +161,7 @@ $breakpoint-lg: 1024px;
 
   @media (min-width: $breakpoint-lg) {
     display: grid;
-    grid-template-columns: 1.25fr 1fr 2fr 2.5fr;
+    grid-template-columns: 1.25fr 1fr 1.25fr 2fr 2fr;
     gap: 1rem;
     padding: 1rem 1.5rem;
     background-color: #f9fafb;
@@ -200,7 +200,7 @@ $breakpoint-lg: 1024px;
   // Desktop: Table Row Style
   @media (min-width: $breakpoint-lg) {
     display: grid;
-    grid-template-columns: 1.25fr 1fr 2fr 2.5fr;
+    grid-template-columns: 1.25fr 1fr 1.25fr 2fr 2fr;
     gap: 1rem;
     align-items: center;
     padding: 1rem 1.5rem;
@@ -280,6 +280,32 @@ $breakpoint-lg: 1024px;
 .date-value {
   font-weight: 500;
   color: $text-primary;
+}
+
+// Sire Column
+.sire-col {
+  order: 3;
+
+  @media (min-width: $breakpoint-lg) {
+    order: unset;
+  }
+}
+
+.sire-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.sire-name {
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.sire-bloodline {
+  font-size: 0.75rem;
+  color: $text-secondary;
+  display: block;
 }
 
 // Notes Column
