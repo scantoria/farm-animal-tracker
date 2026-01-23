@@ -82,22 +82,16 @@
       <!-- Notes Field -->
       <div class="form-group">
         <label for="notes" class="form-label">
-          Notes <span class="required">*</span>
+          Notes <span class="optional">(Optional)</span>
         </label>
         <textarea
           id="notes"
           name="notes"
-          #notesField="ngModel"
           ngModel
-          required
           rows="4"
           placeholder="Enter any relevant details about this breeding event..."
           class="form-control"
-          [class.is-invalid]="notesField.invalid && notesField.touched"
         ></textarea>
-        <div class="invalid-feedback" *ngIf="notesField.invalid && notesField.touched">
-          Notes are required.
-        </div>
       </div>
 
       <!-- Form Actions -->

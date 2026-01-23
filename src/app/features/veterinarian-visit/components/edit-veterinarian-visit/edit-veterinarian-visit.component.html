@@ -46,25 +46,19 @@
       <!-- Veterinarian Field -->
       <div class="form-group">
         <label for="veterinarianName" class="form-label">
-          Veterinarian <span class="required">*</span>
+          Veterinarian <span class="optional">(Optional)</span>
         </label>
         <select
           id="veterinarianName"
           name="veterinarianName"
           [(ngModel)]="visitRecord.veterinarianName"
-          required
-          #veterinarianField="ngModel"
           class="form-control"
-          [class.is-invalid]="veterinarianField.invalid && veterinarianField.touched"
         >
-          <option value="" disabled>Select veterinarian...</option>
+          <option value="">Select veterinarian...</option>
           <option *ngFor="let vet of veterinarians$ | async" [value]="vet.name">
             {{ vet.name }}{{ vet.clinic ? ' - ' + vet.clinic : '' }}
           </option>
         </select>
-        <div class="invalid-feedback" *ngIf="veterinarianField.invalid && veterinarianField.touched">
-          Veterinarian is required.
-        </div>
         <small class="form-text">Select the veterinarian who performed the visit</small>
       </div>
 

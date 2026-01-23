@@ -104,41 +104,32 @@
         <!-- Sire ID -->
         <div class="form-group">
           <label for="sire" class="form-label">
-            Sire ID <span class="required">*</span>
+            Sire ID <span class="optional">(Optional)</span>
           </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="sire" 
-            name="sire" 
-            [(ngModel)]="newRecord.sire" 
+          <input
+            type="text"
+            class="form-control"
+            id="sire"
+            name="sire"
+            [(ngModel)]="newRecord.sire"
             placeholder="Enter sire identification"
-            required
-            #sireField="ngModel"
           >
-          <div class="form-error" *ngIf="sireField.invalid && sireField.touched">
-            Sire ID is required
-          </div>
+          <small class="form-help">Leave blank if unknown</small>
         </div>
 
         <!-- Birth Weight -->
         <div class="form-group">
           <label for="birthWeight" class="form-label">
-            Birth Weight <span class="required">*</span>
+            Birth Weight <span class="optional">(Optional)</span>
           </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="birthWeight" 
-            name="birthWeight" 
-            [(ngModel)]="newRecord.birthWeight" 
+          <input
+            type="text"
+            class="form-control"
+            id="birthWeight"
+            name="birthWeight"
+            [(ngModel)]="newRecord.birthWeight"
             placeholder="e.g., 85 lbs or 38.5 kg"
-            required
-            #weightField="ngModel"
           >
-          <div class="form-error" *ngIf="weightField.invalid && weightField.touched">
-            Birth weight is required
-          </div>
           <small class="form-help">Include units (lbs, kg, etc.)</small>
         </div>
 
@@ -165,22 +156,17 @@
         <!-- Calving Ease -->
         <div class="form-group">
           <label for="calvingEase" class="form-label">
-            Calving Ease <span class="required">*</span>
+            Calving Ease <span class="optional">(Optional)</span>
           </label>
-          <select 
-            class="form-control" 
-            id="calvingEase" 
-            name="calvingEase" 
-            [(ngModel)]="newRecord.calvingEase" 
-            required
-            #easeField="ngModel"
+          <select
+            class="form-control"
+            id="calvingEase"
+            name="calvingEase"
+            [(ngModel)]="newRecord.calvingEase"
           >
-            <option value="" disabled selected>Select calving ease</option>
+            <option value="" selected>Select calving ease</option>
             <option *ngFor="let ease of calvingEaseOptions" [value]="ease">{{ ease }}</option>
           </select>
-          <div class="form-error" *ngIf="easeField.invalid && easeField.touched">
-            Calving ease is required
-          </div>
         </div>
 
         <!-- Notes - Full Width -->

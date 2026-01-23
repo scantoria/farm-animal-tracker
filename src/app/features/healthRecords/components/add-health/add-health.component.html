@@ -65,37 +65,37 @@
       <!-- Description Field -->
       <div class="form-group">
         <label for="description" class="form-label">
-          Description <span class="optional">(Optional)</span>
+          Description <span class="required">*</span>
         </label>
         <textarea
           id="description"
           name="description"
+          #descriptionField="ngModel"
           ngModel
+          required
           rows="4"
           class="form-control"
           placeholder="Enter details about the health event..."
+          [class.is-invalid]="descriptionField.invalid && descriptionField.touched"
         ></textarea>
+        <div class="invalid-feedback" *ngIf="descriptionField.invalid && descriptionField.touched">
+          Description is required.
+        </div>
       </div>
 
       <!-- Administered By Field -->
       <div class="form-group">
         <label for="administeredBy" class="form-label">
-          Administered By <span class="required">*</span>
+          Administered By <span class="optional">(Optional)</span>
         </label>
         <input
           type="text"
           id="administeredBy"
           name="administeredBy"
-          #administeredByField="ngModel"
           ngModel
-          required
           class="form-control"
           placeholder="Veterinarian or staff name"
-          [class.is-invalid]="administeredByField.invalid && administeredByField.touched"
         />
-        <div class="invalid-feedback" *ngIf="administeredByField.invalid && administeredByField.touched">
-          Administrator name is required.
-        </div>
       </div>
 
       <!-- Dosage Field -->

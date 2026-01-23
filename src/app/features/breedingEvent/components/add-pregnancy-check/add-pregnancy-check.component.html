@@ -64,45 +64,33 @@
       <!-- Confirmation Method Field -->
       <div class="form-group">
         <label for="confirmationMethod" class="form-label">
-          Confirmation Method <span class="required">*</span>
+          Confirmation Method <span class="optional">(Optional)</span>
         </label>
         <select
           id="confirmationMethod"
           name="confirmationMethod"
-          #methodField="ngModel"
           ngModel
-          required
           class="form-control"
-          [class.is-invalid]="methodField.invalid && methodField.touched"
         >
-          <option value="" disabled selected>Select method...</option>
+          <option value="" selected>Select method...</option>
           <option *ngFor="let method of checkMethods" [value]="method">
             {{ method }}
           </option>
         </select>
-        <div class="invalid-feedback" *ngIf="methodField.invalid && methodField.touched">
-          Confirmation method is required.
-        </div>
       </div>
 
       <!-- Next Check Date Field -->
       <div class="form-group">
         <label for="nextCheckDate" class="form-label">
-          Next Check Date <span class="required">*</span>
+          Next Check Date <span class="optional">(Optional)</span>
         </label>
         <input
           type="date"
           id="nextCheckDate"
           name="nextCheckDate"
-          #nextCheckField="ngModel"
           ngModel
-          required
           class="form-control"
-          [class.is-invalid]="nextCheckField.invalid && nextCheckField.touched"
         />
-        <div class="invalid-feedback" *ngIf="nextCheckField.invalid && nextCheckField.touched">
-          Next check date is required.
-        </div>
       </div>
 
       <!-- Notes Field -->

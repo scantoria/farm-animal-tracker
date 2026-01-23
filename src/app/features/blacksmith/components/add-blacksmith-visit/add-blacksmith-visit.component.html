@@ -23,24 +23,19 @@
         <!-- Blacksmith Provider -->
         <div class="form-group">
           <label for="provider" class="form-label">
-            Blacksmith Provider <span class="required">*</span>
+            Blacksmith Provider <span class="optional">(Optional)</span>
           </label>
-          <select 
-            class="form-control" 
-            id="provider" 
-            name="provider" 
-            [(ngModel)]="visitData.provider" 
-            required 
-            #providerControl="ngModel"
+          <select
+            class="form-control"
+            id="provider"
+            name="provider"
+            [(ngModel)]="visitData.provider"
           >
-            <option value="" disabled selected>Select Blacksmith</option>
+            <option value="" selected>Select Blacksmith</option>
             <option *ngFor="let bs of blacksmiths$ | async" [value]="bs.name">
               {{ bs.name }}
             </option>
           </select>
-          <div class="form-error" *ngIf="providerControl.invalid && providerControl.touched">
-            Blacksmith provider is required
-          </div>
         </div>
 
         <!-- Visit Date -->
