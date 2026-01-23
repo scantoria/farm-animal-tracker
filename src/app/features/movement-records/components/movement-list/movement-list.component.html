@@ -1,0 +1,199 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" [routerLink]="['/']">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Movement Records</h1>
+        <p class="subtitle">Track animal movements between farms</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Mode Tabs -->
+  <div class="view-tabs">
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="viewMode === 'movements'"
+      (click)="setViewMode('movements')"
+    >
+      <i class="bi bi-arrow-left-right"></i>
+      Movement History
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="viewMode === 'inventory'"
+      (click)="setViewMode('inventory')"
+    >
+      <i class="bi bi-box-seam"></i>
+      Farm Inventory
+    </button>
+  </div>
+
+  <!-- MOVEMENT HISTORY VIEW -->
+  <div class="view-section" *ngIf="viewMode === 'movements'">
+
+    <!-- Filters -->
+    <div class="filters-card">
+      <div class="filters-header">
+        <h3><i class="bi bi-funnel"></i> Filters</h3>
+        <button type="button" class="btn-clear" (click)="clearFilters()">
+          Clear All
+        </button>
+      </div>
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label for="filterFarm">Farm</label>
+          <select id="filterFarm" [(ngModel)]="filters.farmId" (change)="applyFilters()">
+            <option [value]="undefined">All Farms</option>
+            <option *ngFor="let farm of farms" [value]="farm.id">{{ farm.name }}</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterReason">Reason</label>
+          <select id="filterReason" [(ngModel)]="filters.reason" (change)="applyFilters()">
+            <option [value]="undefined">All Reasons</option>
+            <option *ngFor="let reason of reasonOptions" [value]="reason">{{ reason }}</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterStartDate">From Date</label>
+          <input type="date" id="filterStartDate" [(ngModel)]="filters.startDate" (change)="applyFilters()" />
+        </div>
+        <div class="filter-group">
+          <label for="filterEndDate">To Date</label>
+          <input type="date" id="filterEndDate" [(ngModel)]="filters.endDate" (change)="applyFilters()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading movement records...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && movements.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-arrow-left-right"></i>
+      </div>
+      <h3>No Movement Records</h3>
+      <p>Movement records will appear here when animals are transferred between farms.</p>
+    </div>
+
+    <!-- Movement Records List -->
+    <div class="records-list" *ngIf="!isLoading && movements.length > 0">
+      <div class="list-header">
+        <span class="count-badge">{{ movements.length }} records</span>
+      </div>
+
+      <div class="movement-card" *ngFor="let movement of movements; trackBy: trackByMovementId">
+        <div class="movement-header">
+          <div class="animal-info">
+            <span class="animal-name">{{ movement.animalName || 'Animal #' + movement.animalId }}</span>
+            <span class="movement-date">{{ formatDate(movement.movementDate) }}</span>
+          </div>
+          <span class="reason-badge" *ngIf="movement.reason">{{ movement.reason }}</span>
+        </div>
+
+        <div class="movement-path">
+          <div class="farm-from">
+            <span class="farm-label">From</span>
+            <span class="farm-name">{{ movement.fromFarmName || getFarmName(movement.fromFarmId) }}</span>
+          </div>
+          <div class="arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
+          <div class="farm-to">
+            <span class="farm-label">To</span>
+            <span class="farm-name">{{ movement.toFarmName || getFarmName(movement.toFarmId) }}</span>
+          </div>
+        </div>
+
+        <div class="movement-notes" *ngIf="movement.notes">
+          <i class="bi bi-chat-left-text"></i>
+          {{ movement.notes }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FARM INVENTORY VIEW -->
+  <div class="view-section" *ngIf="viewMode === 'inventory'">
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoadingInventory">
+      <div class="spinner"></div>
+      <p>Loading farm inventory...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoadingInventory && inventorySummary.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-box-seam"></i>
+      </div>
+      <h3>No Farms Found</h3>
+      <p>Create farms and assign animals to see inventory.</p>
+      <button type="button" class="btn-primary" [routerLink]="['/farms']">
+        <i class="bi bi-plus-circle"></i>
+        Manage Farms
+      </button>
+    </div>
+
+    <!-- Inventory Summary -->
+    <div class="inventory-section" *ngIf="!isLoadingInventory && inventorySummary.length > 0">
+
+      <!-- Summary Stats -->
+      <div class="summary-stats">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="bi bi-geo-alt"></i></div>
+          <div class="stat-content">
+            <span class="stat-value">{{ inventorySummary.length }}</span>
+            <span class="stat-label">Active Farms</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="bi bi-list-check"></i></div>
+          <div class="stat-content">
+            <span class="stat-value">{{ getTotalInventory() }}</span>
+            <span class="stat-label">Total Animals</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Farm Inventory Cards -->
+      <div class="inventory-grid">
+        <div class="inventory-card" *ngFor="let summary of inventorySummary; trackBy: trackByFarmId">
+          <div class="inventory-header">
+            <h3>{{ summary.farmName }}</h3>
+            <span class="total-count">{{ summary.totalAnimals }} animals</span>
+          </div>
+
+          <div class="species-breakdown" *ngIf="getSpeciesKeys(summary).length > 0">
+            <div class="species-item" *ngFor="let species of getSpeciesKeys(summary)">
+              <span class="species-name">{{ species }}</span>
+              <span class="species-count">{{ summary.animalsBySpecies[species] }}</span>
+            </div>
+          </div>
+
+          <div class="inventory-actions">
+            <a [routerLink]="['/farms', summary.farmId]" class="btn-view">
+              <i class="bi bi-eye"></i>
+              View Farm
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

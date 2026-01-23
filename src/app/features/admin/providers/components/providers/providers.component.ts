@@ -54,6 +54,13 @@ export class ProvidersComponent {
       route: '/admin/users',
       status: 'Active'
     },
+    {
+      name: 'Movement Records',
+      description: 'Track animal movements and farm inventory.',
+      icon: '📦',
+      route: '/movement-records',
+      status: 'Active'
+    },
   ];
 
   constructor(private router: Router) { }

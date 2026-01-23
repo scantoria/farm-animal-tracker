@@ -88,6 +88,9 @@ import { EditSireComponent } from './features/admin/sires/components/edit-sire/e
 import { UserListComponent } from './features/admin/users/component/user-list.component/user-list.component';
 import { EditUserComponent } from './features/admin/users/component/edit-user/edit-user.component';
 
+// Movement Records
+import { MovementListComponent } from './features/movement-records/components/movement-list/movement-list.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -180,6 +183,9 @@ export const routes: Routes = [
     // User Management Admin
     { path: 'admin/users', component: UserListComponent, canActivate: [AuthGuard] },
     { path: 'admin/users/edit/:userId', component: EditUserComponent, canActivate: [AuthGuard] },
+
+    // Movement Records
+    { path: 'movement-records', component: MovementListComponent, canActivate: [AuthGuard] },
 
     /*{
         path: ':id/edit',
