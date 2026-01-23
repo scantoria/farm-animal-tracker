@@ -1,0 +1,157 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" [routerLink]="['/admin/users']">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit User</h1>
+        <p class="subtitle">Update user information and permissions</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading user details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="!isLoading && errorMessage && !user">
+    <div class="error-icon">
+      <i class="bi bi-exclamation-triangle"></i>
+    </div>
+    <h3>Error</h3>
+    <p>{{ errorMessage }}</p>
+    <button type="button" class="btn-primary" [routerLink]="['/admin/users']">
+      Back to Users
+    </button>
+  </div>
+
+  <!-- Edit Form -->
+  <div class="form-card" *ngIf="!isLoading && user">
+
+    <!-- Success Message -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+    </div>
+
+    <!-- Error Message -->
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ errorMessage }}
+    </div>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="form-grid">
+
+        <!-- Email Field (Read-only) -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [value]="user.email"
+            class="form-control"
+            disabled
+            readonly
+          />
+          <small class="form-hint">Email cannot be changed</small>
+        </div>
+
+        <!-- Name Field -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            Display Name <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="user.name"
+            required
+            #name="ngModel"
+            class="form-control"
+            placeholder="Enter user's display name"
+            [class.is-invalid]="name.invalid && name.touched"
+          />
+          <div class="invalid-feedback" *ngIf="name.invalid && name.touched">
+            <div *ngIf="name.errors?.['required']">
+              Name is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Role Field -->
+        <div class="form-group">
+          <label for="role" class="form-label">
+            User Role <span class="required">*</span>
+          </label>
+          <select
+            id="role"
+            name="role"
+            [(ngModel)]="user.role"
+            required
+            #role="ngModel"
+            class="form-control"
+            [class.is-invalid]="role.invalid && role.touched"
+          >
+            <option value="" disabled>Select role...</option>
+            <option *ngFor="let option of roleOptions" [value]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+          <div class="invalid-feedback" *ngIf="role.invalid && role.touched">
+            <div *ngIf="role.errors?.['required']">
+              Role is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Created At (Read-only info) -->
+        <div class="form-group" *ngIf="user.createdAt">
+          <label class="form-label">Account Created</label>
+          <p class="form-static-text">{{ formatTimestamp(user.createdAt) }}</p>
+        </div>
+
+        <!-- Last Login (Read-only info) -->
+        <div class="form-group" *ngIf="user.lastLogin">
+          <label class="form-label">Last Login</label>
+          <p class="form-static-text">{{ formatTimestamp(user.lastLogin) }}</p>
+        </div>
+
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [disabled]="isSaving"
+        >
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="form.invalid || isSaving"
+        >
+          <span *ngIf="!isSaving">
+            <i class="bi bi-check-circle me-1"></i> Save Changes
+          </span>
+          <span *ngIf="isSaving">
+            <span class="spinner-small"></span> Saving...
+          </span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

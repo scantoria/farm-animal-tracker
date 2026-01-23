@@ -84,6 +84,10 @@ import { SiresManagementComponent } from './features/admin/sires/components/sire
 import { AddSireComponent } from './features/admin/sires/components/add-sire/add-sire.component';
 import { EditSireComponent } from './features/admin/sires/components/edit-sire/edit-sire.component';
 
+// User Management
+import { UserListComponent } from './features/admin/users/component/user-list.component/user-list.component';
+import { EditUserComponent } from './features/admin/users/component/edit-user/edit-user.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -172,6 +176,10 @@ export const routes: Routes = [
     { path: 'admin/sires', component: SiresManagementComponent, canActivate: [AuthGuard] },
     { path: 'admin/sires/add', component: AddSireComponent, canActivate: [AuthGuard] },
     { path: 'admin/sires/edit/:sireId', component: EditSireComponent, canActivate: [AuthGuard] },
+
+    // User Management Admin
+    { path: 'admin/users', component: UserListComponent, canActivate: [AuthGuard] },
+    { path: 'admin/users/edit/:userId', component: EditUserComponent, canActivate: [AuthGuard] },
 
     /*{
         path: ':id/edit',

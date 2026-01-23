@@ -47,7 +47,13 @@ export class ProvidersComponent {
       route: '/admin/sires',
       status: 'Active'
     },
-    // Add other provider types here (e.g., Farm Managers, etc.)
+    {
+      name: 'Users',
+      description: 'Manage system users and access permissions.',
+      icon: '👤',
+      route: '/admin/users',
+      status: 'Active'
+    },
   ];
 
   constructor(private router: Router) { }

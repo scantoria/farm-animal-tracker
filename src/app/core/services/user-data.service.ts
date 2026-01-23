@@ -1,8 +1,18 @@
 // src/app/core/services/user-data.service.ts
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Firestore, collection, collectionData, doc, deleteDoc, updateDoc, setDoc } from '@angular/fire/firestore';
+import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  deleteDoc,
+  updateDoc,
+  getDoc,
+  serverTimestamp
+} from '@angular/fire/firestore';
 import { User } from '../../shared/models/user.model';
 
 @Injectable({
@@ -19,20 +29,41 @@ export class UserDataService {
    */
   getAllUsers(): Observable<User[]> {
     const usersRef = collection(this.firestore, this.usersCollection);
-    // Cast the observable data to the User interface
     return collectionData(usersRef, { idField: 'id' }) as Observable<User[]>;
   }
 
   /**
    * Retrieves a single user by ID.
-   * NOTE: This is included for the 'edit' view later.
+   * @param id The user document ID.
+   * @returns An Observable of the User or undefined if not found.
    */
   getUserById(id: string): Observable<User | undefined> {
-    // You would typically use a method that specifically fetches one document
-    // For simplicity, we'll keep the basic structure here, assuming a method exists
-    // that filters or directly fetches a doc by ID. For now, we omit the implementation
-    // until the 'edit-user' component is needed.
-    throw new Error('Method not implemented yet.');
+    const userDocRef = doc(this.firestore, `${this.usersCollection}/${id}`);
+    return from(getDoc(userDocRef)).pipe(
+      map(docSnap => {
+        if (docSnap.exists()) {
+          return {
+            id: docSnap.id,
+            ...docSnap.data()
+          } as User;
+        }
+        return undefined;
+      })
+    );
+  }
+
+  /**
+   * Updates an existing user record.
+   * @param id The user document ID.
+   * @param updates Partial user data to update.
+   * @returns A Promise that resolves when the update is complete.
+   */
+  updateUser(id: string, updates: Partial<User>): Promise<void> {
+    const userDocRef = doc(this.firestore, `${this.usersCollection}/${id}`);
+    return updateDoc(userDocRef, {
+      ...updates,
+      updatedAt: serverTimestamp()
+    });
   }
 
   /**
@@ -44,10 +75,4 @@ export class UserDataService {
     const userDocRef = doc(this.firestore, `${this.usersCollection}/${id}`);
     return deleteDoc(userDocRef);
   }
-
-  /**
-   * Adds a new user to the registry.
-   * NOTE: In a real app, user creation/signup should be handled by Firebase Auth.
-   */
-  // addUpdateUser(user: User): Promise<void> { /* ... implementation for add/edit */ }
 }
