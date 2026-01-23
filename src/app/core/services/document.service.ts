@@ -1,6 +1,6 @@
 // src/app/core/services/document.service.ts
 
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import {
   Storage,
   ref,
@@ -44,7 +44,8 @@ export class DocumentService {
 
   constructor(
     private storage: Storage,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private ngZone: NgZone
   ) {}
 
   /**
@@ -101,63 +102,69 @@ export class DocumentService {
       uploadTask.on(
         'state_changed',
         (snapshot: UploadTaskSnapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.uploadProgress$.next({
-            progress,
-            state: snapshot.state as 'running' | 'paused',
-            bytesTransferred: snapshot.bytesTransferred,
-            totalBytes: snapshot.totalBytes
+          this.ngZone.run(() => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.uploadProgress$.next({
+              progress,
+              state: snapshot.state as 'running' | 'paused',
+              bytesTransferred: snapshot.bytesTransferred,
+              totalBytes: snapshot.totalBytes
+            });
           });
         },
         (error) => {
-          this.uploadProgress$.next({
-            progress: 0,
-            state: 'error',
-            bytesTransferred: 0,
-            totalBytes: file.size
-          });
-          observer.error(error);
-        },
-        async () => {
-          try {
-            // Get download URL
-            const downloadUrl = await getDownloadURL(storageRef);
-
-            // Save metadata to Firestore
-            const documentData: Omit<AnimalDocument, 'id'> = {
-              animalId,
-              tenantId,
-              fileName,
-              originalName: file.name,
-              fileType: file.type,
-              fileSize: file.size,
-              storagePath,
-              downloadUrl,
-              description,
-              documentType,
-              uploadedAt: Timestamp.now()
-            };
-
-            const docRef = await addDoc(
-              collection(this.firestore, 'animalDocuments'),
-              documentData
-            );
-
+          this.ngZone.run(() => {
             this.uploadProgress$.next({
-              progress: 100,
-              state: 'success',
-              bytesTransferred: file.size,
+              progress: 0,
+              state: 'error',
+              bytesTransferred: 0,
               totalBytes: file.size
             });
-
-            observer.next({
-              ...documentData,
-              id: docRef.id
-            });
-            observer.complete();
-          } catch (error) {
             observer.error(error);
-          }
+          });
+        },
+        async () => {
+          this.ngZone.run(async () => {
+            try {
+              // Get download URL
+              const downloadUrl = await getDownloadURL(storageRef);
+
+              // Save metadata to Firestore
+              const documentData: Omit<AnimalDocument, 'id'> = {
+                animalId,
+                tenantId,
+                fileName,
+                originalName: file.name,
+                fileType: file.type,
+                fileSize: file.size,
+                storagePath,
+                downloadUrl,
+                description,
+                documentType,
+                uploadedAt: Timestamp.now()
+              };
+
+              const docRef = await addDoc(
+                collection(this.firestore, 'animalDocuments'),
+                documentData
+              );
+
+              this.uploadProgress$.next({
+                progress: 100,
+                state: 'success',
+                bytesTransferred: file.size,
+                totalBytes: file.size
+              });
+
+              observer.next({
+                ...documentData,
+                id: docRef.id
+              });
+              observer.complete();
+            } catch (error) {
+              observer.error(error);
+            }
+          });
         }
       );
     });
@@ -277,37 +284,43 @@ export class DocumentService {
       uploadTask.on(
         'state_changed',
         (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.uploadProgress$.next({
-            progress,
-            state: snapshot.state as 'running' | 'paused',
-            bytesTransferred: snapshot.bytesTransferred,
-            totalBytes: snapshot.totalBytes
+          this.ngZone.run(() => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.uploadProgress$.next({
+              progress,
+              state: snapshot.state as 'running' | 'paused',
+              bytesTransferred: snapshot.bytesTransferred,
+              totalBytes: snapshot.totalBytes
+            });
           });
         },
         (error) => {
-          this.uploadProgress$.next({
-            progress: 0,
-            state: 'error',
-            bytesTransferred: 0,
-            totalBytes: file.size
-          });
-          observer.error(error);
-        },
-        async () => {
-          try {
-            const downloadUrl = await getDownloadURL(storageRef);
+          this.ngZone.run(() => {
             this.uploadProgress$.next({
-              progress: 100,
-              state: 'success',
-              bytesTransferred: file.size,
+              progress: 0,
+              state: 'error',
+              bytesTransferred: 0,
               totalBytes: file.size
             });
-            observer.next({ downloadUrl, storagePath });
-            observer.complete();
-          } catch (error) {
             observer.error(error);
-          }
+          });
+        },
+        async () => {
+          this.ngZone.run(async () => {
+            try {
+              const downloadUrl = await getDownloadURL(storageRef);
+              this.uploadProgress$.next({
+                progress: 100,
+                state: 'success',
+                bytesTransferred: file.size,
+                totalBytes: file.size
+              });
+              observer.next({ downloadUrl, storagePath });
+              observer.complete();
+            } catch (error) {
+              observer.error(error);
+            }
+          });
         }
       );
     });
