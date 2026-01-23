@@ -64,7 +64,7 @@
       <!-- Description Field -->
       <div class="form-group">
         <label for="description" class="form-label">
-          Description <span class="optional">(Optional)</span>
+          Description <span class="required">*</span>
         </label>
         <textarea
           id="description"
@@ -72,13 +72,17 @@
           rows="4"
           class="form-control"
           placeholder="Enter details about the health event..."
+          [class.is-invalid]="editHealthRecordForm.get('description')?.invalid && editHealthRecordForm.get('description')?.touched"
         ></textarea>
+        <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('description')?.invalid && editHealthRecordForm.get('description')?.touched">
+          Description is required.
+        </div>
       </div>
 
       <!-- Administered By Field -->
       <div class="form-group">
         <label for="administeredBy" class="form-label">
-          Administered By <span class="required">*</span>
+          Administered By <span class="optional">(Optional)</span>
         </label>
         <input
           type="text"
@@ -86,11 +90,7 @@
           formControlName="administeredBy"
           class="form-control"
           placeholder="Veterinarian or staff name"
-          [class.is-invalid]="editHealthRecordForm.get('administeredBy')?.invalid && editHealthRecordForm.get('administeredBy')?.touched"
         />
-        <div class="invalid-feedback" *ngIf="editHealthRecordForm.get('administeredBy')?.invalid && editHealthRecordForm.get('administeredBy')?.touched">
-          Administrator name is required.
-        </div>
       </div>
 
       <!-- Dosage Field -->
@@ -283,6 +283,94 @@
       </div>
 
     </form>
+
+    <!-- Documents Section -->
+    <div class="documents-section">
+      <div class="section-header">
+        <h3><i class="bi bi-folder2-open me-2"></i>Attachments</h3>
+        <span class="document-count">{{ documents.length }} file{{ documents.length !== 1 ? 's' : '' }}</span>
+      </div>
+
+      <!-- Success Message -->
+      <div class="alert alert-success" *ngIf="showSuccessMessage">
+        <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+      </div>
+
+      <!-- Upload Form -->
+      <div class="upload-form">
+        <div class="form-group">
+          <label for="documentDescription" class="form-label">Description (Optional)</label>
+          <input
+            type="text"
+            id="documentDescription"
+            [(ngModel)]="documentDescription"
+            class="form-control"
+            placeholder="Brief description of the document"
+          />
+        </div>
+
+        <div class="upload-area" [class.uploading]="isUploading">
+          <input
+            type="file"
+            id="fileInput"
+            (change)="onFileSelected($event)"
+            [accept]="acceptedFileTypes"
+            [disabled]="isUploading"
+            hidden
+          />
+          <label for="fileInput" class="upload-label" *ngIf="!isUploading">
+            <i class="bi bi-cloud-upload"></i>
+            <span class="upload-text">Click to upload or drag and drop</span>
+            <span class="upload-hint">PDF, Images, Word, Excel (Max 10MB)</span>
+          </label>
+          <div class="upload-progress" *ngIf="isUploading">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+            </div>
+            <span class="progress-text">Uploading... {{ uploadProgress | number:'1.0-0' }}%</span>
+          </div>
+        </div>
+
+        <div class="upload-error" *ngIf="uploadError">
+          <i class="bi bi-exclamation-triangle me-1"></i>
+          {{ uploadError }}
+        </div>
+      </div>
+
+      <!-- Document List -->
+      <div class="document-list" *ngIf="documents.length > 0">
+        <div class="document-item" *ngFor="let doc of documents">
+          <div class="document-icon">
+            <i class="bi" [ngClass]="getFileIcon(doc.fileType)"></i>
+          </div>
+          <div class="document-info">
+            <a [href]="doc.downloadUrl" target="_blank" class="document-name">
+              {{ doc.originalName }}
+            </a>
+            <div class="document-meta">
+              <span class="document-size">{{ formatFileSize(doc.fileSize) }}</span>
+            </div>
+            <p class="document-description" *ngIf="doc.description">{{ doc.description }}</p>
+          </div>
+          <div class="document-actions">
+            <a [href]="doc.downloadUrl" target="_blank" class="btn btn-sm btn-outline-primary" title="Download">
+              <i class="bi bi-download"></i>
+            </a>
+            <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteDocument(doc)" title="Delete">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="no-documents" *ngIf="documents.length === 0">
+        <i class="bi bi-file-earmark-x"></i>
+        <p>No attachments yet</p>
+        <span>Upload lab results, prescriptions, or other related documents</span>
+      </div>
+    </div>
+
   </div>
 
 </div>

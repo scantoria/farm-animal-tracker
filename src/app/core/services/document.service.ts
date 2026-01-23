@@ -342,4 +342,97 @@ export class DocumentService {
         });
     });
   }
+
+  /**
+   * Upload a document for a health record
+   */
+  uploadHealthDocument(
+    file: File,
+    storagePath: string,
+    description?: string
+  ): Observable<{ fileName: string; originalName: string; fileType: string; fileSize: number; storagePath: string; downloadUrl: string; description?: string; uploadedAt: Timestamp }> {
+    return new Observable(observer => {
+      // Validate file first
+      const validation = this.validateFile(file);
+      if (!validation.valid) {
+        observer.error(new Error(validation.error));
+        return;
+      }
+
+      // Create storage reference
+      const storageRef = ref(this.storage, storagePath);
+
+      // Start upload
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          this.ngZone.run(() => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.uploadProgress$.next({
+              progress,
+              state: snapshot.state as 'running' | 'paused',
+              bytesTransferred: snapshot.bytesTransferred,
+              totalBytes: snapshot.totalBytes
+            });
+          });
+        },
+        (error) => {
+          this.ngZone.run(() => {
+            this.uploadProgress$.next({
+              progress: 0,
+              state: 'error',
+              bytesTransferred: 0,
+              totalBytes: file.size
+            });
+            observer.error(error);
+          });
+        },
+        async () => {
+          this.ngZone.run(async () => {
+            try {
+              const downloadUrl = await getDownloadURL(storageRef);
+              this.uploadProgress$.next({
+                progress: 100,
+                state: 'success',
+                bytesTransferred: file.size,
+                totalBytes: file.size
+              });
+              observer.next({
+                fileName: storagePath.split('/').pop() || file.name,
+                originalName: file.name,
+                fileType: file.type,
+                fileSize: file.size,
+                storagePath,
+                downloadUrl,
+                description,
+                uploadedAt: Timestamp.now()
+              });
+              observer.complete();
+            } catch (error) {
+              observer.error(error);
+            }
+          });
+        }
+      );
+    });
+  }
+
+  /**
+   * Delete a health record document from storage
+   */
+  deleteHealthDocument(storagePath: string): Observable<void> {
+    return new Observable(observer => {
+      const storageRef = ref(this.storage, storagePath);
+      deleteObject(storageRef)
+        .then(() => {
+          observer.next();
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
 }
