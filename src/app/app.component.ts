@@ -4,11 +4,12 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastComponent } from './shared/components/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, ToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

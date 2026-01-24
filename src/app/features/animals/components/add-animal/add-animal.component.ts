@@ -10,6 +10,7 @@ import { FarmService } from '../../../../core/services/farm.service';
 import { Animal } from '../../../../shared/models/animal.model';
 import { Farm } from '../../../../shared/models/farm.model';
 import { getReproductiveStatusOptions } from '../../../../shared/utils/gestation-period.util';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-add-animal',
@@ -31,7 +32,8 @@ export class AddAnimalComponent implements OnInit {
     private animalsService: AnimalsService,
     private farmService: FarmService,
     private router: Router,
-    private auth: Auth
+    private auth: Auth,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -92,11 +94,13 @@ export class AddAnimalComponent implements OnInit {
     this.animalsService.addAnimal(newAnimal)
       .subscribe({
         next: () => {
+          this.toastService.success(`${newAnimal.name} added successfully`);
           form.resetForm();
           this.router.navigate(['/']);
         },
         error: (error) => {
           console.error('Error adding animal:', error);
+          this.toastService.error('Failed to add animal');
         }
       });
   }

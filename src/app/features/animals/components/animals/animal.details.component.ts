@@ -13,6 +13,7 @@ import { Auth } from '@angular/fire/auth';
 import { calculateDueDate, formatDueDate } from '../../../../shared/utils/gestation-period.util';
 import { Timestamp } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 interface GroupedAnimals {
   species: string;
@@ -43,7 +44,8 @@ export class AnimalsComponent implements OnInit {
   constructor(
     private animalsService: AnimalsService,
     private breedingService: BreedingService,
-    private auth: Auth
+    private auth: Auth,
+    private toastService: ToastService
   ) { }
 
   getReproductiveStatusDisplay(animal: Animal): string {
@@ -169,7 +171,7 @@ export class AnimalsComponent implements OnInit {
       this.animalsService.deleteAnimal(animal)
         .subscribe({
           next: () => {
-            console.log('Animal deleted successfully.');
+            this.toastService.success(`${animal.name} deleted successfully`);
             // Re-fetch the list to update the view
             this.animals$ = this.animalsService.getAll().pipe(
               map(animals => this.sortAnimals(animals)),
@@ -182,6 +184,7 @@ export class AnimalsComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error deleting animal:', error);
+            this.toastService.error('Failed to delete animal');
           }
         });
     }

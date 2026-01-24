@@ -18,6 +18,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Timestamp } from '@angular/fire/firestore';
 import { getReproductiveStatusOptions } from '../../../../shared/utils/gestation-period.util';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-edit-animal',
@@ -68,7 +69,8 @@ export class EditAnimalComponent implements OnInit {
     private farmService: FarmService,
     private documentService: DocumentService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -296,7 +298,7 @@ export class EditAnimalComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error transferring animal:', error);
-        alert('Error transferring animal. Please try again.');
+        this.toastService.error('Error transferring animal. Please try again.');
       }
     });
   }
@@ -395,7 +397,7 @@ export class EditAnimalComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting document:', error);
-        alert('Error deleting document. Please try again.');
+        this.toastService.error('Error deleting document. Please try again.');
       }
     });
   }
@@ -521,7 +523,7 @@ export class EditAnimalComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting image:', error);
-        alert('Error removing image. Please try again.');
+        this.toastService.error('Error removing image. Please try again.');
       }
     });
   }
@@ -539,12 +541,12 @@ export class EditAnimalComponent implements OnInit {
 
     this.animalsService.deleteAnimal(this.animal).subscribe({
       next: () => {
-        alert('Animal deleted successfully.');
+        this.toastService.success('Animal deleted successfully');
         this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error deleting animal:', error);
-        alert('Error deleting animal. Please try again.');
+        this.toastService.error('Error deleting animal. Please try again.');
       }
     });
   }

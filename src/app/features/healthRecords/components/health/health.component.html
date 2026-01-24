@@ -18,7 +18,8 @@
   </div>
 
   <!-- Records List -->
-  <div class="records-container" *ngIf="healthModel$ | async as records">
+  <ng-container *ngIf="healthModel$ | async as records; else loading">
+  <div class="records-container">
 
     <!-- Desktop Header (hidden on mobile) -->
     <div class="list-header d-none d-lg-grid">
@@ -86,5 +87,13 @@
     </div>
 
   </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading health records...</p>
+    </div>
+  </ng-template>
 
 </div>

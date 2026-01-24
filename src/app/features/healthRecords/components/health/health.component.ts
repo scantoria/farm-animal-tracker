@@ -5,6 +5,7 @@ import { HealthService } from '../../../../core/services/health.service';
 import { HealthModel } from '../../../../shared/models/health.model';
 import { AnimalsService } from '../../../../core/services/animals.service';
 import { Animal } from '../../../../shared/models/animal.model';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -23,7 +24,8 @@ export class HealthComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private healthService: HealthService,
-    private animalsService: AnimalsService
+    private animalsService: AnimalsService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -75,11 +77,12 @@ export class HealthComponent implements OnInit {
     if (confirm('Are you sure you want to delete this health record?')) {
       this.healthService.deleteHealthRecord(this.animalId, recordId).subscribe({
         next: () => {
-          console.log('Record deleted successfully!');
+          this.toastService.success('Health record deleted successfully');
           this.loadRecords();
         },
         error: (error) => {
           console.error('Error deleting health record:', error);
+          this.toastService.error('Failed to delete health record');
         }
       });
     }

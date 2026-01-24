@@ -569,6 +569,7 @@ $breakpoint-lg: 1024px;
 }
 
 // Empty States
+.empty-state,
 .no-animals-container {
   display: flex;
   flex-direction: column;
@@ -601,6 +602,7 @@ $breakpoint-lg: 1024px;
 }
 
 // Loading State
+.loading-state,
 .loading-container {
   display: flex;
   flex-direction: column;

@@ -193,9 +193,23 @@
       </div>
     </div>
     
-    <ng-template #noAnimals>...</ng-template>
+    <ng-template #noAnimals>
+      <div class="empty-state">
+        <i class="bi bi-inbox empty-icon"></i>
+        <h3>No Animals Found</h3>
+        <p>Start building your farm registry by adding your first animal.</p>
+        <button class="btn btn-primary" [routerLink]="['/add-animal']">
+          <i class="bi bi-plus-circle me-1"></i> Add First Animal
+        </button>
+      </div>
+    </ng-template>
   </div>
-  
-  <ng-template #loading>...</ng-template>
+
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading animals...</p>
+    </div>
+  </ng-template>
 
 </div>
