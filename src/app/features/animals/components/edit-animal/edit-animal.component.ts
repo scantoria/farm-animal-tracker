@@ -220,24 +220,33 @@ export class EditAnimalComponent implements OnInit {
             ).subscribe({
               next: () => {
                 const farmName = this.farms.find(f => f.id === form.value.currentFarmId)?.name || 'selected farm';
-                this.successMessage = `Animal moved to ${farmName}`;
-                this.showSuccessMessage = true;
-                setTimeout(() => {
-                  this.showSuccessMessage = false;
-                  this.router.navigate(['/']);
-                }, 2000);
+                this.previousFarmId = form.value.currentFarmId;
+                this.toastService.success(`Animal updated and moved to ${farmName}`);
+
+                // Reload current farm details
+                this.farmService.getFarmById(form.value.currentFarmId).subscribe({
+                  next: (farm) => this.currentFarm = farm,
+                  error: (error) => console.error('Error loading current farm:', error)
+                });
+
+                // Reload movement history
+                this.farmService.getAnimalMovementHistory(this.animal!.id!).subscribe({
+                  next: (movements) => this.movementHistory = movements,
+                  error: (error) => console.error('Error loading movement history:', error)
+                });
               },
               error: (error) => {
                 console.error('Error creating movement record:', error);
-                this.router.navigate(['/']);
+                this.toastService.error('Animal updated but failed to record farm movement');
               }
             });
           } else {
-            this.router.navigate(['/']);
+            this.toastService.success('Animal updated successfully');
           }
         },
         error: (error) => {
           console.error('Error updating animal:', error);
+          this.toastService.error('Error updating animal. Please try again.');
         }
       });
   }
