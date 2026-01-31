@@ -56,9 +56,11 @@
           name="weighDate"
           [(ngModel)]="weighDate"
           #weighDateField="ngModel"
+          #weighDateInput
           required
           class="form-control"
           [class.is-invalid]="weighDateField.invalid && weighDateField.touched"
+          (change)="weighDateInput.blur()"
         />
         <div class="invalid-feedback" *ngIf="weighDateField.invalid && weighDateField.touched">
           Date is required.

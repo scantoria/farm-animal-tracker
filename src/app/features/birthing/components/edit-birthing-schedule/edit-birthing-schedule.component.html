@@ -52,14 +52,16 @@
           <label for="dob" class="form-label">
             Date of Birth <span class="required">*</span>
           </label>
-          <input 
-            type="date" 
-            class="form-control" 
-            id="dob" 
-            name="dob" 
-            [(ngModel)]="birthingRecord.dob" 
+          <input
+            type="date"
+            class="form-control"
+            id="dob"
+            name="dob"
+            [(ngModel)]="birthingRecord.dob"
             required
             #dobField="ngModel"
+            #dobInput
+            (change)="dobInput.blur()"
           >
           <div class="form-error" *ngIf="dobField.invalid && dobField.touched">
             Date of birth is required

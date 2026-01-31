@@ -195,7 +195,11 @@ export class BirthEventService {
       this.firestore,
       `animals/${damId}/birthEvents/${eventId}`
     );
-    return from(updateDoc(eventDocRef, updates));
+    const updateData = {
+      ...updates,
+      updatedAt: Timestamp.now()
+    };
+    return from(updateDoc(eventDocRef, updateData));
   }
 
   /**

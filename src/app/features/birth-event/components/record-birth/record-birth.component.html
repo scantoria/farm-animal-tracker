@@ -28,9 +28,11 @@
           name="birthDate"
           [(ngModel)]="birthDate"
           #birthDateField="ngModel"
+          #birthDateInput
           required
           class="form-control"
           [class.is-invalid]="birthDateField.invalid && birthDateField.touched"
+          (change)="birthDateInput.blur()"
         />
         <div class="invalid-feedback" *ngIf="birthDateField.invalid && birthDateField.touched">
           Birth date is required.
