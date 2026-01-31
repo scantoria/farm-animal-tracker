@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideFirestore, getFirestore, enableIndexedDbPersistence } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { AuthService } from './core/services/auth.service';
@@ -15,7 +15,22 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+
+      // Enable offline persistence
+      enableIndexedDbPersistence(firestore).catch((err) => {
+        if (err.code === 'failed-precondition') {
+          console.warn('Firestore persistence failed: Multiple tabs open');
+        } else if (err.code === 'unimplemented') {
+          console.warn('Firestore persistence not available in this browser');
+        } else {
+          console.error('Firestore persistence error:', err);
+        }
+      });
+
+      return firestore;
+    }),
     provideStorage(() => getStorage()),
     provideCharts(withDefaultRegisterables()),
     AuthService,
