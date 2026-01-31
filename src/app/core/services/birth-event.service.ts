@@ -45,6 +45,15 @@ export class BirthEventService {
   constructor(private firestore: Firestore) {}
 
   /**
+   * Remove undefined values from an object (Firestore doesn't accept undefined)
+   */
+  private removeUndefined<T extends object>(obj: T): Partial<T> {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, value]) => value !== undefined)
+    ) as Partial<T>;
+  }
+
+  /**
    * Records a birth event by:
    * 1. Creating a new Animal record for the calf
    * 2. Creating the BirthEvent record under the dam
@@ -54,8 +63,8 @@ export class BirthEventService {
   recordBirth(data: RecordBirthData): Observable<{ calfId: string; birthEventId: string }> {
     const animalsCollection = collection(this.firestore, 'animals');
 
-    // Step 1: Create the calf animal record
-    const calfAnimal: Omit<Animal, 'id'> = {
+    // Step 1: Create the calf animal record (remove undefined values)
+    const calfAnimal = this.removeUndefined({
       tenantId: data.tenantId,
       name: data.calfName || data.calfTag,
       identifier: data.calfTag,
@@ -65,7 +74,7 @@ export class BirthEventService {
       sex: data.sex === 'Bull' ? 'male' : 'female',
       status: 'active',
       damId: data.damId,
-      sireId: data.sireId,
+      sireId: data.sireId || undefined,
       reproductiveStatus: data.sex === 'Bull' ? 'intact' : 'open',
       birthWeight: data.birthWeight,
       currentWeight: data.birthWeight,
@@ -75,19 +84,19 @@ export class BirthEventService {
       currentFarmName: data.currentFarmName,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-    };
+    });
 
     // Create the calf first
     return from(addDoc(animalsCollection, calfAnimal)).pipe(
       switchMap((calfDocRef) => {
         const calfId = calfDocRef.id;
 
-        // Step 2: Create the BirthEvent record
-        const birthEvent: Omit<BirthEvent, 'id'> = {
+        // Step 2: Create the BirthEvent record (remove undefined values)
+        const birthEvent = this.removeUndefined({
           tenantId: data.tenantId,
           damId: data.damId,
           calfId: calfId,
-          sireId: data.sireId,
+          sireId: data.sireId || undefined,
           sireType: data.sireType,
           birthDate: data.birthDate,
           birthWeight: data.birthWeight,
@@ -96,7 +105,7 @@ export class BirthEventService {
           notes: data.notes,
           createdAt: Timestamp.now(),
           createdBy: data.createdBy,
-        };
+        });
 
         const birthEventsCollection = collection(
           this.firestore,
