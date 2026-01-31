@@ -1,0 +1,126 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text" *ngIf="summary">
+        <h1>{{ summary.animal.name }}</h1>
+        <p class="animal-tag">
+          {{ summary.animal.identifier }}
+          <span class="sex-badge" [class.male]="summary.animal.sex === 'male'" [class.female]="summary.animal.sex === 'female'">
+            {{ summary.animal.sex === 'male' ? 'Steer' : 'Heifer' }}
+          </span>
+        </p>
+      </div>
+    </div>
+    <div class="header-actions" *ngIf="summary">
+      <button class="btn btn-secondary" (click)="onViewAnimal()">
+        <i class="bi bi-eye"></i>
+        <span>View Animal</span>
+      </button>
+      <button class="btn btn-primary" (click)="onAddWeight()">
+        <i class="bi bi-plus-circle"></i>
+        <span>Add Weight</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading calf details...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && summary" class="content-grid">
+
+    <!-- Stats Card -->
+    <div class="stats-card">
+      <h2>Growth Summary</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Current Weight</span>
+          <span class="stat-value large">{{ currentWeight }} <small>lbs</small></span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Age</span>
+          <span class="stat-value">{{ formatMonths(summary.daysOld) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Average ADG</span>
+          <app-adg-badge [adg]="summary.averageADG"></app-adg-badge>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Birth Weight</span>
+          <span class="stat-value">{{ summary.birthWeight || '-' }} <small *ngIf="summary.birthWeight">lbs</small></span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Weight Records</span>
+          <span class="stat-value">{{ summary.totalWeightRecords }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Last Weighed</span>
+          <span class="stat-value" *ngIf="summary.latestWeight">{{ formatDate(summary.latestWeight.weighDate) | date:'MMM d, yyyy' }}</span>
+          <span class="stat-value text-muted" *ngIf="!summary.latestWeight">-</span>
+        </div>
+      </div>
+
+      <!-- Sale Status -->
+      <div class="sale-status-section">
+        <h3>Sale Status</h3>
+        <div class="sale-status-content">
+          <ng-container *ngIf="summary.isSaleReady">
+            <span class="status-badge ready">
+              <i class="bi bi-star-fill"></i> Sale Ready!
+            </span>
+            <p class="sale-note">Weight exceeds {{ targetWeight }} lbs target</p>
+          </ng-container>
+          <ng-container *ngIf="!summary.isSaleReady && summary.daysToSaleWeight !== null">
+            <div class="projection">
+              <span class="days-remaining">{{ summary.daysToSaleWeight }} days</span>
+              <span class="projection-label">to reach {{ targetWeight }} lbs</span>
+            </div>
+            <p class="projected-date" *ngIf="summary.projectedSaleDate">
+              Estimated sale date: <strong>{{ summary.projectedSaleDate | date:'MMMM d, yyyy' }}</strong>
+            </p>
+          </ng-container>
+          <ng-container *ngIf="!summary.isSaleReady && summary.daysToSaleWeight === null">
+            <span class="status-badge tracking">In Progress</span>
+            <p class="sale-note">More weight data needed for projections</p>
+          </ng-container>
+        </div>
+
+        <div class="sale-actions" *ngIf="summary.animal.growthStatus !== 'sold'">
+          <button class="btn btn-outline" (click)="onMarkAsSold()">
+            <i class="bi bi-cash-stack"></i> Mark as Sold
+          </button>
+        </div>
+        <div class="sold-info" *ngIf="summary.animal.growthStatus === 'sold'">
+          <span class="status-badge sold">Sold</span>
+          <p *ngIf="summary.animal.saleDate">Sold on {{ formatDate(summary.animal.saleDate) | date:'MMM d, yyyy' }}</p>
+          <p *ngIf="summary.animal.saleWeight">Sale weight: {{ summary.animal.saleWeight }} lbs</p>
+          <p *ngIf="summary.animal.salePrice">Sale price: ${{ summary.animal.salePrice | number:'1.2-2' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Card -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h2>Growth Chart</h2>
+        <button class="btn-link" (click)="onViewWeightHistory()">
+          View All Records <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+      <app-growth-chart
+        [weightRecords]="weightRecords"
+        [birthWeight]="summary.birthWeight">
+      </app-growth-chart>
+    </div>
+
+  </div>
+
+</div>

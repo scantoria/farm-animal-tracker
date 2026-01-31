@@ -1,0 +1,66 @@
+<div class="calf-card" [class.sale-ready]="summary.isSaleReady">
+
+  <!-- Header -->
+  <div class="card-header">
+    <div class="calf-identity">
+      <h3 class="calf-name">{{ summary.animal.name }}</h3>
+      <span class="calf-tag" *ngIf="summary.animal.identifier">{{ summary.animal.identifier }}</span>
+    </div>
+    <span class="sex-badge" [class.male]="summary.animal.sex === 'male'" [class.female]="summary.animal.sex === 'female'">
+      <i class="bi" [class.bi-gender-male]="summary.animal.sex === 'male'" [class.bi-gender-female]="summary.animal.sex === 'female'"></i>
+      {{ summary.animal.sex === 'male' ? 'Steer' : 'Heifer' }}
+    </span>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-label">Age</span>
+      <span class="stat-value">{{ formatMonths(summary.daysOld) }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Weight</span>
+      <span class="stat-value">{{ currentWeight }} <small>lbs</small></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">ADG</span>
+      <app-adg-badge [adg]="summary.averageADG" [showUnit]="false"></app-adg-badge>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Last Weigh</span>
+      <span class="stat-value" *ngIf="lastWeighDate">{{ formatDate(lastWeighDate) | date:'M/d' }}</span>
+      <span class="stat-value text-muted" *ngIf="!lastWeighDate">-</span>
+    </div>
+  </div>
+
+  <!-- Sale Status -->
+  <div class="sale-status">
+    <ng-container *ngIf="summary.isSaleReady">
+      <span class="status-badge ready">
+        <i class="bi bi-star-fill"></i> Sale Ready
+      </span>
+    </ng-container>
+    <ng-container *ngIf="!summary.isSaleReady && summary.daysToSaleWeight !== null">
+      <span class="days-to-sale">{{ summary.daysToSaleWeight }} days to {{ targetWeight }} lbs</span>
+      <span class="projected-date" *ngIf="summary.projectedSaleDate">
+        Est. {{ summary.projectedSaleDate | date:'MMM d' }}
+      </span>
+    </ng-container>
+    <ng-container *ngIf="!summary.isSaleReady && summary.daysToSaleWeight === null">
+      <span class="status-badge tracking">Tracking</span>
+    </ng-container>
+  </div>
+
+  <!-- Actions -->
+  <div class="card-actions">
+    <button class="btn-action btn-weight" (click)="onAddWeight()" title="Add Weight">
+      <i class="bi bi-speedometer2"></i>
+      <span>Weigh</span>
+    </button>
+    <button class="btn-action btn-details" (click)="onViewDetails()" title="View Details">
+      <i class="bi bi-graph-up"></i>
+      <span>Details</span>
+    </button>
+  </div>
+
+</div>

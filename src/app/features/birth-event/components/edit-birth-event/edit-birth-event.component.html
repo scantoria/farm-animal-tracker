@@ -1,0 +1,139 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit Birth Event</h1>
+        <p class="animal-id">Dam: <b>{{ damName }}</b></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading birth event...</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card" *ngIf="!isLoading && event">
+
+    <!-- Read-Only Calf Info -->
+    <div class="info-card">
+      <div class="info-header">
+        <h3>Calf Information</h3>
+        <button type="button" class="btn-link" (click)="onViewCalf()">
+          <i class="bi bi-eye me-1"></i> View Calf
+        </button>
+      </div>
+      <div class="info-content">
+        <div class="info-item">
+          <span class="info-label">Name:</span>
+          <span class="info-value">{{ calfName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Tag:</span>
+          <span class="info-value">{{ calf?.identifier || '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Sex:</span>
+          <span class="sex-badge" [class.bull]="event.sex === 'Bull'" [class.heifer]="event.sex === 'Heifer'">
+            <i class="bi" [class.bi-gender-male]="event.sex === 'Bull'" [class.bi-gender-female]="event.sex === 'Heifer'"></i>
+            {{ event.sex }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)">
+
+      <!-- Birth Date Field -->
+      <div class="form-group">
+        <label for="birthDate" class="form-label">
+          Birth Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="birthDate"
+          name="birthDate"
+          [(ngModel)]="birthDate"
+          #birthDateField="ngModel"
+          required
+          class="form-control"
+          [class.is-invalid]="birthDateField.invalid && birthDateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="birthDateField.invalid && birthDateField.touched">
+          Birth date is required.
+        </div>
+      </div>
+
+      <!-- Birth Weight -->
+      <div class="form-group">
+        <label for="birthWeight" class="form-label">
+          Birth Weight (lbs) <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="number"
+          id="birthWeight"
+          name="birthWeight"
+          [(ngModel)]="birthWeight"
+          placeholder="e.g., 85"
+          min="0"
+          max="200"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Calving Ease -->
+      <div class="form-group">
+        <label for="calvingEase" class="form-label">
+          Calving Ease
+        </label>
+        <select
+          id="calvingEase"
+          name="calvingEase"
+          [(ngModel)]="calvingEase"
+          class="form-control"
+        >
+          <option [ngValue]="undefined">Not recorded</option>
+          <option *ngFor="let ease of calvingEaseOptions" [value]="ease">
+            {{ ease }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          [(ngModel)]="notes"
+          rows="3"
+          placeholder="Any additional notes about the birth..."
+          class="form-control"
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isSubmitting">
+          <i class="bi bi-check-circle me-1" *ngIf="!isSubmitting"></i>
+          <span class="spinner-border spinner-border-sm me-1" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

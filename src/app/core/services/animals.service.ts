@@ -47,7 +47,11 @@ export class AnimalsService {
     }
     const animalDocRef = doc(this.firestore, `animals/${animal.id}`);
     const { id, ...animalData } = animal;
-    return from(updateDoc(animalDocRef, animalData));
+    // Remove undefined values as Firestore doesn't accept them
+    const cleanedData = Object.fromEntries(
+      Object.entries(animalData).filter(([_, value]) => value !== undefined)
+    );
+    return from(updateDoc(animalDocRef, cleanedData));
   }
 
   // Delete an animal

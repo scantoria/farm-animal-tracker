@@ -1,0 +1,104 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Edit Weight Record</h1>
+        <p class="animal-id">{{ animalName }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading weight record...</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card" *ngIf="!isLoading && record">
+    <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)">
+
+      <!-- Weight Input -->
+      <div class="form-group">
+        <label for="weight" class="form-label">
+          Weight (lbs) <span class="required">*</span>
+        </label>
+        <input
+          type="number"
+          id="weight"
+          name="weight"
+          [(ngModel)]="weight"
+          #weightField="ngModel"
+          required
+          min="1"
+          max="2000"
+          class="form-control"
+          [class.is-invalid]="weightField.invalid && weightField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="weightField.invalid && weightField.touched">
+          Weight is required.
+        </div>
+      </div>
+
+      <!-- Date Field -->
+      <div class="form-group">
+        <label for="weighDate" class="form-label">
+          Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="weighDate"
+          name="weighDate"
+          [(ngModel)]="weighDate"
+          #weighDateField="ngModel"
+          required
+          class="form-control"
+          [class.is-invalid]="weighDateField.invalid && weighDateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="weighDateField.invalid && weighDateField.touched">
+          Date is required.
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          [(ngModel)]="notes"
+          rows="3"
+          placeholder="Any notes about this weigh-in..."
+          class="form-control"
+        ></textarea>
+      </div>
+
+      <!-- Info Box -->
+      <div class="info-box">
+        <i class="bi bi-info-circle"></i>
+        <p>Note: Editing a weight record will not automatically recalculate ADG values for other records. Consider deleting and re-adding if date changes significantly.</p>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isSubmitting">
+          <i class="bi bi-check-circle me-1" *ngIf="!isSubmitting"></i>
+          <span class="spinner-border spinner-border-sm me-1" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

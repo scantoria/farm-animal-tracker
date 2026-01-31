@@ -1,0 +1,135 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" [routerLink]="['/edit-animal', animalId]">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Birth Events / Calves</h1>
+        <p class="animal-id">Dam: <b>{{ animalName }}</b></p>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="onRecordBirth()">
+      <i class="bi bi-plus-circle me-1"></i> Record Birth
+    </button>
+  </div>
+
+  <!-- Records List -->
+  <div *ngIf="birthEvents$ | async as events; else loading">
+    <div *ngIf="events.length > 0; else noRecords">
+
+      <div class="records-list">
+
+        <!-- Desktop Table Header -->
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col">Calf</div>
+          <div class="header-col">Birth Date</div>
+          <div class="header-col">Sex</div>
+          <div class="header-col">Birth Weight</div>
+          <div class="header-col">Calving Ease</div>
+          <div class="header-col">Actions</div>
+        </div>
+
+        <!-- Record Rows/Cards -->
+        <div class="record-row" *ngFor="let event of events; trackBy: trackByEventId">
+
+          <!-- Calf Column -->
+          <div class="record-data calf-col">
+            <span class="d-lg-none data-label">Calf:</span>
+            <div class="calf-info">
+              <span class="calf-name">{{ event.calf?.name || 'Unknown' }}</span>
+              <small class="calf-tag" *ngIf="event.calf?.identifier">Tag: {{ event.calf?.identifier }}</small>
+            </div>
+          </div>
+
+          <!-- Birth Date Column -->
+          <div class="record-data date-col">
+            <span class="d-lg-none data-label">Birth Date:</span>
+            <span class="date-value">{{ toDate(event.birthDate) | date:'MMM d, yyyy' }}</span>
+          </div>
+
+          <!-- Sex Column -->
+          <div class="record-data sex-col">
+            <span class="d-lg-none data-label">Sex:</span>
+            <span class="sex-badge" [class.bull]="event.sex === 'Bull'" [class.heifer]="event.sex === 'Heifer'">
+              <i class="bi" [class.bi-gender-male]="event.sex === 'Bull'" [class.bi-gender-female]="event.sex === 'Heifer'"></i>
+              {{ event.sex }}
+            </span>
+          </div>
+
+          <!-- Birth Weight Column -->
+          <div class="record-data weight-col">
+            <span class="d-lg-none data-label">Birth Weight:</span>
+            <span class="weight-value" *ngIf="event.birthWeight">{{ event.birthWeight }} lbs</span>
+            <span *ngIf="!event.birthWeight" class="text-muted">-</span>
+          </div>
+
+          <!-- Calving Ease Column -->
+          <div class="record-data ease-col">
+            <span class="d-lg-none data-label">Calving Ease:</span>
+            <span class="ease-badge" [ngClass]="getCalvingEaseClass(event.calvingEase)" *ngIf="event.calvingEase">
+              {{ event.calvingEase }}
+            </span>
+            <span *ngIf="!event.calvingEase" class="text-muted">-</span>
+          </div>
+
+          <!-- Actions Column -->
+          <div class="record-data actions-col">
+            <div class="action-buttons">
+              <button
+                class="btn-action btn-view"
+                (click)="onViewCalf(event.calfId)"
+                title="View Calf"
+              >
+                <i class="bi bi-eye"></i>
+                <span class="btn-text">View Calf</span>
+              </button>
+              <button
+                class="btn-action btn-edit"
+                (click)="onEdit(event.id!)"
+                title="Edit Event"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                class="btn-action btn-delete"
+                (click)="onDelete(event.id!)"
+                title="Delete Event"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- No Records State -->
+    <ng-template #noRecords>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-balloon-heart"></i>
+        </div>
+        <h3>No Birth Events</h3>
+        <p>No births have been recorded for this dam yet.</p>
+        <button class="btn btn-primary" (click)="onRecordBirth()">
+          <i class="bi bi-plus-circle me-1"></i> Record First Birth
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Loading State -->
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading birth events...</p>
+    </div>
+  </ng-template>
+
+</div>

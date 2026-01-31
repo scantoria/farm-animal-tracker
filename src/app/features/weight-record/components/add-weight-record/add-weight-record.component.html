@@ -1,0 +1,158 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Add Weight</h1>
+        <p class="animal-id">{{ animalName }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry Form -->
+  <div class="form-card" *ngIf="!showResults">
+    <form #weightForm="ngForm" (ngSubmit)="onSubmit(weightForm)">
+
+      <!-- Large Weight Input (Mobile Optimized) -->
+      <div class="form-group weight-input-group">
+        <label for="weight" class="form-label">
+          Weight <span class="required">*</span>
+        </label>
+        <div class="weight-input-wrapper">
+          <input
+            type="number"
+            id="weight"
+            name="weight"
+            [(ngModel)]="weight"
+            #weightField="ngModel"
+            required
+            min="1"
+            max="2000"
+            placeholder="0"
+            class="form-control weight-input"
+            [class.is-invalid]="weightField.invalid && weightField.touched"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <span class="weight-unit">lbs</span>
+        </div>
+        <div class="invalid-feedback" *ngIf="weightField.invalid && weightField.touched">
+          Weight is required.
+        </div>
+      </div>
+
+      <!-- Date Field -->
+      <div class="form-group">
+        <label for="weighDate" class="form-label">
+          Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="weighDate"
+          name="weighDate"
+          [(ngModel)]="weighDate"
+          #weighDateField="ngModel"
+          required
+          class="form-control"
+          [class.is-invalid]="weighDateField.invalid && weighDateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="weighDateField.invalid && weighDateField.touched">
+          Date is required.
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          [(ngModel)]="notes"
+          rows="2"
+          placeholder="Any notes about this weigh-in..."
+          class="form-control"
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="weightForm.invalid || isSubmitting">
+          <span class="spinner-border spinner-border-sm me-1" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? 'Saving...' : 'Save Weight' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Results Display -->
+  <div class="results-card" *ngIf="showResults && calculations">
+    <div class="results-header">
+      <i class="bi bi-check-circle-fill"></i>
+      <h2>Weight Recorded!</h2>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-item">
+        <span class="result-label">Weight</span>
+        <span class="result-value large">{{ weight }} <small>lbs</small></span>
+      </div>
+
+      <div class="result-item">
+        <span class="result-label">Age</span>
+        <span class="result-value">{{ formatMonths(calculations.ageInDays) }}</span>
+      </div>
+
+      <div class="result-item" *ngIf="calculations.adgSinceLastWeigh !== undefined">
+        <span class="result-label">ADG (this period)</span>
+        <span class="result-value adg-badge" [ngClass]="getADGClass(calculations.adgSinceLastWeigh)">
+          {{ calculations.adgSinceLastWeigh | number:'1.2-2' }} <small>lbs/day</small>
+        </span>
+        <small class="result-detail" *ngIf="calculations.daysSinceLastWeigh">
+          over {{ calculations.daysSinceLastWeigh }} days
+        </small>
+      </div>
+
+      <div class="result-item">
+        <span class="result-label">Overall ADG</span>
+        <span class="result-value adg-badge" [ngClass]="getADGClass(calculations.cumulativeADG)">
+          {{ calculations.cumulativeADG | number:'1.2-2' }} <small>lbs/day</small>
+        </span>
+      </div>
+
+      <div class="result-item highlight" *ngIf="calculations.isSaleReady">
+        <span class="result-label">Status</span>
+        <span class="result-value sale-ready">
+          <i class="bi bi-star-fill"></i> Sale Ready!
+        </span>
+      </div>
+
+      <div class="result-item" *ngIf="!calculations.isSaleReady && calculations.daysToSaleWeight !== null">
+        <span class="result-label">Days to {{ targetWeight }} lbs</span>
+        <span class="result-value">{{ calculations.daysToSaleWeight }} days</span>
+        <small class="result-detail" *ngIf="calculations.projectedSaleDate">
+          Projected: {{ calculations.projectedSaleDate | date:'MMM d, yyyy' }}
+        </small>
+      </div>
+    </div>
+
+    <div class="results-actions">
+      <button type="button" class="btn btn-secondary" (click)="onAddAnother()">
+        <i class="bi bi-plus-circle me-1"></i> Add Another
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onDone()">
+        Done
+      </button>
+    </div>
+  </div>
+
+</div>

@@ -11,7 +11,9 @@ $shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 $border-radius: 8px;
 $danger-color: #ef4444;
+$danger-color-dark: #dc2626;
 $success-color: #22c55e;
+$success-color-dark: #16a34a;
 
 // Breakpoints
 $breakpoint-md: 768px;
@@ -181,13 +183,13 @@ $breakpoint-lg: 1024px;
 .alert-success {
   background-color: rgba($success-color, 0.1);
   border: 1px solid rgba($success-color, 0.3);
-  color: darken($success-color, 15%);
+  color: $success-color-dark;
 }
 
 .alert-danger {
   background-color: rgba($danger-color, 0.1);
   border: 1px solid rgba($danger-color, 0.3);
-  color: darken($danger-color, 15%);
+  color: $danger-color-dark;
 }
 
 // Form Grid

@@ -91,6 +91,20 @@ import { EditUserComponent } from './features/admin/users/component/edit-user/ed
 // Movement Records
 import { MovementListComponent } from './features/movement-records/components/movement-list/movement-list.component';
 
+// Birth Event
+import { BirthEventListComponent } from './features/birth-event/components/birth-event-list/birth-event-list.component';
+import { RecordBirthComponent } from './features/birth-event/components/record-birth/record-birth.component';
+import { EditBirthEventComponent } from './features/birth-event/components/edit-birth-event/edit-birth-event.component';
+
+// Weight Record
+import { WeightRecordListComponent } from './features/weight-record/components/weight-record-list/weight-record-list.component';
+import { AddWeightRecordComponent } from './features/weight-record/components/add-weight-record/add-weight-record.component';
+import { EditWeightRecordComponent } from './features/weight-record/components/edit-weight-record/edit-weight-record.component';
+
+// Growth Tracking Dashboard
+import { GrowthDashboardComponent } from './features/growth-tracking/components/growth-dashboard/growth-dashboard.component';
+import { CalfDetailComponent } from './features/growth-tracking/components/calf-detail/calf-detail.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -186,6 +200,20 @@ export const routes: Routes = [
 
     // Movement Records
     { path: 'movement-records', component: MovementListComponent, canActivate: [AuthGuard] },
+
+    // Birth Event Routes (for dams/females)
+    { path: 'animals/:id/birth-events', component: BirthEventListComponent, canActivate: [AuthGuard] },
+    { path: 'animals/:id/birth-events/record', component: RecordBirthComponent, canActivate: [AuthGuard] },
+    { path: 'animals/:id/birth-events/edit/:eventId', component: EditBirthEventComponent, canActivate: [AuthGuard] },
+
+    // Weight Record Routes
+    { path: 'animals/:id/weight', component: WeightRecordListComponent, canActivate: [AuthGuard] },
+    { path: 'animals/:id/weight/add', component: AddWeightRecordComponent, canActivate: [AuthGuard] },
+    { path: 'animals/:id/weight/edit/:recordId', component: EditWeightRecordComponent, canActivate: [AuthGuard] },
+
+    // Growth Tracking Dashboard
+    { path: 'growth-tracking', component: GrowthDashboardComponent, canActivate: [AuthGuard] },
+    { path: 'growth-tracking/calf/:id', component: CalfDetailComponent, canActivate: [AuthGuard] },
 
     /*{
         path: ':id/edit',

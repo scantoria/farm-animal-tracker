@@ -1,0 +1,273 @@
+// growth-dashboard.component.scss
+@use 'sass:color';
+
+$primary-color: #198754;
+$primary-hover: #157347;
+$border-color: #e5e7eb;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$bg-hover: #f9fafb;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$border-radius: 8px;
+
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+.page-container {
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (min-width: $breakpoint-md) {
+    padding: 1.5rem;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    padding: 2rem;
+  }
+}
+
+// Header
+.header-bar {
+  margin-bottom: 1.5rem;
+
+  @media (min-width: $breakpoint-md) {
+    margin-bottom: 2rem;
+  }
+
+  .header-text {
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin: 0 0 0.25rem 0;
+
+      @media (min-width: $breakpoint-md) {
+        font-size: 2rem;
+      }
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: $text-secondary;
+      margin: 0;
+
+      @media (min-width: $breakpoint-md) {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// Stats Row
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: $breakpoint-sm) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: $breakpoint-md) {
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.stat-card {
+  background-color: white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: $shadow-sm;
+
+  .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-primary;
+
+    @media (min-width: $breakpoint-md) {
+      font-size: 2rem;
+    }
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+
+  &.ready {
+    border-color: $primary-color;
+    background-color: #f0fdf4;
+
+    .stat-value {
+      color: $primary-color;
+    }
+  }
+
+  &.sold {
+    .stat-value {
+      color: #6b7280;
+    }
+  }
+
+  &.adg {
+    .stat-value {
+      color: #0d6efd;
+    }
+  }
+}
+
+// Filters
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  box-shadow: $shadow-sm;
+
+  @media (min-width: $breakpoint-md) {
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 120px;
+
+  @media (min-width: $breakpoint-md) {
+    flex: 0 0 auto;
+    min-width: 150px;
+  }
+
+  label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  select {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    color: $text-primary;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
+    }
+  }
+}
+
+// Calves Grid
+.calves-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: $breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: $breakpoint-xl) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// Loading State
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  text-align: center;
+
+  .spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid $border-color;
+    border-top-color: $primary-color;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    margin-top: 1rem;
+    color: $text-secondary;
+    font-size: 0.9375rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  background-color: white;
+  border: 2px dashed $border-color;
+  border-radius: $border-radius;
+
+  .empty-icon {
+    font-size: 3rem;
+    color: $text-secondary;
+    margin-bottom: 1rem;
+
+    i {
+      font-size: 3rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: $text-secondary;
+    margin: 0;
+    font-size: 0.9375rem;
+    max-width: 400px;
+  }
+}

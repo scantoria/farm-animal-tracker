@@ -203,13 +203,14 @@
           <i class="bi bi-x-circle"></i>
           <span>Cancel</span>
         </button>
-        <button 
-          type="submit" 
-          class="btn btn-primary" 
-          [disabled]="form.invalid"
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="form.invalid || isSubmitting"
         >
-          <i class="bi bi-save"></i>
-          <span>Update Record</span>
+          <i class="bi bi-save" *ngIf="!isSubmitting"></i>
+          <span class="spinner-border spinner-border-sm" *ngIf="isSubmitting"></span>
+          <span>{{ isSubmitting ? 'Updating...' : 'Update Record' }}</span>
         </button>
       </div>
 

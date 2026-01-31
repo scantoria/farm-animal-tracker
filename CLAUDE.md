@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Farm Animal Tracker is an Angular 20.2 standalone application for managing farm animals and related records (health, breeding, birthing, weaning, medication, blacksmith services). It uses Firebase for authentication and data storage.
+Farm Animal Tracker is an Angular 20.2 standalone application for managing farm animals and related records (health, breeding, birthing, weaning, medication, blacksmith services, birth events, weight records, growth tracking). It uses Firebase for authentication and data storage.
 
 ## Development Commands
 
@@ -40,14 +40,19 @@ src/app/
 │   └── guards/             # Route guards
 ├── features/               # Feature modules organized by domain
 │   ├── animals/           # Animal CRUD operations
-│   ├── admin/             # Admin features (veterinarians, blacksmiths, farms, users)
+│   ├── admin/             # Admin features (veterinarians, blacksmiths, farms, users, sires, feed suppliers)
 │   ├── healthRecords/     # Animal health tracking
 │   ├── breedingEvent/     # Breeding events, pregnancy checks, hormone treatments
 │   ├── birthing/          # Birthing schedules
+│   ├── birth-event/       # Birth event recording and offspring tracking
 │   ├── weaning/           # Weaning schedules
 │   ├── blacksmith/        # Blacksmith visit records
 │   ├── medication-record/ # Medication tracking
-│   ├── veterinarian/      # Veterinarian-specific views
+│   ├── veterinarian-visit/ # Veterinarian visit records
+│   ├── weight-record/     # Animal weight tracking
+│   ├── growth-tracking/   # Calf growth monitoring dashboard with ADG calculations
+│   ├── movement-records/  # Animal movement/transfer history
+│   ├── farms/             # Farm location management
 │   └── providers/         # Provider dashboard
 ├── shared/
 │   ├── components/        # Reusable components
@@ -87,10 +92,23 @@ Routes follow a hierarchical pattern centered around animals:
 /animals/:id/breeding/:eventId/treatments          # Hormone treatments
 ```
 
+**Standalone Feature Routes** (not nested under animals):
+```
+/growth-tracking                    # Growth tracking dashboard
+/growth-tracking/calf/:id          # Individual calf growth details
+/movement-records                   # Animal movement history
+/farms                              # Farm management
+/farms/:id                          # Farm details
+```
+
 **Admin Routes**:
 ```
 /admin/blacksmiths
 /admin/veterinarian
+/admin/feed-suppliers
+/admin/sires
+/admin/users
+/admin/invite-user                  # Admin-only user invitation
 ```
 
 All routes except `/login` and `/signup` are protected by `AuthGuard`.
@@ -119,6 +137,7 @@ Key services:
 - `health.service.ts` - Health records
 - `breeding.service.ts` - Breeding events, pregnancy checks, hormone treatments
 - `birthing.service.ts` - Birthing schedules
+- `birth-event.service.ts` - Birth event recording and offspring management
 - `weaning.service.ts` - Weaning schedules
 - `blacksmith.service.ts` & `blacksmith-data.service.ts` - Blacksmith services
 - `medication.service.ts` - Medication records
@@ -128,6 +147,8 @@ Key services:
 - `sire.service.ts` - External sires management (AI, leased bulls)
 - `document.service.ts` - Document/file upload management
 - `farm.service.ts` - Farm locations and animal transfers
+- `weight-record.service.ts` - Animal weight tracking
+- `growth-tracking.service.ts` - Calf growth metrics and ADG calculations
 
 ### Styling
 
@@ -151,7 +172,7 @@ The project has `skipTests: true` configured for all Angular schematics (compone
 1. **AuthGuard Usage**: Protect routes by adding `canActivate: [AuthGuard]` to route definitions
 2. **Service Injection**: Use `providedIn: 'root'` for singleton services
 3. **Observable Pattern**: Services return Observables; components subscribe in templates with async pipe
-4. **Route Parameters**: Access via `ActivatedRoute` - common params are `id` (animalId), `recordId`, `eventId`, `checkId`, `treatmentId`
+4. **Route Parameters**: Access via `ActivatedRoute` - common params are `id` (animalId), `recordId`, `eventId`, `checkId`, `treatmentId`, `sireId`, `userId`, `blacksmithId`
 5. **Navigation**: Use `Router` service or `[routerLink]` directive with array syntax
 
 ## Git Workflow

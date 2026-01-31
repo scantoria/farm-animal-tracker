@@ -1,0 +1,237 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Record Birth</h1>
+        <p class="animal-id">Dam: <b>{{ damName }}</b></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form #birthForm="ngForm" (ngSubmit)="onSubmit(birthForm)">
+
+      <!-- Birth Date Field -->
+      <div class="form-group">
+        <label for="birthDate" class="form-label">
+          Birth Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="birthDate"
+          name="birthDate"
+          [(ngModel)]="birthDate"
+          #birthDateField="ngModel"
+          required
+          class="form-control"
+          [class.is-invalid]="birthDateField.invalid && birthDateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="birthDateField.invalid && birthDateField.touched">
+          Birth date is required.
+        </div>
+      </div>
+
+      <!-- Calf Sex -->
+      <div class="form-group">
+        <label class="form-label">
+          Calf Sex <span class="required">*</span>
+        </label>
+        <div class="radio-group">
+          <label class="radio-option" [class.selected]="calfSex === 'Bull'">
+            <input
+              type="radio"
+              name="calfSex"
+              value="Bull"
+              [(ngModel)]="calfSex"
+              (change)="onSexChange()"
+            />
+            <i class="bi bi-gender-male"></i>
+            <span>Bull</span>
+          </label>
+          <label class="radio-option" [class.selected]="calfSex === 'Heifer'">
+            <input
+              type="radio"
+              name="calfSex"
+              value="Heifer"
+              [(ngModel)]="calfSex"
+              (change)="onSexChange()"
+            />
+            <i class="bi bi-gender-female"></i>
+            <span>Heifer</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Calf Tag/ID -->
+      <div class="form-group">
+        <label for="calfTag" class="form-label">
+          Calf Tag / ID <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="calfTag"
+          name="calfTag"
+          [(ngModel)]="calfTag"
+          #calfTagField="ngModel"
+          required
+          placeholder="e.g., 2024-001"
+          class="form-control"
+          [class.is-invalid]="calfTagField.invalid && calfTagField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="calfTagField.invalid && calfTagField.touched">
+          Calf tag/ID is required.
+        </div>
+      </div>
+
+      <!-- Calf Name (Optional) -->
+      <div class="form-group">
+        <label for="calfName" class="form-label">
+          Calf Name <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="text"
+          id="calfName"
+          name="calfName"
+          [(ngModel)]="calfName"
+          placeholder="Enter a name (defaults to tag if empty)"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Birth Weight -->
+      <div class="form-group">
+        <label for="birthWeight" class="form-label">
+          Birth Weight (lbs) <span class="optional">(Optional)</span>
+        </label>
+        <input
+          type="number"
+          id="birthWeight"
+          name="birthWeight"
+          [(ngModel)]="birthWeight"
+          placeholder="e.g., 85"
+          min="0"
+          max="200"
+          class="form-control"
+        />
+        <small class="form-text text-muted">
+          Typical range: 60-100 lbs for beef cattle
+        </small>
+      </div>
+
+      <!-- Sire Selection -->
+      <div class="form-group">
+        <label for="sireId" class="form-label">
+          Sire / Bull
+        </label>
+        <select
+          id="sireId"
+          name="sireId"
+          [(ngModel)]="sireId"
+          (change)="onSireChange($any($event.target).value)"
+          class="form-control"
+        >
+          <option value="">Unknown / Not specified</option>
+          <optgroup label="External Sires (AI / Leased)">
+            <ng-container *ngFor="let sire of sireOptions">
+              <option *ngIf="sire.type === 'external'"
+                      [value]="sire.id">
+                {{ sire.name }} ({{ sire.breed }}) [{{ sire.source }}]{{ sire.bloodline ? ' - ' + sire.bloodline : '' }}
+              </option>
+            </ng-container>
+          </optgroup>
+          <optgroup label="Herd Bulls">
+            <ng-container *ngFor="let sire of sireOptions">
+              <option *ngIf="sire.type === 'animal'"
+                      [value]="sire.id">
+                {{ sire.name }} ({{ sire.breed }})
+              </option>
+            </ng-container>
+          </optgroup>
+        </select>
+        <small class="form-text text-muted">
+          Select the bull/sire to track bloodlines.
+        </small>
+      </div>
+
+      <!-- Calving Ease -->
+      <div class="form-group">
+        <label for="calvingEase" class="form-label">
+          Calving Ease
+        </label>
+        <select
+          id="calvingEase"
+          name="calvingEase"
+          [(ngModel)]="calvingEase"
+          class="form-control"
+        >
+          <option [ngValue]="undefined">Not recorded</option>
+          <option *ngFor="let ease of calvingEaseOptions" [value]="ease">
+            {{ ease }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Growth Tracking Enrollment -->
+      <div class="form-group">
+        <label class="checkbox-container">
+          <input
+            type="checkbox"
+            name="enrollInGrowthTracking"
+            [(ngModel)]="enrollInGrowthTracking"
+          />
+          <span class="checkmark"></span>
+          <span class="checkbox-label">
+            Enroll in Growth Tracking
+            <small class="checkbox-hint">Track weight and ADG for sale readiness</small>
+          </span>
+        </label>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label for="notes" class="form-label">
+          Notes <span class="optional">(Optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          [(ngModel)]="notes"
+          rows="3"
+          placeholder="Any additional notes about the birth..."
+          class="form-control"
+        ></textarea>
+      </div>
+
+      <!-- Summary Preview -->
+      <div class="summary-card" *ngIf="calfTag">
+        <h4>Summary</h4>
+        <p>A new <strong>{{ calfSex }}</strong> calf with tag <strong>{{ calfTag }}</strong> will be created.</p>
+        <ul>
+          <li *ngIf="birthWeight">Birth weight: {{ birthWeight }} lbs</li>
+          <li>Dam: {{ damName }}</li>
+          <li *ngIf="enrollInGrowthTracking">Will be enrolled in growth tracking</li>
+        </ul>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="birthForm.invalid || isSubmitting">
+          <i class="bi bi-check-circle me-1" *ngIf="!isSubmitting"></i>
+          <span class="spinner-border spinner-border-sm me-1" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? 'Recording...' : 'Record Birth' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

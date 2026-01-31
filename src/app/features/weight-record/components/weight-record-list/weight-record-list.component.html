@@ -1,0 +1,153 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" [routerLink]="['/edit-animal', animalId]">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Weight Records</h1>
+        <p class="animal-id">{{ animalName }}</p>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="onAddWeight()">
+      <i class="bi bi-plus-circle me-1"></i> Add Weight
+    </button>
+  </div>
+
+  <!-- Growth Summary Card -->
+  <div class="summary-card" *ngIf="animal">
+    <div class="summary-grid">
+      <div class="summary-item">
+        <span class="summary-label">Current Weight</span>
+        <span class="summary-value">{{ currentWeight || '-' }} <small>lbs</small></span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Age</span>
+        <span class="summary-value">{{ formatMonths(daysOld) }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Average ADG</span>
+        <span class="summary-value adg-badge" [ngClass]="getADGClass(averageADG)">
+          {{ averageADG | number:'1.2-2' }} <small>lbs/day</small>
+        </span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Sale Status</span>
+        <span class="summary-value">
+          <span class="status-badge" [class.ready]="isSaleReady" [class.not-ready]="!isSaleReady">
+            {{ isSaleReady ? 'Sale Ready' : (daysToSaleWeight !== null ? daysToSaleWeight + ' days to 600 lbs' : 'Tracking') }}
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weight Records List -->
+  <div *ngIf="weightRecords$ | async as records; else loading">
+    <div *ngIf="records.length > 0; else noRecords">
+
+      <div class="records-list">
+
+        <!-- Desktop Table Header -->
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col">Date</div>
+          <div class="header-col">Weight</div>
+          <div class="header-col">Age</div>
+          <div class="header-col">ADG</div>
+          <div class="header-col">Notes</div>
+          <div class="header-col">Actions</div>
+        </div>
+
+        <!-- Record Rows/Cards -->
+        <div class="record-row" *ngFor="let record of records; trackBy: trackByRecordId; let i = index">
+
+          <!-- Date Column -->
+          <div class="record-data date-col">
+            <span class="d-lg-none data-label">Date:</span>
+            <span class="date-value">{{ formatDate(record.weighDate) | date:'MMM d, yyyy' }}</span>
+          </div>
+
+          <!-- Weight Column -->
+          <div class="record-data weight-col">
+            <span class="d-lg-none data-label">Weight:</span>
+            <span class="weight-value">{{ record.weight }} lbs</span>
+          </div>
+
+          <!-- Age Column -->
+          <div class="record-data age-col">
+            <span class="d-lg-none data-label">Age:</span>
+            <span class="age-value">{{ record.ageInDays }} days</span>
+          </div>
+
+          <!-- ADG Column -->
+          <div class="record-data adg-col">
+            <span class="d-lg-none data-label">ADG:</span>
+            <div class="adg-info">
+              <span class="adg-badge" [ngClass]="getADGClass(record.cumulativeADG || 0)" *ngIf="record.cumulativeADG">
+                {{ record.cumulativeADG | number:'1.2-2' }}
+              </span>
+              <small class="adg-since" *ngIf="record.adgSinceLastWeigh !== undefined && record.daysSinceLastWeigh">
+                ({{ record.adgSinceLastWeigh | number:'1.2-2' }} over {{ record.daysSinceLastWeigh }}d)
+              </small>
+              <span *ngIf="!record.cumulativeADG" class="text-muted">-</span>
+            </div>
+          </div>
+
+          <!-- Notes Column -->
+          <div class="record-data notes-col" *ngIf="record.notes">
+            <span class="d-lg-none data-label">Notes:</span>
+            <p class="notes-text">{{ record.notes }}</p>
+          </div>
+
+          <!-- Actions Column -->
+          <div class="record-data actions-col">
+            <div class="action-buttons">
+              <button
+                class="btn-action btn-edit"
+                (click)="onEdit(record.id!)"
+                title="Edit Record"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                class="btn-action btn-delete"
+                (click)="onDelete(record.id!)"
+                title="Delete Record"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- No Records State -->
+    <ng-template #noRecords>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-speedometer2"></i>
+        </div>
+        <h3>No Weight Records</h3>
+        <p>No weight records have been logged for this animal yet.</p>
+        <button class="btn btn-primary" (click)="onAddWeight()">
+          <i class="bi bi-plus-circle me-1"></i> Add First Weight
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Loading State -->
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading weight records...</p>
+    </div>
+  </ng-template>
+
+</div>

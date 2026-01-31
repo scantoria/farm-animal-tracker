@@ -34,10 +34,27 @@ export interface Animal {
   purchasePrice?: number;
   currentWeight?: number;
   notes?: string;
-  
+
+  // Growth Tracking Fields
+  birthWeight?: number;                 // Birth weight in lbs
+  lastWeighDate?: string | Timestamp;   // Date of most recent weight record
+  enrolledInGrowthTracking?: boolean;   // Whether calf is being tracked for growth/sale
+  growthStatus?: GrowthStatus;          // Current growth tracking status
+  saleDate?: string | Timestamp;        // Date animal was sold
+  saleWeight?: number;                  // Weight at sale (lbs)
+  salePrice?: number;                   // Sale price
+  averageADG?: number;                  // Overall average daily gain
+
+  // Offspring Tracking (for dams)
+  offspringIds?: string[];              // IDs of offspring (calves)
+  lastCalvingDate?: string | Timestamp; // Date of most recent calving
+  lactationStatus?: boolean;            // Whether currently lactating
+
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
+
+export type GrowthStatus = 'active' | 'ready-for-sale' | 'sold';
 
 // Lineage interface for displaying bloodline information
 export interface AnimalLineage {

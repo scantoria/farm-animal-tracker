@@ -10,6 +10,7 @@
     
     <ul *ngIf="isAuthenticated$ | async" class="nav-list logged-in">
       <li><a class="nav-link" [routerLink]="['/']"><span class="nav-icon">🏠</span><span class="nav-text">Home</span></a></li>
+      <li><a class="nav-link" [routerLink]="['/growth-tracking']"><span class="nav-icon">📈</span><span class="nav-text">Growth</span></a></li>
       <li><a class="nav-link" [routerLink]="['/profile']"><span class="nav-icon">👤</span><span class="nav-text">Profile</span></a></li>
       <li><a class="nav-link" [routerLink]="['/admin/providers']"><span class="nav-icon">⚙️</span><span class="nav-text">Providers</span></a></li>
       <li>

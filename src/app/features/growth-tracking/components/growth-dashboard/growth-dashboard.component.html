@@ -1,0 +1,95 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="header-bar">
+    <div class="header-text">
+      <h1>Growth Tracking</h1>
+      <p class="subtitle">Monitor calf growth and sale readiness</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-value">{{ stats.totalActive }}</span>
+      <span class="stat-label">Active</span>
+    </div>
+    <div class="stat-card ready">
+      <span class="stat-value">{{ stats.totalReadyForSale }}</span>
+      <span class="stat-label">Sale Ready</span>
+    </div>
+    <div class="stat-card sold">
+      <span class="stat-value">{{ stats.totalSold }}</span>
+      <span class="stat-label">Sold</span>
+    </div>
+    <div class="stat-card adg">
+      <span class="stat-value">{{ stats.averageADG | number:'1.2-2' }}</span>
+      <span class="stat-label">Avg ADG</span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label for="statusFilter">Status</label>
+      <select id="statusFilter" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+        <option value="all">All</option>
+        <option value="active">Active</option>
+        <option value="ready-for-sale">Ready for Sale</option>
+        <option value="sold">Sold</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="sexFilter">Sex</label>
+      <select id="sexFilter" [(ngModel)]="sexFilter" (change)="onFilterChange()">
+        <option value="all">All</option>
+        <option value="male">Steers</option>
+        <option value="female">Heifers</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="sortBy">Sort By</label>
+      <select id="sortBy" [(ngModel)]="sortBy" (change)="onFilterChange()">
+        <option value="saleReadiness">Sale Readiness</option>
+        <option value="age">Age</option>
+        <option value="weight">Weight</option>
+        <option value="adg">ADG</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading calves...</p>
+  </div>
+
+  <!-- Calves Grid -->
+  <div *ngIf="!isLoading && summaries.length > 0" class="calves-grid">
+    <app-calf-card
+      *ngFor="let summary of summaries; trackBy: trackBySummary"
+      [summary]="summary"
+      (viewDetails)="onViewDetails($event)"
+      (addWeight)="onAddWeight($event)">
+    </app-calf-card>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && summaries.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="bi bi-graph-up-arrow"></i>
+    </div>
+    <h3>No Calves in Growth Tracking</h3>
+    <p>
+      <ng-container *ngIf="statusFilter !== 'all'">
+        No calves match the current filters. Try changing the filters above.
+      </ng-container>
+      <ng-container *ngIf="statusFilter === 'all'">
+        Record a birth to automatically enroll bull calves in growth tracking, or manually enroll any animal from their profile.
+      </ng-container>
+    </p>
+  </div>
+
+</div>
