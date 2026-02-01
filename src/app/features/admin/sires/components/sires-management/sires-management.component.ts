@@ -7,7 +7,7 @@ import { SireService } from '../../../../../core/services/sire.service';
 import { BreedingService } from '../../../../../core/services/breeding.service';
 import { Sire, SireWithStats } from '../../../../../shared/models/sire.model';
 import { forkJoin, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sires-management',
@@ -41,6 +41,7 @@ export class SiresManagementComponent implements OnInit {
     this.isLoading = true;
 
     this.sireService.getAll().pipe(
+      take(1),
       switchMap(sires => {
         // Extract unique species
         this.availableSpecies = [...new Set(sires.map(s => s.species))].sort();
@@ -49,9 +50,10 @@ export class SiresManagementComponent implements OnInit {
           return of([]);
         }
 
-        // For each sire, get breeding count
+        // For each sire, get breeding count (use take(1) since collectionData streams)
         const siresWithStats$ = sires.map(sire => {
           return this.breedingService.getBreedingEventsBySireId(sire.id!).pipe(
+            take(1),
             map(events => ({
               ...sire,
               breedingCount: events.length
