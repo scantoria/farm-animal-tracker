@@ -7,7 +7,7 @@ import { SireService } from '../../../../../core/services/sire.service';
 import { BreedingService } from '../../../../../core/services/breeding.service';
 import { Sire, SireWithStats } from '../../../../../shared/models/sire.model';
 import { forkJoin, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sires-management',
@@ -57,7 +57,14 @@ export class SiresManagementComponent implements OnInit {
             map(events => ({
               ...sire,
               breedingCount: events.length
-            } as SireWithStats))
+            } as SireWithStats)),
+            catchError(() => {
+              // If breeding count lookup fails, return sire with 0 count
+              return of({
+                ...sire,
+                breedingCount: 0
+              } as SireWithStats);
+            })
           );
         });
 
