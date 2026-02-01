@@ -9,6 +9,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Animal } from '../../../../shared/models/animal.model';
 import { Farm } from '../../../../shared/models/farm.model';
 import { FarmMovement } from '../../../../shared/models/farm-movement.model';
+import { SireService } from '../../../../core/services/sire.service';
+import { Sire } from '../../../../shared/models/sire.model';
 import {
   AnimalDocument,
   DocumentType,
@@ -64,10 +66,14 @@ export class EditAnimalComponent implements OnInit {
   sire: Animal | undefined;
   dam: Animal | undefined;
 
+  // Registry sires (from Bulls/Sire/Buck registry)
+  registrySires: Sire[] = [];
+
   constructor(
     private animalsService: AnimalsService,
     private farmService: FarmService,
     private documentService: DocumentService,
+    private sireService: SireService,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService
@@ -110,6 +116,11 @@ export class EditAnimalComponent implements OnInit {
           // Update reproductive status options based on animal's sex
           if (animal?.sex) {
             this.reproductiveStatusOptions = getReproductiveStatusOptions(animal.sex);
+          }
+
+          // Load registry sires filtered by animal's species
+          if (animal?.species) {
+            this.loadRegistrySires(animal.species);
           }
 
           // Load current farm details
@@ -170,6 +181,25 @@ export class EditAnimalComponent implements OnInit {
     // Reset reproductive status when sex changes
     if (this.animal) {
       this.animal.reproductiveStatus = 'unknown';
+    }
+  }
+
+  loadRegistrySires(species: string): void {
+    this.sireService.getSiresBySpecies(species).subscribe({
+      next: (sires) => {
+        // Only show active sires
+        this.registrySires = sires.filter(s => s.status === 'active');
+      },
+      error: (error) => console.error('Error loading registry sires:', error)
+    });
+  }
+
+  getSourceLabel(source: string): string {
+    switch (source) {
+      case 'ai': return 'AI';
+      case 'leased': return 'Leased';
+      case 'owned': return 'Owned';
+      default: return source;
     }
   }
 

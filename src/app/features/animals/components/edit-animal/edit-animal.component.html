@@ -141,13 +141,13 @@
       <label for="sireId">Sire (Father):</label>
       <select id="sireId" name="sireId" [(ngModel)]="animal.sireId" class="form-control">
         <option [value]="undefined">Unknown / Not in system</option>
-        <option *ngFor="let sireOption of potentialSires" [value]="sireOption.id">
-          {{ sireOption.name }} ({{ sireOption.breed }})
+        <option *ngFor="let sireOption of registrySires" [value]="sireOption.id">
+          {{ sireOption.name }} - {{ sireOption.breed }} ({{ getSourceLabel(sireOption.source) }})
         </option>
       </select>
-      <div class="parent-info" *ngIf="sire">
-        <small class="text-muted">Current: {{ sire.name }} - {{ sire.breed }}</small>
-      </div>
+      <small class="form-text text-muted" *ngIf="registrySires.length === 0">
+        No sires found for this species. Add sires in the Bulls/Sire/Buck Registry.
+      </small>
     </div>
 
     <!-- Dam (Mother) Field -->
