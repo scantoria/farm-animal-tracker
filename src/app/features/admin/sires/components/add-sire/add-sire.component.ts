@@ -17,6 +17,21 @@ import { Sire } from '../../../../../shared/models/sire.model';
 export class AddSireComponent {
   isSubmitting: boolean = false;
 
+  // Form model with default values
+  sire: Partial<Sire> = {
+    name: '',
+    registrationNumber: '',
+    species: '',
+    breed: '',
+    source: undefined,  // Will be selected from dropdown
+    provider: '',
+    status: 'active',
+    sireName: '',
+    damName: '',
+    bloodline: '',
+    notes: ''
+  };
+
   constructor(
     private sireService: SireService,
     private router: Router,
@@ -25,6 +40,10 @@ export class AddSireComponent {
 
   onSubmit(form: NgForm): void {
     if (form.invalid || this.isSubmitting) {
+      // Mark all fields as touched to show validation errors
+      Object.keys(form.controls).forEach(key => {
+        form.controls[key].markAsTouched();
+      });
       return;
     }
 
@@ -33,17 +52,17 @@ export class AddSireComponent {
 
     const newSire: Sire = {
       tenantId: tenantId,
-      name: form.value.name,
-      registrationNumber: form.value.registrationNumber || undefined,
-      species: form.value.species,
-      breed: form.value.breed,
-      sireName: form.value.sireName || undefined,
-      damName: form.value.damName || undefined,
-      bloodline: form.value.bloodline || undefined,
-      source: form.value.source,
-      provider: form.value.provider || undefined,
-      status: form.value.status || 'active',
-      notes: form.value.notes || undefined
+      name: this.sire.name!,
+      registrationNumber: this.sire.registrationNumber || undefined,
+      species: this.sire.species!,
+      breed: this.sire.breed!,
+      sireName: this.sire.sireName || undefined,
+      damName: this.sire.damName || undefined,
+      bloodline: this.sire.bloodline || undefined,
+      source: this.sire.source!,
+      provider: this.sire.provider || undefined,
+      status: this.sire.status || 'active',
+      notes: this.sire.notes || undefined
     };
 
     this.sireService.addSire(newSire).subscribe({

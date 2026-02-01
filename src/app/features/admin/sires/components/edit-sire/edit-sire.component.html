@@ -71,19 +71,24 @@
             <label for="species" class="form-label">
               Species <span class="required">*</span>
             </label>
-            <input
-              type="text"
+            <select
               id="species"
               name="species"
               [(ngModel)]="sire.species"
               required
-              #species="ngModel"
+              #speciesField="ngModel"
               class="form-control"
-              placeholder="e.g., Cattle, Goat, Sheep"
-              [class.is-invalid]="species.invalid && species.touched"
-            />
-            <div class="invalid-feedback" *ngIf="species.invalid && species.touched">
-              <div *ngIf="species.errors?.['required']">Species is required.</div>
+              [class.is-invalid]="speciesField.invalid && speciesField.touched"
+            >
+              <option value="" disabled>Select species...</option>
+              <option value="Cattle">Cattle</option>
+              <option value="Goat">Goat</option>
+              <option value="Sheep">Sheep</option>
+              <option value="Pig">Pig</option>
+              <option value="Horse">Horse</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="speciesField.invalid && speciesField.touched">
+              <div *ngIf="speciesField.errors?.['required']">Species is required.</div>
             </div>
           </div>
 
@@ -131,12 +136,15 @@
             >
               <option value="" disabled>Select source type...</option>
               <option value="ai">AI (Artificial Insemination)</option>
-              <option value="leased">Leased Bull</option>
-              <option value="owned">Owned</option>
+              <option value="leased">Leased Bull (Live Animal)</option>
+              <option value="owned">Owned (Live Animal)</option>
             </select>
             <div class="invalid-feedback" *ngIf="source.invalid && source.touched">
               <div *ngIf="source.errors?.['required']">Source type is required.</div>
             </div>
+            <small class="form-text text-muted">
+              AI = Semen for artificial insemination | Leased/Owned = Live animal on premises
+            </small>
           </div>
 
           <!-- Provider Field -->

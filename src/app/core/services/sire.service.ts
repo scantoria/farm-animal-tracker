@@ -25,6 +25,15 @@ export class SireService {
   constructor(private firestore: Firestore) {}
 
   /**
+   * Remove undefined values from an object (Firestore doesn't accept undefined)
+   */
+  private removeUndefined<T extends object>(obj: T): Partial<T> {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, value]) => value !== undefined)
+    ) as Partial<T>;
+  }
+
+  /**
    * Get all sires
    */
   getAll(): Observable<Sire[]> {
@@ -76,10 +85,10 @@ export class SireService {
    */
   addSire(sire: Sire): Observable<string> {
     const siresCollection = collection(this.firestore, this.collectionName);
-    const sireData = {
+    const sireData = this.removeUndefined({
       ...sire,
       dateAdded: new Date().toISOString().split('T')[0]
-    };
+    });
     return from(addDoc(siresCollection, sireData)).pipe(
       map((docRef) => docRef.id)
     );
@@ -94,7 +103,8 @@ export class SireService {
     }
     const sireDocRef = doc(this.firestore, `${this.collectionName}/${sire.id}`);
     const { id, ...sireData } = sire;
-    return from(updateDoc(sireDocRef, sireData));
+    const cleanedData = this.removeUndefined(sireData);
+    return from(updateDoc(sireDocRef, cleanedData));
   }
 
   /**

@@ -50,27 +50,17 @@ export class EditSireComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     if (form.invalid || this.isSubmitting || !this.sire) {
+      // Mark all fields as touched to show validation errors
+      Object.keys(form.controls).forEach(key => {
+        form.controls[key].markAsTouched();
+      });
       return;
     }
 
     this.isSubmitting = true;
 
-    const updatedSire: Sire = {
-      ...this.sire,
-      name: this.sire.name,
-      registrationNumber: this.sire.registrationNumber || undefined,
-      species: this.sire.species,
-      breed: this.sire.breed,
-      sireName: this.sire.sireName || undefined,
-      damName: this.sire.damName || undefined,
-      bloodline: this.sire.bloodline || undefined,
-      source: this.sire.source,
-      provider: this.sire.provider || undefined,
-      status: this.sire.status,
-      notes: this.sire.notes || undefined
-    };
-
-    this.sireService.updateSire(updatedSire).subscribe({
+    // The sire object is already bound via ngModel, so just pass it
+    this.sireService.updateSire(this.sire).subscribe({
       next: () => {
         this.router.navigate(['/admin/sires']);
       },
