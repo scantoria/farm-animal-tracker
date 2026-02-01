@@ -194,6 +194,15 @@ export class EditAnimalComponent implements OnInit {
     });
   }
 
+  onSpeciesChange(): void {
+    // Reload sires when species changes
+    if (this.animal?.species) {
+      this.loadRegistrySires(this.animal.species);
+      // Clear current sire selection since it may not match the new species
+      this.animal.sireId = undefined;
+    }
+  }
+
   getSourceLabel(source: string): string {
     switch (source) {
       case 'ai': return 'AI';

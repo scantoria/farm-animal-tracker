@@ -59,7 +59,13 @@
   <!-- Input for Species -->
   <div class="form-group">
     <label for="species">Species:</label>
-    <input type="text" id="species" name="species" [(ngModel)]="animal.species" required #species="ngModel">
+    <select id="species" name="species" [(ngModel)]="animal.species" required #species="ngModel" (change)="onSpeciesChange()">
+      <option value="" disabled>Select species...</option>
+      <option value="Cattle">Cattle</option>
+      <option value="Goat">Goat</option>
+      <option value="Sheep">Sheep</option>
+      <option value="Horse">Horse</option>
+    </select>
     <div class="validation-message" *ngIf="species.invalid && (species.dirty || species.touched)">
       <div *ngIf="species.errors?.['required']">
         Species is required.
