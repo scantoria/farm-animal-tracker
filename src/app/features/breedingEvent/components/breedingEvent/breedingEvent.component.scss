@@ -370,12 +370,18 @@ $breakpoint-lg: 1024px;
   transition: all 0.2s ease;
   white-space: nowrap;
 
+  // Mobile: hide text, show only icons
+  .btn-text {
+    display: none;
+  }
+
+  // Desktop: show icon + text
   @media (min-width: $breakpoint-lg) {
     padding: 0.375rem 0.75rem;
     font-size: 0.8125rem;
 
     .btn-text {
-      display: none;
+      display: inline;
     }
   }
 

@@ -29,15 +29,15 @@ import { PregnancyCheckComponent } from './features/breedingEvent/components/pre
 import { AddPregnancyCheckComponent } from './features/breedingEvent/components/add-pregnancy-check/add-pregnancy-check.component'; 
 import { EditPregnancyCheckComponent } from './features/breedingEvent/components/edit-pregnancy-check/edit-pregnancy-check.component'; 
 
-// Hormone Treatment
-import { HormoneTreatmentListComponent } from './features/breedingEvent/components/hormone-treatment-list/hormone-treatment-list.component'; 
+// Hormone Treatment (nested under breeding events - legacy)
+import { HormoneTreatmentListComponent } from './features/breedingEvent/components/hormone-treatment-list/hormone-treatment-list.component';
 import { AddHormoneTreatmentComponent } from './features/breedingEvent/components/add-hormone-treatment/add-hormone-treatment.component';
-import { EditHormoneTreatmentComponent } from './features/breedingEvent/components/edit-hormone-treatment/edit-hormone-treatment.component'; 
+import { EditHormoneTreatmentComponent } from './features/breedingEvent/components/edit-hormone-treatment/edit-hormone-treatment.component';
 
-// Birthing Schedule
-import { BirthingScheduleComponent } from './features/birthing/components/birthing-schedule/birthing-schedule.component'; 
-import { AddBirthingScheduleComponent } from './features/birthing/components/add-birthing-schedule/add-birthing-schedule.component';
-import { EditBirthingScheduleComponent } from './features/birthing/components/edit-birthing-schedule/edit-birthing-schedule.component';
+// Standalone Hormone Treatment (accessible from animal profile)
+import { StandaloneHormoneTreatmentListComponent } from './features/hormone-treatment/components/hormone-treatment-list/hormone-treatment-list.component';
+import { StandaloneAddHormoneTreatmentComponent } from './features/hormone-treatment/components/add-hormone-treatment/add-hormone-treatment.component';
+import { StandaloneEditHormoneTreatmentComponent } from './features/hormone-treatment/components/edit-hormone-treatment/edit-hormone-treatment.component';
 
 // Weaning Schedule
 import { WeaningScheduleComponent } from './features/weaning/components/weaning-schedule/weaning-schedule.component'; 
@@ -146,15 +146,15 @@ export const routes: Routes = [
     { path: 'animals/:id/breeding/:eventId/checks/add', component: AddPregnancyCheckComponent },
     { path: 'animals/:id/breeding/:eventId/checks/edit/:checkId', component: EditPregnancyCheckComponent },
 
-    // Hormone Treatment Routes (Nested under Breeding Event)
+    // Hormone Treatment Routes (Nested under Breeding Event - legacy)
     { path: 'animals/:id/breeding/:eventId/treatments', component: HormoneTreatmentListComponent },
     { path: 'animals/:id/breeding/:eventId/treatments/add', component: AddHormoneTreatmentComponent },
     { path: 'animals/:id/breeding/:eventId/treatments/edit/:treatmentId', component: EditHormoneTreatmentComponent },
 
-    // Birthing Records Module Routes
-    { path: 'animals/:id/birthing', component: BirthingScheduleComponent }, 
-    { path: 'animals/:id/birthing/add', component: AddBirthingScheduleComponent },
-    { path: 'animals/:id/birthing/edit/:recordId', component: EditBirthingScheduleComponent },
+    // Standalone Hormone Treatment Routes (accessible from animal profile)
+    { path: 'animals/:id/hormone-treatments', component: StandaloneHormoneTreatmentListComponent, canActivate: [AuthGuard] },
+    { path: 'animals/:id/hormone-treatments/add', component: StandaloneAddHormoneTreatmentComponent, canActivate: [AuthGuard] },
+    { path: 'animals/:id/hormone-treatments/edit/:treatmentId', component: StandaloneEditHormoneTreatmentComponent, canActivate: [AuthGuard] },
 
     // Weaning Schedule
     { path: 'animals/:id/weaning', component: WeaningScheduleComponent }, 

@@ -1,0 +1,185 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="form-header">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="onCancel()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Add Hormone Treatment</h1>
+        <p class="subtitle">Record treatment for {{ animalName }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+      <!-- Treatment Information Section -->
+      <div class="form-section-header">
+        <h3>Treatment Information</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Treatment Date -->
+        <div class="form-group">
+          <label for="treatmentDate" class="form-label">
+            Treatment Date <span class="required">*</span>
+          </label>
+          <input
+            type="date"
+            id="treatmentDate"
+            name="treatmentDate"
+            [(ngModel)]="treatment.treatmentDate"
+            (change)="onTreatmentDateChange()"
+            required
+            #treatmentDate="ngModel"
+            class="form-control"
+            [class.is-invalid]="treatmentDate.invalid && treatmentDate.touched"
+          />
+          <div class="invalid-feedback" *ngIf="treatmentDate.invalid && treatmentDate.touched">
+            <div *ngIf="treatmentDate.errors?.['required']">Treatment date is required.</div>
+          </div>
+        </div>
+
+        <!-- Hormone Type / Protocol -->
+        <div class="form-group">
+          <label for="hormoneType" class="form-label">
+            Hormone Type / Protocol <span class="required">*</span>
+          </label>
+          <select
+            id="hormoneType"
+            name="hormoneType"
+            [(ngModel)]="treatment.hormoneType"
+            (change)="onHormoneTypeChange()"
+            required
+            #hormoneType="ngModel"
+            class="form-control"
+            [class.is-invalid]="hormoneType.invalid && hormoneType.touched"
+          >
+            <option value="" disabled>Select protocol...</option>
+            <option *ngFor="let protocol of hormoneProtocols" [value]="protocol.value">
+              {{ protocol.label }}
+            </option>
+          </select>
+          <div class="invalid-feedback" *ngIf="hormoneType.invalid && hormoneType.touched">
+            <div *ngIf="hormoneType.errors?.['required']">Hormone type is required.</div>
+          </div>
+        </div>
+
+        <!-- Additional Protocol Details (for custom) -->
+        <div class="form-group" *ngIf="treatment.hormoneType === 'other'">
+          <label for="protocol" class="form-label">
+            Custom Protocol Details
+          </label>
+          <input
+            type="text"
+            id="protocol"
+            name="protocol"
+            [(ngModel)]="treatment.protocol"
+            class="form-control"
+            placeholder="Describe the custom protocol..."
+          />
+        </div>
+      </div>
+
+      <!-- Dosage Section -->
+      <div class="form-section-header">
+        <h3>Dosage Information</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Dosage -->
+        <div class="form-group">
+          <label for="dosage" class="form-label">Dosage</label>
+          <div class="input-group">
+            <input
+              type="text"
+              id="dosage"
+              name="dosage"
+              [(ngModel)]="treatment.dosage"
+              class="form-control"
+              placeholder="e.g., 2"
+            />
+            <select
+              id="dosageUnit"
+              name="dosageUnit"
+              [(ngModel)]="treatment.dosageUnit"
+              class="form-select unit-select"
+            >
+              <option value="ml">ml</option>
+              <option value="cc">cc</option>
+              <option value="mg">mg</option>
+              <option value="units">units</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Expected Breeding Date -->
+        <div class="form-group">
+          <label for="expectedBreedingDate" class="form-label">
+            Expected Breeding Date
+          </label>
+          <input
+            type="date"
+            id="expectedBreedingDate"
+            name="expectedBreedingDate"
+            [(ngModel)]="treatment.expectedBreedingDate"
+            class="form-control"
+          />
+          <small class="form-text text-muted" *ngIf="treatment.hormoneType && treatment.hormoneType !== 'other'">
+            Auto-calculated based on protocol. Adjust if needed.
+          </small>
+        </div>
+
+        <!-- Administered By -->
+        <div class="form-group">
+          <label for="administeredBy" class="form-label">
+            Administered By
+          </label>
+          <input
+            type="text"
+            id="administeredBy"
+            name="administeredBy"
+            [(ngModel)]="treatment.administeredBy"
+            class="form-control"
+            placeholder="Technician or staff name"
+          />
+        </div>
+      </div>
+
+      <!-- Notes Section -->
+      <div class="form-section-header">
+        <h3>Additional Notes</h3>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="notes" class="form-label">Notes</label>
+        <textarea
+          id="notes"
+          name="notes"
+          [(ngModel)]="treatment.notes"
+          class="form-control"
+          rows="3"
+          placeholder="Any additional observations or notes..."
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSubmitting">
+          <i class="bi bi-check-circle me-1" *ngIf="!isSubmitting"></i>
+          <span class="spinner-border spinner-border-sm me-1" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? 'Saving...' : 'Save Treatment' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

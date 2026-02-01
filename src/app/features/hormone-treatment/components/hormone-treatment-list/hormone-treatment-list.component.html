@@ -1,0 +1,129 @@
+<div class="page-container">
+
+  <!-- Header Section -->
+  <div class="header-bar">
+    <div class="header-content">
+      <button class="btn-back" [routerLink]="['/edit-animal', animalId]">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Hormone Treatments</h1>
+        <p class="animal-id">Animal: <b>{{ animalName }}</b></p>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="onAddTreatment()">
+      <i class="bi bi-plus-circle me-1"></i> Add Treatment
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading treatments...</p>
+  </div>
+
+  <!-- Records List -->
+  <div *ngIf="!isLoading">
+    <div *ngIf="treatments$ | async as treatments">
+      <div *ngIf="treatments.length > 0; else noRecords" class="records-list">
+
+        <!-- Desktop Table Header -->
+        <div class="list-header d-none d-lg-grid">
+          <div class="header-col">Date</div>
+          <div class="header-col">Protocol / Hormone</div>
+          <div class="header-col">Dosage</div>
+          <div class="header-col">Expected Breeding</div>
+          <div class="header-col">Administered By</div>
+          <div class="header-col">Actions</div>
+        </div>
+
+        <!-- Record Rows/Cards -->
+        <div class="record-row" *ngFor="let treatment of treatments; trackBy: trackByTreatmentId">
+
+          <!-- Date Column -->
+          <div class="record-data date-col">
+            <span class="d-lg-none data-label">Date:</span>
+            <span class="date-value">{{ treatment.treatmentDate | date:'MMM d, yyyy' }}</span>
+          </div>
+
+          <!-- Protocol Column -->
+          <div class="record-data protocol-col">
+            <span class="d-lg-none data-label">Protocol:</span>
+            <div class="protocol-info">
+              <span class="protocol-name">{{ getProtocolLabel(treatment.hormoneType) }}</span>
+              <small class="protocol-details" *ngIf="treatment.protocol">{{ treatment.protocol }}</small>
+            </div>
+          </div>
+
+          <!-- Dosage Column -->
+          <div class="record-data dosage-col">
+            <span class="d-lg-none data-label">Dosage:</span>
+            <span *ngIf="treatment.dosage">{{ treatment.dosage }} {{ treatment.dosageUnit }}</span>
+            <span *ngIf="!treatment.dosage" class="text-muted">-</span>
+          </div>
+
+          <!-- Expected Breeding Column -->
+          <div class="record-data breeding-col">
+            <span class="d-lg-none data-label">Expected Breeding:</span>
+            <span *ngIf="treatment.expectedBreedingDate" class="breeding-date">
+              {{ treatment.expectedBreedingDate | date:'MMM d, yyyy' }}
+            </span>
+            <span *ngIf="!treatment.expectedBreedingDate" class="text-muted">-</span>
+          </div>
+
+          <!-- Administered By Column -->
+          <div class="record-data admin-col">
+            <span class="d-lg-none data-label">Administered By:</span>
+            <span *ngIf="treatment.administeredBy">{{ treatment.administeredBy }}</span>
+            <span *ngIf="!treatment.administeredBy" class="text-muted">-</span>
+          </div>
+
+          <!-- Notes (Mobile only) -->
+          <div class="record-data notes-col" *ngIf="treatment.notes">
+            <span class="d-lg-none data-label">Notes:</span>
+            <p class="notes-text">{{ treatment.notes }}</p>
+          </div>
+
+          <!-- Actions Column -->
+          <div class="record-data actions-col">
+            <div class="action-buttons">
+              <button
+                class="btn-action btn-edit"
+                (click)="onEdit(treatment.id!)"
+                title="Edit Treatment"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button
+                class="btn-action btn-delete"
+                (click)="onDelete(treatment)"
+                title="Delete Treatment"
+              >
+                <i class="bi bi-trash"></i>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- No Records State -->
+      <ng-template #noRecords>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="bi bi-capsule"></i>
+          </div>
+          <h3>No Hormone Treatments</h3>
+          <p>No hormone treatments have been recorded for this animal yet.</p>
+          <p class="hint">Record hormone treatments to track estrus synchronization, CIDR protocols, and more.</p>
+          <button class="btn btn-primary" (click)="onAddTreatment()">
+            <i class="bi bi-plus-circle me-1"></i> Add First Treatment
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+</div>
